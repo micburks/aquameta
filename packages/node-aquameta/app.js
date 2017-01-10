@@ -2,14 +2,14 @@
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
-const endpoint = require('./endpoint');
-endpoint.my_next_value = 15555;
-
-console.log(endpoint);
+const cookieParser = require('cookie-parser');
 
 // Set up the express app
 const app = express();
+app.use(cookieParser());
+
+// Endpoint setup
+const endpoint = require('./endpoint')(app);
 
 // Log request to the console
 app.use(logger('dev'));
@@ -19,11 +19,8 @@ app.set('views', './views');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-let dbPools = {
-    one: 1, two: 2
-};
 // Routes
-require('./server/routes')(app, dbPools);
+require('./server/routes')(app, endpoint);
 
 module.exports = app;
 
