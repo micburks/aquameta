@@ -1,21 +1,5 @@
-from endpoint.db import cursor_for_request, map_errors_to_http
-from werkzeug.exceptions import HTTPException
-from werkzeug.wrappers import Request, Response
-from werkzeug.wsgi import responder
-from os import environ
-
-import json
-
-# For logging
-import logging, sys
-logger = logging.getLogger('events')
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stdout))
-import re
-from binascii import a2b_base64
-
-@responder
-def application(env, start_response):
+/*
+const application = (env, start_response) => {
     request = Request(env)
 
     try:
@@ -75,3 +59,13 @@ def application(env, start_response):
 
         else:
             return e
+};
+*/
+
+module.exports = app => {
+    /*
+     * starts with /endpoint
+     * go through auth middleware
+     * return endpoint.request
+     */
+};
