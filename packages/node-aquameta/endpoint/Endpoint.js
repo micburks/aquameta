@@ -12,6 +12,13 @@ const anonConfig = {
     idleTimeoutMillis: 30000
 };
 
+/* TODO I want to keep track of how many pools are open and when they connect
+ * pg-pool has some great events
+ * pool.on('connect', client => {
+ *   client.count = count++
+ * })
+ */
+
 /*
 var pool = new pg.Pool(config);
 pool.connect(callback);
@@ -44,6 +51,7 @@ const verifySession = function( req ) {
     return pg.connect(anonConfig)
         .then(client => {
             return client.query('select (role_id).name as role_name from endpoint.session where id = $1::uuid', [ req.cookies.session_id ]);
+            /* TODO these clients still need to be closed. SEE BELOW */
         })
         .then(result => {
             let userConfig = anonConfig;
@@ -55,6 +63,19 @@ const verifySession = function( req ) {
             /* Problem logging in */
             return pg.connect(anonConfig);
         });
+
+        /* TODO close clients e.g. */
+		/*
+		pool
+			.connect()
+			.then(client => {
+				return client
+					.query('SELECT $1::int AS "clientCount"', [client.count])
+					.then(res => console.log(res.rows[0].clientCount)) // outputs 0
+					.then(() => client)
+			})
+			.then(client => client.release())
+		*/
 
 }
 
@@ -153,6 +174,9 @@ module.exports = function( request ) {
         version: process.env.version,
         request: request
     };
+
+    // TODO if query was defined in this block, we wouldn't have to pass in the
+    // config every time
 
     return {
         get: query('GET', config),
