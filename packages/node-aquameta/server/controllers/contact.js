@@ -6,17 +6,17 @@ module.exports = {
         });
         */
     },
-    post(req, res, endpoint) {
-        /*
-        endpoint.schema('meta').relation('column').insert().then(insertedRow => {
+    post(req, res, datum) {
+        datum(req).schema('meta').relation('column').insert().then(insertedRow => {
+            //console.log(insertedRow instanceof client);
             res.send({
                 message: 'you sure did insert a row to /contact',
-                result: insertedRow
+                result: 'insertedRow'
             });
         }).catch(err => {
-            console.err('error inserting row', err);
+            console.log('error inserting row', err);
         });
-        */
+        /*
         endpoint.connectionForRequest(req).then(client => {
 
             return client.query('select $1::int as number', ['1']).then(result => {
@@ -32,6 +32,7 @@ module.exports = {
                 console.error('error running query', err);
             });
         });
+        */
 
     }
 };

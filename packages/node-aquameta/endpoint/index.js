@@ -1,6 +1,8 @@
 const Endpoint = require('./Endpoint');
 const Schema = require('./datum/Schema');
-const uuid = require('./util/Uuid');
+//const uuid = require('./util/Uuid');
+const dataRoutes = require('./Data');
+//const pageRoutes = require('./Page');
 
 /*
  * TODOs
@@ -31,26 +33,41 @@ const uuid = require('./util/Uuid');
  *
  */
 
-const dataRoutes = require('./Data');
-//const pageRoutes = require('./Page');
+/* Usage
+ * const app = require('express')();
+ * const endpoint = require('./node-datum')(app, optionalConfig)
+ * app.get('/contact', (req, res) =>
+ *      endpoint.schema(...).table(...).rows().then(res.send));
+ */
+module.exports = ( app, config ) => {
 
-module.exports = app => {
+    /* ENDPOINT */
+    // Defines the routes for retrieving client-side data
+    // Returns a function that can be used to retrieve database access server-side
 
-    // Server side DB requests
-    const endpoint = {
-        connectionForRequest: Endpoint.connectionForRequest,
-        request: Endpoint.request,
-        schema: function(name) { return new Schema(this, name); },
-        uuid
-    };
+    /*
+    datum(req).schema('meta').table('relation').rows();
+    let db = datum(req);
+    let db = database(req);
+    let endpoint = connect(req);
+    let database = connection(req);
+    let database = endpoint(req);
+    let database = connectionForRequest(req);
+    let endpoint = endpointForRequest(req);
+    */
 
-    //console.log('endpoint', endpoint.connectionForRequest);
+    // Server-side API
+    const datum = req => ({
+        schema: name => new Schema(new Endpoint(req), name)
+    });
 
-    // API routes
-    dataRoutes(app, endpoint);
+    // Register Client-side API routes
+    dataRoutes(app, datum);
 
     // Probably not using
     //pageRoutes(app);
 
-    return endpoint;
+    return datum;
+
 };
+
