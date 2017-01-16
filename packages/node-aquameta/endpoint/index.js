@@ -1,7 +1,8 @@
-const Endpoint = require('./Endpoint');
+//const Endpoint = require('./Endpoint');
+const Connection = require('./Connection');
 const Schema = require('./datum/Schema');
 //const uuid = require('./util/Uuid');
-const dataRoutes = require('./Data');
+const datumRoutes = require('./Datum');
 //const pageRoutes = require('./Page');
 
 /*
@@ -58,15 +59,18 @@ module.exports = ( app, config ) => {
 
     // Server-side API
     const datum = req => ({
-        schema: name => new Schema(new Endpoint(req), name)
+        // Maybe this should not be Endpoint, but Connection...
+        schema: name => new Schema(new Connection(req), name)
     });
 
+    // If app is supplied...
     // Register Client-side API routes
-    dataRoutes(app, datum);
+    if(app) datumRoutes(app, datum);
 
     // Probably not using
     //pageRoutes(app);
 
+    // Return server-side API
     return datum;
 
 };
