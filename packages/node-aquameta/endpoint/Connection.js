@@ -54,24 +54,32 @@ const verifySession = function( req ) {
 
     return pg.connect(anonConfig)
         .then(client => {
-            return client.query('select (role_id).name as role_name from endpoint.session where id = $1::uuid', [ req.cookies.session_id ]);
-            /* TODO these clients still need to be closed. SEE BELOW */
+            return client.query(
+                    'select (role_id).name as role_name from endpoint.session where id = $1::uuid',
+                    [ req.cookies.session_id ])
+
+                /* TODO these clients still need to be closed. SEE BELOW */
+                .then(result => (client.release(), result));
+                .then(error => (client.release(), throw error));
         })
         .then(result => {
             console.log('result is : ', result.row.length, result.row);
-            let userConfig = anonConfig;
-            userConfig.user = result.row.role_name;
+
+            let userConfig = Object.assign({}, anonConfig, { user: result.row.role_name });
             console.log('configs', userConfig, anonConfig);
+
             return pg.connect(userConfig);
         })
         .catch(err => {
             /* Problem logging in */
-            console.log('result is : ', result.row.length, result.row);
+            console.log('error is : ', err);
             return pg.connect(anonConfig);
         });
 
         /* TODO close clients e.g. */
 		/*
+         * this way would only work if we passed in a callback, instead of
+         * using promises
 		pool
 			.connect()
 			.then(client => {
