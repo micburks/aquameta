@@ -56,10 +56,9 @@ const QueryOptions = function( options ) {
         }
     })
     .join('&')
-    .replace(/^/, '?')
+    //.replace(/^/, '?')
     .replace(/&&/g, '&');
 
-    console.log(this);
 
 };
 

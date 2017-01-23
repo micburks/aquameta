@@ -1,9 +1,6 @@
-//const Endpoint = require('./Endpoint');
 const Connection = require('./Connection');
 const Schema = require('./datum/Schema');
-//const uuid = require('./util/Uuid');
 const datumRoutes = require('./Datum');
-//const pageRoutes = require('./Page');
 
 /*
  * TODOs
@@ -59,8 +56,7 @@ module.exports = ( app, config ) => {
 
     // Server-side API
     const datum = req => ({
-        // Maybe this should not be Endpoint, but Connection...
-        schema: name => new Schema(new Connection(req), name)
+        schema: name => new Schema(Connection(req), name)
     });
 
     // If app is supplied...

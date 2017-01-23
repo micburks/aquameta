@@ -93,18 +93,42 @@ return Response(
 */
 
 
-module.exports = request => {
+module.exports = function( request ) {
 
     const config = {
-        url: process.env.url,
-        version: process.env.version,
+        url: process.env.url || '/endpoint',
+        version: process.env.version || '/v1',
         request: request
     };
 
     const query = function( method ) {
 
-        return function(...args) {
-            return verifySession(config.request);
+        return function( metaId, args, data ) {
+            //console.log('function returned from query', config, method);
+
+            let queryOptions = new QueryOptions(args);
+
+            return verifySession(config.request)
+                .then(client => {
+                    return client.query(
+                        'select status, message, response, mimetype ' +
+                        'from endpoint.request($1, $2, $3, $4::json, $5::json)', [
+                            config.version,
+                            method,
+                            metaId.toUrl(),
+                            JSON.stringify(queryOptions.options),
+                            JSON.stringify(data)
+                        ])
+                    .then(res => {
+                        client.release();
+                        console.log(res);
+                        return res;
+                    })
+                    .catch(err => {
+                        client.release();
+                        console.log('error in query');
+                    });
+                })
         };
 
     };
