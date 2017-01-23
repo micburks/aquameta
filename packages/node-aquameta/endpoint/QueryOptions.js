@@ -1,8 +1,8 @@
 'use strict';
 const QueryOptions = function( options ) {
 
-    options = options || {};
-    options.metaData = options.hasOwnProperty('metaData') ? options.metaData : true;
+    this.options = options || {};
+    this.options.metaData = options.hasOwnProperty('metaData') ? options.metaData : true;
 
     // Map the keys of the options object to an array of encoded url components
     this.queryString = Object.keys(options).sort().map(keyName => {
@@ -59,6 +59,8 @@ const QueryOptions = function( options ) {
     .join('&')
     //.replace(/^/, '?')
     .replace(/&&/g, '&');
+
+    console.log('query options querystring', this.queryString);
 
 
 };
