@@ -7,37 +7,38 @@ const Relation = function(schema, name) {
     //console.log('Relation', schema.endpoint.connectionForRequest, name);
 	this.id = { schema_id: this.schema.id, name: this.name };
 };
+
 Relation.prototype.toUrl = function() {
-    return `/${this.schema.name}/${this.name}/`;
+    return `relation/${this.schema.name}/${this.name}`;
 /* idOnly param
 	return id_only ? '/relation/' + this.schema.name + '/' + this.name :
 		this.schema.database.endpoint.url + '/relation/' + this.schema.name + '/' + this.name;
 */
 };
+
 Relation.prototype.column = function( name ) {
 	return new AQ.Column(this, name);
 };
+
 Relation.prototype.rows = function( options ) {
-    return this.schema.endpoint.get(this, options).then(result => {
-        return new Rowset(this, result);
-    })
-/*
-		.then(function(rows) {
+    return this.schema.endpoint.get(this, options)
+        .then(rows => {
 
-			if (rows == null) {
-				throw 'Empty response';
-			}/*
-				else if (rows.result.length < 1) {
-				throw 'No rows returned';
-				}*/
-/*
-			return new AQ.Rowset(this, rows, options);
+            if (rows == null) {
+                throw 'Empty response';
+            }
+            else if (rows.result.length < 1) {
+                throw 'No rows returned';
+            }
 
-		}.bind(this)).catch(function(err) {
-			throw 'Rows request failed: ' + err;
-		});
-*/
+            return new Rowset(this, rows, options);
+
+        })
+        .catch(err => {
+            throw 'Rows request failed: ' + err;
+        });
 };
+
 Relation.prototype.row = function( options ) {
     this.schema.endpoint.get(this, options).then(result => {
         return new Row(this, result);
@@ -100,40 +101,28 @@ Relation.prototype.row = function( options ) {
 */
 };
 Relation.prototype.insert = function( data, options ) {
-    return this.schema.endpoint.post(this, options);/*.then(result => {
-        if(!result.length) {
-            throw 'no rows inserted';
-        }
-        if(result.length === 1) {
-            return new Row(this, result);
-        }
-        return new Rowset(this, result);
-    });
-    */
 
-/*
-	if (typeof data == 'undefined') {
+	if (typeof data === 'undefined') {
 		// table.insert({}) is equivalent to table.insert()
 		// both will insert default values
 		data = {};
 	}
 
-	// Return inserted row promise
-	return this.schema.database.endpoint.patch(this, data)
-		.then(function(inserted_row) {
+	return this.schema.endpoint.patch(this, {}, data)
+		.then(result => {
 
-			if (inserted_row == null) {
+			if (!result) {
 				throw 'Empty response';
 			}
-			if (typeof data.length != 'undefined' && data.length > 1) {
-				return new AQ.Rowset(this, inserted_row, null);
+			if (result.length === 1) {
+				return new Rowset(this, result, null);
 			}
-			return new AQ.Row(this, inserted_row);
+			return new Row(this, result);
 
-		}.bind(this)).catch(function(err) {
+		})
+        .catch(err => {
 			throw 'Insert failed: ' + err;
 		});
-*/
 };
 
 module.exports = Relation;
