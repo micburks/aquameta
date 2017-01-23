@@ -1,3 +1,4 @@
+'use strict';
 const QueryOptions = function( options ) {
 
     options = options || {};

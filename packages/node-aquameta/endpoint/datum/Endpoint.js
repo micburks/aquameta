@@ -1,3 +1,4 @@
+'use strict';
 const QueryOptions = require('../QueryOptions');
 
 module.exports = function() {

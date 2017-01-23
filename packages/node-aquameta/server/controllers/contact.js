@@ -2,15 +2,13 @@
 module.exports = {
     get(req, res, datum) {
 
-        var rows = datum(req).schema('mickey').relation('test_data').rows();
-        console.log(rows);
-        rows.then(rows => {
+        datum(req).schema('mickey').relation('test_data').rows().then(rows => {
 
-            res.send({
-                message: 'you sure did get rows from /contact',
-                result: 'rows'
-            });
+            res.render('server.contact.pug', { rows });
 
+        }).catch(err => {
+            console.log('error selecting all rows', err);
+            res.render('server.contact.pug', { err });
         });
 
     },
@@ -28,6 +26,9 @@ module.exports = {
 
         }).catch(err => {
             console.log('error inserting row', err);
+            res.send({
+                message: 'error'
+            });
         });
 
     }
