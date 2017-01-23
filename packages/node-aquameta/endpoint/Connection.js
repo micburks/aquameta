@@ -1,11 +1,15 @@
+'use strict';
 const pg = require('pg');
 const QueryOptions = require('./QueryOptions');
 
 const anonConfig = {
-    // user: 'anonymous',
+    /*
+    user: 'anonymous',
+    password: null,
+    */
     user: 'mickey',
+    password: 'secret',
     database: 'aquameta',
-    /* password: 'lkjd', */
     host: 'localhost',
     port: 5432,
     max: 4,
@@ -54,6 +58,7 @@ const verifySession = function( req ) {
             /* TODO these clients still need to be closed. SEE BELOW */
         })
         .then(result => {
+            console.log('result is : ', result.row.length, result.row);
             let userConfig = anonConfig;
             userConfig.user = result.row.role_name;
             console.log('configs', userConfig, anonConfig);
@@ -61,6 +66,7 @@ const verifySession = function( req ) {
         })
         .catch(err => {
             /* Problem logging in */
+            console.log('result is : ', result.row.length, result.row);
             return pg.connect(anonConfig);
         });
 
@@ -121,12 +127,12 @@ module.exports = function( request ) {
                         ])
                     .then(res => {
                         client.release();
-                        console.log(res);
+                        console.log('endpiont.request', res);
                         return res;
                     })
                     .catch(err => {
                         client.release();
-                        console.log('error in query');
+                        console.log('error in endpoint.request query');
                     });
                 })
         };

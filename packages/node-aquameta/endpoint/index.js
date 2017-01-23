@@ -1,3 +1,4 @@
+'use strict';
 const Connection = require('./Connection');
 const Schema = require('./datum/Schema');
 const datumRoutes = require('./Datum');
