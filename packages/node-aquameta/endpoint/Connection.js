@@ -58,38 +58,28 @@ const verifySession = function( req ) {
                     'select (role_id).name as role_name from endpoint.session where id = $1::uuid',
                     [ req.cookies.session_id ])
 
-                /* TODO these clients still need to be closed. SEE BELOW */
-                .then(result => (client.release(), result));
-                .then(error => (client.release(), throw error));
+                /* Release Client */
+                .then(result => (client.release(), result))
+                .catch(error => {
+                    client.release();
+                    throw error;
+                });
+
         })
         .then(result => {
-            console.log('result is : ', result.row.length, result.row);
+            console.log('result is : ', result.rows.length, result.rows);
 
-            let userConfig = Object.assign({}, anonConfig, { user: result.row.role_name });
+            /* Copy anonymous config and modify user */
+            let userConfig = Object.assign({}, anonConfig, { user: result.rows[0].role_name });
             console.log('configs', userConfig, anonConfig);
 
             return pg.connect(userConfig);
         })
         .catch(err => {
             /* Problem logging in */
-            console.log('error is : ', err);
+            //console.log('connection error is : ', err);
             return pg.connect(anonConfig);
         });
-
-        /* TODO close clients e.g. */
-		/*
-         * this way would only work if we passed in a callback, instead of
-         * using promises
-		pool
-			.connect()
-			.then(client => {
-				return client
-					.query('SELECT $1::int AS "clientCount"', [client.count])
-					.then(res => console.log(res.rows[0].clientCount)) // outputs 0
-					.then(() => client)
-			})
-			.then(client => client.release())
-		*/
 
 }
 
@@ -120,10 +110,13 @@ module.exports = function( request ) {
         return function( metaId, args, data ) {
             //console.log('function returned from query', config, method);
 
+            args = args || {};
+            data = data || {};
             let queryOptions = new QueryOptions(args);
 
             return verifySession(config.request)
                 .then(client => {
+                    console.log('trying connection', config.version, method, metaId.toUrl(), JSON.stringify(queryOptions.options), JSON.stringify(data));
                     return client.query(
                         'select status, message, response, mimetype ' +
                         'from endpoint.request($1, $2, $3, $4::json, $5::json)', [
@@ -133,14 +126,18 @@ module.exports = function( request ) {
                             JSON.stringify(queryOptions.options),
                             JSON.stringify(data)
                         ])
-                    .then(res => {
+                    .then(result => {
                         client.release();
-                        console.log('endpiont.request', res);
-                        return res;
+                        result = result.rows[0];
+                        if (result.status >= 400) {
+                            throw result;
+                        }
+                        console.log('endpoint.request, result.rows:', result);
+                        return result.response;
                     })
                     .catch(err => {
-                        client.release();
-                        console.log('error in endpoint.request query');
+                        if (client.release) client.release();
+                        console.log('error in endpoint.request query', err);
                     });
                 })
         };
