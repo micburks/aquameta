@@ -1,5 +1,5 @@
 const Relation = require('./Relation');
-const Function = require('./Function');
+const Fn = require('./Function');
 
 const Schema = function( endpoint, name ) {
     this.endpoint = endpoint;
@@ -7,7 +7,7 @@ const Schema = function( endpoint, name ) {
     this.id = { name: this.name };
 };
 Schema.prototype.relation = function( name ) { return new Relation(this, name); };
-//Schema.prototype.function = function( name, options ) { return new Function(this, name, options); };
+//Schema.prototype.function = function( name, options ) { return new Fn(this, name, options); };
 
 Schema.prototype.function = function( identifier, args, options )   {
 
@@ -43,7 +43,7 @@ Schema.prototype.function = function( identifier, args, options )   {
         }
     }
 
-    var fn = new Function(this, name, parameter_type_list);
+    var fn = new Fn(this, name, parameter_type_list);
 
     return this.database.endpoint.get(fn, options)
         .then(function(response) {
@@ -55,9 +55,9 @@ Schema.prototype.function = function( identifier, args, options )   {
                 throw 'Result set empty';
             }
             if(response.result.length > 1) {
-                return new FunctionResultSet(fn, response);
+                return new FnResultSet(fn, response);
             }
-            return new FunctionResult(fn, response);
+            return new FnResult(fn, response);
 
         }.bind(this)).catch(function(err) {
             throw 'Function call request failed: ' + err;

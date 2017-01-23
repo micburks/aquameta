@@ -15,13 +15,13 @@ module.exports = function() {
             let queryOptions = new QueryOptions(args);
             // args = args || {};
 
-            let baseUrl = `/${config.url}/${config.version}`.replace(/\/\//g, '/');
+            let baseUrl = `/${config.url}/${config.version}`.replace(/\/+/g, '/');
             console.log(baseUrl);
 
             // URLs
             let idUrl = metaId.toUrl();//true); // ID part of the URL only
             let urlWithoutQuery = baseUrl + idUrl;
-            let urlWithQuery = urlWithoutQuery + queryOptions.queryString;
+            let urlWithQuery = urlWithoutQuery + queryOptions.queryString.replace(/^\?*/, '?');
 
             // If query string is too long, upgrade GET method to POST
             if(method === 'GET' && (location.host + urlWithQuery).length > 1000) {
