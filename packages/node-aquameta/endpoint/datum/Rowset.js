@@ -2,6 +2,7 @@ const Field = require('./Field');
 const Rowset = /*function( relation, options ) {};
 
 Rowset = */ function( relation, response, server_arguments ) {
+    console.log('in rowset', response);
 	this.relation = relation;
 	this.schema = relation.schema;
 	this.columns = response.columns || null;
@@ -110,7 +111,8 @@ Rowset.prototype.where = function() {
 	}.bind(this));
 
 };
-Rowset.prototype.order_by = function( column, direction ) {
+
+Rowset.prototype.orderBy = function( column, direction ) {
 	/*
 	   var ordered = _.sortBy(this.rows, function(el) {
 	   return el.row[column];
@@ -121,13 +123,15 @@ Rowset.prototype.order_by = function( column, direction ) {
 	}
 	return new AQ.Rowset(this.relation, { columns: this.columns, result: ordered });
 };
+
 Rowset.prototype.limit = function( lim ) {
 	if (lim <= 0) {
 		throw 'Bad limit';
 	}
 	return new AQ.Rowset(this.relation, { columns: this.columns, result: this.rows.slice(0, lim) });
 };
-Rowset.prototype.related_rows = function( self_column_name, related_relation_name, related_column_name, options ) {
+
+Rowset.prototype.relatedRows = function( self_column_name, related_relation_name, related_column_name, options ) {
 
 	var relation_parts = related_relation_name.split('.');
 	if (relation_parts.length < 2) {
@@ -154,7 +158,8 @@ Rowset.prototype.related_rows = function( self_column_name, related_relation_nam
 
 	return db.schema(schema_name).relation(relation_name).rows(options);
 };
-Rowset.prototype.related_row = function( self_column_name, related_relation_name, related_column_name, options ) {
+
+Rowset.prototype.relatedRow = function( self_column_name, related_relation_name, related_column_name, options ) {
 
 	var relation_parts = related_relation_name.split('.');
 	if (relation_parts.length < 2) {
@@ -183,3 +188,4 @@ Rowset.prototype.related_row = function( self_column_name, related_relation_name
 };
 
 module.exports = Rowset;
+

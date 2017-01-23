@@ -18,7 +18,7 @@ Relation.prototype.column = function( name ) {
 	return new AQ.Column(this, name);
 };
 Relation.prototype.rows = function( options ) {
-    this.schema.endpoint.get(this, options).then(result => {
+    return this.schema.endpoint.get(this, options).then(result => {
         return new Rowset(this, result);
     })
 /*

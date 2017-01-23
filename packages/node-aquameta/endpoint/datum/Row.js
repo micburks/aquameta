@@ -1,10 +1,7 @@
 const Field = require('./Field');
-const Row = function( relation, options ) {};
-// get/set field
-Row.prototype.update = function() {};
-Row.prototype.delete = function() {};
 
-AQ.Row = function( relation, response ) {
+const Row = function( relation, options ) {
+
 	this.relation = relation;
 	this.schema = relation.schema;
 	this.row_data = response.result[0].row;
@@ -36,13 +33,19 @@ AQ.Row = function( relation, response ) {
 				this.relation.schema.database.endpoint.url + '/row/' + this.relation.schema.name + '/' + this.relation.name + '/' + /*JSON.stringify(this.pk_value)*/ this.pk_value;
 		};
 
-	}
+    }
 };
-AQ.Row.prototype = {
-	constructor: AQ.Row,
+/*
+// get/set field
+Row.prototype.update = function() {};
+Row.prototype.delete = function() {};
+*/
+
+Row.prototype = {
+	constructor: Row,
 	get: function( name )           { return this.row_data[name]; },
 	set: function( name, value )    { this.row_data[name] = value; return this; },
-	to_string: function()           { return JSON.stringify(this.row_data); },
+	toString: function()           { return JSON.stringify(this.row_data); },
 	clone: function()               { return new AQ.Row(this.relation, { columns: this.columns, pk: this.pk_column_name, result: [{ row: this.row_data }]}); },
 	field: function( name ) {
 		if (typeof this.cached_fields[name] == 'undefined') {
@@ -59,7 +62,8 @@ AQ.Row.prototype = {
 		return null;
 	}
 };
-AQ.Row.prototype.update = function() {
+
+Row.prototype.update = function() {
 	return this.relation.schema.database.endpoint.patch(this, this.row_data)
 		.then(function(response) {
 
@@ -72,7 +76,8 @@ AQ.Row.prototype.update = function() {
 			throw 'Update failed: ' + err;
 		});
 };
-AQ.Row.prototype.delete = function() { 
+
+Row.prototype.delete = function() { 
 	return this.relation.schema.database.endpoint.delete(this)
 		.then(function(response) {
 
@@ -84,7 +89,8 @@ AQ.Row.prototype.delete = function() {
 			throw 'Delete failed: ' + err;
 		});
 };
-AQ.Row.prototype.related_rows = function( self_column_name, related_relation_name, related_column_name, options )  {
+
+Row.prototype.relatedRows = function( self_column_name, related_relation_name, related_column_name, options )  {
 
 	var relation_parts = related_relation_name.split('.');
 	if (relation_parts.length < 2) {
@@ -106,7 +112,8 @@ AQ.Row.prototype.related_rows = function( self_column_name, related_relation_nam
 
 	return db.schema(schema_name).relation(relation_name).rows(options);
 };
-AQ.Row.prototype.related_row = function( self_column_name, related_relation_name, related_column_name, options ) {
+
+Row.prototype.relatedRow = function( self_column_name, related_relation_name, related_column_name, options ) {
 
 	var relation_parts = related_relation_name.split('.');
 	if (relation_parts.length < 2) {
@@ -128,4 +135,5 @@ AQ.Row.prototype.related_row = function( self_column_name, related_relation_name
 
 	return db.schema(schema_name).relation(relation_name).row(options);
 };
+
 module.exports = Row;
