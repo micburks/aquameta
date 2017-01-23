@@ -1,0 +1,7 @@
+extends layout.pug
+block content
+    h1 title
+    p body text
+    form(method='POST' action='/server/contact')
+        input(type='text' placeholder='placeholder') 
+        input(type='submit' value='Send')
