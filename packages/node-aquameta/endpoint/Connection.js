@@ -1,6 +1,6 @@
 'use strict';
 const pg = require('pg');
-const QueryOptions = require('./QueryOptions');
+const Query = require('./Query');
 
 const anonConfig = {
     /*
@@ -95,12 +95,12 @@ module.exports = function( request, config ) {
             
             args = args || {};
             data = data || {};
-            let queryOptions = new QueryOptions(args);
+            let query = new Query(args);
 
             return verifySession(request)
             .then(client => {
 
-                console.log('trying connection', config.version, method, metaId.toUrl(), JSON.stringify(queryOptions.options), JSON.stringify(data));
+                console.log('trying connection', config.version, method, metaId.toUrl(), JSON.stringify(query.options), JSON.stringify(data));
 
                 return client.query(
                     'select status, message, response, mimetype ' +
@@ -108,7 +108,7 @@ module.exports = function( request, config ) {
                         config.version,
                         method,
                         metaId.toUrl(),
-                        JSON.stringify(queryOptions.options),
+                        JSON.stringify(query.options),
                         JSON.stringify(data)
                 ])
                 .then(result => {

@@ -1,4 +1,4 @@
-const QueryOptions = require('./QueryOptions');
+const Query = require('./Query');
 const Connection = require('./Connection');
 
 const express = require('express');
