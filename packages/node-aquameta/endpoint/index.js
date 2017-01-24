@@ -5,13 +5,11 @@ const datumRoutes = require('./Datum');
 
 /*
  * TODOs
- * auth login - call function and set cookie
- * Request - map function call to endpoint.request argument object or to a url if client side
- * register Data routes
+ * auth login - call function and set cookie - wrapper?
  * consider events/websocket... sockiet.io?
- * figure out auth role call - store user in env, instead of doing user lookup on every db hit
  * map db errors?
  * parse data url /endpoint/v1/schema/rel|func/...
+ * keep-open for server-side computation
  *
  * regarding auth role call
  * data requests are one db hit per request, so we can always just look up the user
@@ -41,11 +39,11 @@ const datumRoutes = require('./Datum');
 module.exports = ( app, config ) => {
 
     /* ENDPOINT */
-    // Defines the routes for retrieving client-side data
-    // Returns a function that can be used to retrieve database access server-side
+    /* Defines the routes for retrieving client-side data */
+    /* Returns a function that can be used to retrieve database access server-side */
 
     config.url = config.url || '/endpoint';
-    config.version = config.version || '/v1';
+    config.version = config.version || 'v1';
     config.sessionCookie = config.sessionCookie || 'SESSION_ID';
 
     /*
@@ -59,19 +57,19 @@ module.exports = ( app, config ) => {
     let endpoint = endpointForRequest(req);
     */
 
-    // Server-side API
+    /* Server-side API */
     const datum = request => ({
         schema: name => new Schema(Connection(request, config), name)
     });
 
-    // If app is supplied...
-    // Register Client-side API routes
+    /* If app is supplied... */
+    /* Register Client-side API route */
     if(app) datumRoutes(app, config);
 
     // Probably not using
     //pageRoutes(app);
 
-    // Return server-side API
+    // Return Server-side API
     return datum;
 
 };
