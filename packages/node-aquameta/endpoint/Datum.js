@@ -1,6 +1,10 @@
 const QueryOptions = require('./QueryOptions');
 const Connection = require('./Connection');
 
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+
 /*
 const application = (env, start_response) => {
     request = Request(env)
@@ -87,7 +91,9 @@ module.exports = (app, config) => {
     return json or whatever
     */
 
+    const router = express.Router();
     const connect = Connection().connect;
+    const path = new RegExp(`^${config.url}/${config.version}`);
 
     function handleRequest(req, res) {
         console.log('datum request', req.url, req.method, req.query, req.body);
@@ -98,13 +104,17 @@ module.exports = (app, config) => {
         */
     }
 
-    let route = new RegExp(`^${config.url}/${config.version}`);
+    router.use(cookieParser());
+    router.use(bodyParser.json());
+    router.use(bodyParser.urlencoded({ extended: true }));
 
-    app.route(route)
+    router.route(path)
         .get(handleRequest)
         .post(handleRequest)
         .patch(handleRequest)
         .delete(handleRequest);
+
+    app.use(router);
 
 };
 
