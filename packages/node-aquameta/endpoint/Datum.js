@@ -1,3 +1,6 @@
+const QueryOptions = require('./QueryOptions');
+const Connection = require('./Connection');
+
 /*
 const application = (env, start_response) => {
     request = Request(env)
@@ -62,10 +65,47 @@ const application = (env, start_response) => {
 };
 */
 
-module.exports = app => {
+module.exports = (app, config) => {
     /*
      * starts with /endpoint
      * go through auth middleware
      * return endpoint.request
      */
+
+    /*
+    could just run endpoint.shcmea('endpoint').function('request', {})
+    and be done
+    would have to duplicate some of the same error checking with status code and
+    pull result and mimetype out of json object
+    */
+
+    /*
+    everythign starting with /endpiont comes here
+    take url, query string, data and pass them into queryOptions parser
+    establish connection to database
+    run query with queryOptions
+    return json or whatever
+    */
+
+    const connect = Connection().connect;
+
+    function handleRequest(req, res) {
+        console.log('datum request', req.url, req.method, req.query, req.body);
+        /*
+         * Next TODO: move query logic into queryOptions or Query
+        let query = new Query(req.method, req.url, req.query, req.body);
+        return query.run(connect(req));
+        */
+    }
+
+    let route = new RegExp(`^${config.url}/${config.version}`);
+
+    app.route(route)
+        .get(handleRequest)
+        .post(handleRequest)
+        .patch(handleRequest)
+        .delete(handleRequest);
+
 };
+
+
