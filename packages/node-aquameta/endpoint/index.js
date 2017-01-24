@@ -46,6 +46,7 @@ module.exports = ( app, config ) => {
 
     config.url = config.url || '/endpoint';
     config.version = config.version || '/v1';
+    config.sessionCookie = config.sessionCookie || 'SESSION_ID';
 
     /*
     datum(req).schema('meta').table('relation').rows();

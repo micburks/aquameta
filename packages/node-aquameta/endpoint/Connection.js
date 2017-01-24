@@ -37,39 +37,23 @@ pg.connect(config, callback);
 
 const verifySession = function( req ) {
 
-    // TODO
-    // If req.session.user is logged in, return pg.connect(userConfig) without
-    // looking at endpoint.session
-    // ... except that a user could have logged out since last time ...
+    /* Verifying the role connected to the database is required for each query attempt */
+    /* This overhead is small compared to the benefits of row-level permissions */
 
     // TODO
-    // Need to pull out session_id from cookies without using 3rd party library
+    // May need to pull out session_id from cookies without using 3rd party library
     // in the case that the user hasn't installed it
-
-/* TODO
-        // Auth session
-        let auth_session_id = req.cookies.sessionId;
-
-
-        let currentSessionCookie =  req.cookies.sessionId;
-        if (this.authSessionId != currentSessioncookie) {
-            // session has changed
-            // update auth_session_id
-            this.authSessionId = currentSessionCookie;
-            // dump cache
-            this.cache = {};
-        }
-        */
+    // OR
+    // Require user to install body-parser and cookie-parser
 
     return pg.connect(anonConfig)
         .then(client => {
+
             return client.query(
                     'select (role_id).name as role_name from endpoint.session where id = $1::uuid',
                     [ req.cookies.session_id ])
 
                 .then(result => {
-
-                    /* TODO put session_id in the cookie data after doing lookup */
 
                     /* Logged in */
                     //console.log('result is : ', result.rows.length, result.rows);
@@ -82,22 +66,19 @@ const verifySession = function( req ) {
                     console.log('configs', userConfig, anonConfig);
 
                     return pg.connect(userConfig);
+
                 })
                 .catch(err => {
+
                     /* Problem logging in */
                     //console.log('connection error is : ', err);
 
-                    // TODO is there any need to connect again? just return the client
-                    /* Release Client */
-                    /*
-                    client.release();
-                    return pg.connect(anonConfig);
-                    */
+                    /* Return client for next query */
                     return client;
+
                 });
 
         });
-
 }
 
 
@@ -155,7 +136,7 @@ module.exports = function( request, config ) {
         patch: query('PATCH'),
         delete: query('DELETE')
     } :
-    { connect: verifySesson };
+    { connect: verifySession };
 
 };
 
