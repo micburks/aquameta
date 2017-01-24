@@ -25,6 +25,15 @@ if (app.get('env') === 'production') {
 }
 app.use(session(sess))
 
+// Log request to the console
+app.use(logger('dev'));
+app.set('views', './views');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(express.static('dist'));
+app.use(express.static('public'));
 
 // Client-side usage
 /**********************************************************/
@@ -36,18 +45,6 @@ const endpointConfig = {
 // Register data routes
 const datum = require('./endpoint')(app, endpointConfig);
 /**********************************************************/
-
-
-// Log request to the console
-app.use(logger('dev'));
-app.set('views', './views');
-
-// Parse incoming requests data (github.com/expressjs/body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(express.static('dist'));
-app.use(express.static('public'));
 
 // Server-side usage
 /**********************************************************/
