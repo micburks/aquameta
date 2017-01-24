@@ -1,5 +1,5 @@
 'use strict';
-const QueryOptions = function( options ) {
+const Query = function( options ) {
 
     this.options = options || {};
     this.options.metaData = options.hasOwnProperty('metaData') ? options.metaData : true;
@@ -65,5 +65,5 @@ const QueryOptions = function( options ) {
 
 };
 
-module.exports = QueryOptions;
+module.exports = Query;
 
