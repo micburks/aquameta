@@ -19,7 +19,7 @@ module.exports = function( app, config ) {
 
         let query = new Query(config);
         query.fromRequest(req);
-        query.run(connect(req))
+        query.execute(connect(req))
             .then(result => {
 
                 console.log(result);

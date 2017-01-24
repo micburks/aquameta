@@ -90,7 +90,7 @@ module.exports = function( request, config ) {
 
             let query = new Query(config);
             query.fromDatum(method, metaId, args, data);
-            return query.run(verifySession(request));
+            return query.execute(verifySession(request));
 
         };
 
