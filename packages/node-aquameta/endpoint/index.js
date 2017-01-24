@@ -44,6 +44,9 @@ module.exports = ( app, config ) => {
     // Defines the routes for retrieving client-side data
     // Returns a function that can be used to retrieve database access server-side
 
+    config.url = config.url || '/endpoint';
+    config.version = config.version || '/v1';
+
     /*
     datum(req).schema('meta').table('relation').rows();
     let db = datum(req);
@@ -56,13 +59,13 @@ module.exports = ( app, config ) => {
     */
 
     // Server-side API
-    const datum = req => ({
-        schema: name => new Schema(Connection(req), name)
+    const datum = request => ({
+        schema: name => new Schema(Connection(request, config), name)
     });
 
     // If app is supplied...
     // Register Client-side API routes
-    if(app) datumRoutes(app, datum);
+    if(app) datumRoutes(app, config);
 
     // Probably not using
     //pageRoutes(app);
