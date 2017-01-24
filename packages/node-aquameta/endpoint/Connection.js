@@ -79,7 +79,7 @@ const verifySession = function( req ) {
                 });
 
         });
-}
+};
 
 
 module.exports = function( request, config ) {
@@ -88,55 +88,28 @@ module.exports = function( request, config ) {
 
         return function( metaId, args, data ) {
 
-            /* TODO?
-            let query = new Query(method, metaId, args, data);
+            let query = new Query(config);
+            query.fromDatum(method, metaId, args, data);
             return query.run(verifySession(request));
-            */
-            
-            args = args || {};
-            data = data || {};
-            let query = new Query(args);
 
-            return verifySession(request)
-            .then(client => {
-
-                console.log('trying connection', config.version, method, metaId.toUrl(), JSON.stringify(query.options), JSON.stringify(data));
-
-                return client.query(
-                    'select status, message, response, mimetype ' +
-                    'from endpoint.request($1, $2, $3, $4::json, $5::json)', [
-                        config.version,
-                        method,
-                        metaId.toUrl(),
-                        JSON.stringify(query.options),
-                        JSON.stringify(data)
-                ])
-                .then(result => {
-                    client.release();
-                    result = result.rows[0];
-                    if (result.status >= 400) {
-                        throw result;
-                    }
-                    console.log('endpoint.request, result.rows:', result);
-                    return result.response;
-                })
-                .catch(err => {
-                    if (client.release) client.release();
-                    console.log('error in endpoint.request query', err);
-                });
-
-            });
         };
+
     };
 
-    // TODO Big ol' ugly ternary
-    return request ? {
-        get: query('GET'),
-        post: query('POST'),
-        patch: query('PATCH'),
-        delete: query('DELETE')
-    } :
-    { connect: verifySession };
+    /* Server-side API */
+    if (request) {
+        return {
+            get: query('GET'),
+            post: query('POST'),
+            patch: query('PATCH'),
+            delete: query('DELETE')
+        };
+    }
+
+    /* Internal */
+    return {
+        connect: verifySession
+    };
 
 };
 
