@@ -5,7 +5,7 @@ const Query = function( config ) {
     return this;
 };
 
-Query.prototype.fromRequest = function( request ) {
+Query.prototype.fromRequest = function( req ) {
 
     this.method = req.method;
     this.metaId = req.url.split('?')[0];
@@ -149,7 +149,7 @@ Query.prototype.fetch = function() {
 };
 
 /* Server-side */
-Query.prototype.run = function( connection ) {
+Query.prototype.execute = function( connection ) {
 
     return connection.then(client => {
 
