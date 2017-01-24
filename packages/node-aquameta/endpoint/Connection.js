@@ -23,6 +23,9 @@ const anonConfig = {
  * })
  */
 
+/* TODO in order to do this, I would have to keep track of the open pools,
+ * instead of doing it with pg.connect()
+
 /*
 var pool = new pg.Pool(config);
 pool.connect(callback);
@@ -34,10 +37,16 @@ pg.connect(config, callback);
 
 const verifySession = function( req ) {
 
+    // TODO
     // If req.session.user is logged in, return pg.connect(userConfig) without
     // looking at endpoint.session
+    // ... except that a user could have logged out since last time ...
 
-/*
+    // TODO
+    // Need to pull out session_id from cookies without using 3rd party library
+    // in the case that the user hasn't installed it
+
+/* TODO
         // Auth session
         let auth_session_id = req.cookies.sessionId;
 
@@ -58,98 +67,95 @@ const verifySession = function( req ) {
                     'select (role_id).name as role_name from endpoint.session where id = $1::uuid',
                     [ req.cookies.session_id ])
 
-                /* Release Client */
-                .then(result => (client.release(), result))
-                .catch(error => {
+                .then(result => {
+
+                    /* TODO put session_id in the cookie data after doing lookup */
+
+                    /* Logged in */
+                    //console.log('result is : ', result.rows.length, result.rows);
+
+                    /* Release Client */
                     client.release();
-                    throw error;
+
+                    /* Copy anonymous config and modify user */
+                    let userConfig = Object.assign({}, anonConfig, { user: result.rows[0].role_name });
+                    console.log('configs', userConfig, anonConfig);
+
+                    return pg.connect(userConfig);
+                })
+                .catch(err => {
+                    /* Problem logging in */
+                    //console.log('connection error is : ', err);
+
+                    // TODO is there any need to connect again? just return the client
+                    /* Release Client */
+                    /*
+                    client.release();
+                    return pg.connect(anonConfig);
+                    */
+                    return client;
                 });
 
-        })
-        .then(result => {
-            console.log('result is : ', result.rows.length, result.rows);
-
-            /* Copy anonymous config and modify user */
-            let userConfig = Object.assign({}, anonConfig, { user: result.rows[0].role_name });
-            console.log('configs', userConfig, anonConfig);
-
-            return pg.connect(userConfig);
-        })
-        .catch(err => {
-            /* Problem logging in */
-            //console.log('connection error is : ', err);
-            return pg.connect(anonConfig);
         });
 
 }
 
-// will have to do anon query to find current user with session_id, then switch
-// role name for next query
 
-/*
-query('select status, message, response, mimetype from endpoint.request($1, $2, $3, $4::json, $5::json)', [ version, request.method, path, json.dumps(request.args.to_dict(flat=False)), request.get_data() if request.data else 'null' ])
-
-return Response(
-    response=row.response,
-    content_type=row.mimetype,
-    status=row.status
-)
-*/
-
-
-module.exports = function( request ) {
-
-    const config = {
-        url: process.env.url || '/endpoint',
-        version: process.env.version || '/v1',
-        request: request
-    };
+module.exports = function( request, config ) {
 
     const query = function( method ) {
 
         return function( metaId, args, data ) {
-            //console.log('function returned from query', config, method);
 
+            /* TODO?
+            let query = new Query(method, metaId, args, data);
+            return query.run(verifySession(request));
+            */
+            
             args = args || {};
             data = data || {};
             let queryOptions = new QueryOptions(args);
 
-            return verifySession(config.request)
-                .then(client => {
-                    console.log('trying connection', config.version, method, metaId.toUrl(), JSON.stringify(queryOptions.options), JSON.stringify(data));
-                    return client.query(
-                        'select status, message, response, mimetype ' +
-                        'from endpoint.request($1, $2, $3, $4::json, $5::json)', [
-                            config.version,
-                            method,
-                            metaId.toUrl(),
-                            JSON.stringify(queryOptions.options),
-                            JSON.stringify(data)
-                        ])
-                    .then(result => {
-                        client.release();
-                        result = result.rows[0];
-                        if (result.status >= 400) {
-                            throw result;
-                        }
-                        console.log('endpoint.request, result.rows:', result);
-                        return result.response;
-                    })
-                    .catch(err => {
-                        if (client.release) client.release();
-                        console.log('error in endpoint.request query', err);
-                    });
-                })
-        };
+            return verifySession(request)
+            .then(client => {
 
+                console.log('trying connection', config.version, method, metaId.toUrl(), JSON.stringify(queryOptions.options), JSON.stringify(data));
+
+                return client.query(
+                    'select status, message, response, mimetype ' +
+                    'from endpoint.request($1, $2, $3, $4::json, $5::json)', [
+                        config.version,
+                        method,
+                        metaId.toUrl(),
+                        JSON.stringify(queryOptions.options),
+                        JSON.stringify(data)
+                ])
+                .then(result => {
+                    client.release();
+                    result = result.rows[0];
+                    if (result.status >= 400) {
+                        throw result;
+                    }
+                    console.log('endpoint.request, result.rows:', result);
+                    return result.response;
+                })
+                .catch(err => {
+                    if (client.release) client.release();
+                    console.log('error in endpoint.request query', err);
+                });
+
+            });
+        };
     };
 
-    return {
+    // TODO Big ol' ugly ternary
+    return request ? {
         get: query('GET'),
         post: query('POST'),
         patch: query('PATCH'),
         delete: query('DELETE')
-    };
+    } :
+    { connect: verifySesson };
 
 };
 
