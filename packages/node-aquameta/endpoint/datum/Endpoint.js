@@ -1,12 +1,7 @@
 'use strict';
 const Query = require('../Query');
 
-module.exports = function() {
-
-    const config = {
-        url: '/endpoint',
-        version: 'v1'
-    };
+module.exports = function( config ) {
 
     const query = function( method ) {
 
