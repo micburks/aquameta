@@ -1,20 +1,13 @@
 const Endpoint = require('./Endpoint');
 const Schema = require('./Schema');
 
+const config = {
+    url: '/endpoint',
+    version: 'v1'
+};
+
 const datum = {
-    schema: name => new Schema(Endpoint, name)
+    schema: name => new Schema(Endpoint(config), name)
 };
 
-window.datum = datum;
-
-/*
-module.exports = ( app, config ) => {
-
-    const datum = {
-        schema: name => new Schema(new Endpoint(), name)
-    };
-
-    return datum;
-
-};
-*/
+module.exports = datum;
