@@ -1,6 +1,5 @@
-'use strict';
-const pg = require('pg');
-const Query = require('./Query');
+const pg = require('pg')
+const Query = require('./Query')
 
 const anonConfig = {
     /*
@@ -14,7 +13,7 @@ const anonConfig = {
     port: 5432,
     max: 4,
     idleTimeoutMillis: 30000
-};
+}
 
 /* TODO I want to keep track of how many pools are open and when they connect
  * pg-pool has some great events
@@ -59,13 +58,13 @@ const verifySession = function( req ) {
                     //console.log('result is : ', result.rows.length, result.rows);
 
                     /* Release Client */
-                    client.release();
+                    client.release()
 
                     /* Copy anonymous config and modify user */
-                    let userConfig = Object.assign({}, anonConfig, { user: result.rows[0].role_name });
-                    console.log('configs', userConfig, anonConfig);
+                    let userConfig = Object.assign({}, anonConfig, { user: result.rows[0].role_name })
+                    console.log('configs', userConfig, anonConfig)
 
-                    return pg.connect(userConfig);
+                    return pg.connect(userConfig)
 
                 })
                 .catch(err => {
@@ -74,27 +73,27 @@ const verifySession = function( req ) {
                     //console.log('connection error is : ', err);
 
                     /* Return client for next query */
-                    return client;
+                    return client
 
-                });
+                })
 
-        });
-};
+        })
+}
 
 
 module.exports = function( request, config ) {
 
-    const query = function( method ) {
+    const query = method => {
 
-        return function( metaId, args, data ) {
+        return ( metaId, args, data ) => {
 
-            let query = new Query(config);
-            query.fromDatum(method, metaId, args, data);
-            return query.execute(verifySession(request));
+            let query = new Query(config)
+            query.fromDatum(method, metaId, args, data)
+            return query.execute(verifySession(request))
 
-        };
+        }
 
-    };
+    }
 
     /* Server-side API */
     if (request) {
@@ -103,13 +102,13 @@ module.exports = function( request, config ) {
             post: query('POST'),
             patch: query('PATCH'),
             delete: query('DELETE')
-        };
+        }
     }
 
     /* Internal */
     return {
         connect: verifySession
-    };
+    }
 
-};
+}
 
