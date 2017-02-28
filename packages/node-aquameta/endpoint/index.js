@@ -1,7 +1,6 @@
-'use strict';
-const Connection = require('./Connection');
-const Schema = require('./datum/Schema');
-const datumRoutes = require('./Datum');
+import { Connection } from './Connection'
+import { Schema } from './datum/Schema'
+import { datumRoutes } from './Datum'
 
 /*
  * TODOs
@@ -42,9 +41,11 @@ module.exports = ( app, config ) => {
     /* Defines the routes for retrieving client-side data */
     /* Returns a function that can be used to retrieve database access server-side */
 
-    config.url = config.url || '/endpoint';
-    config.version = config.version || 'v1';
-    config.sessionCookie = config.sessionCookie || 'SESSION_ID';
+    const {
+        url = '/endpoint',
+        version = 'v1',
+        sessionCookie = 'SESSION_ID'
+    } = config
 
     /*
     datum(req).schema('meta').table('relation').rows();
@@ -60,17 +61,17 @@ module.exports = ( app, config ) => {
     /* Server-side API */
     const datum = request => ({
         schema: name => new Schema(Connection(request, config), name)
-    });
+    })
 
     /* If app is supplied... */
     /* Register Client-side API route */
-    if(app) datumRoutes(app, config);
+    if(app) datumRoutes(app, config)
 
     // Probably not using
-    //pageRoutes(app);
+    //pageRoutes(app)
 
     // Return Server-side API
-    return datum;
+    return datum
 
-};
+}
 
