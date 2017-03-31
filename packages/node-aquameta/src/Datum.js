@@ -1,9 +1,9 @@
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const debug = require('debug')('Datum')
+const express = require('express')
 const Query = require('./Query')
 const Conneciton = require('./Connection')
-
-const express = require('express')
-const cookieParser = require('cookie-parser')
-const bodyParser = require('body-parser')
 
 module.exports = function( app, config ) {
 
@@ -15,14 +15,14 @@ module.exports = function( app, config ) {
 
   function handleRequest(req, res) {
 
-    console.log('datum request', req.url, req.method, req.query, req.body)
+    debug('datum request', req.url, req.method, req.query, req.body)
 
     let query = new Query(config)
     query.fromRequest(req)
     query.execute(connect(req))
       .then(result => {
 
-        console.log(result)
+        debug(result)
 
         // TODO these things are not available as of right now
         //res.status(result.status);
@@ -39,7 +39,7 @@ module.exports = function( app, config ) {
                 */
       })
       .catch(error => {
-        console.log(error)
+        debug(error)
         res.send(error)
       })
 

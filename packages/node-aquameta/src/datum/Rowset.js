@@ -72,7 +72,7 @@ Rowset.prototype.where = function() {
     // The new rowset that is returned must be in the same format as the response from the server
 
     if (first) {
-      for (var i = 0 i < this.rows.length i++) {
+      for (var i = 0; i < this.rows.length; i++) {
         if (this.rows[i].row[field] == value) {
           resolve(new AQ.Row(this.relation, { columns: this.columns, result: [ this.rows[i] ] }))
         }
@@ -81,7 +81,7 @@ Rowset.prototype.where = function() {
     }
     else {
       var return_rowset = []
-      for (var i = 0 i < this.rows.length i++) {
+      for (var i = 0; i < this.rows.length; i++) {
         if (this.rows[i].row[field] == value) {
           return_rowset.push(this.rows[i])
         }

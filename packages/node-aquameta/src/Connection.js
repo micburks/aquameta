@@ -1,3 +1,4 @@
+const debug = require('debug')('Connection')
 const pg = require('pg')
 const Query = require('./Query')
 
@@ -55,14 +56,14 @@ const verifySession = function( req ) {
         .then(result => {
 
           /* Logged in */
-          //console.log('result is : ', result.rows.length, result.rows);
+          debug('result is : ', result.rows.length, result.rows);
 
           /* Release Client */
           client.release()
 
           /* Copy anonymous config and modify user */
           let userConfig = Object.assign({}, anonConfig, { user: result.rows[0].role_name })
-          console.log('configs', userConfig, anonConfig)
+          debug('configs', userConfig, anonConfig)
 
           return pg.connect(userConfig)
 
@@ -70,7 +71,7 @@ const verifySession = function( req ) {
         .catch(err => {
 
           /* Problem logging in */
-          //console.log('connection error is : ', err);
+          debug('connection error is : ', err);
 
           /* Return client for next query */
           return client

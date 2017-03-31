@@ -44,7 +44,7 @@ Row.prototype.delete = function() {}
 Row.prototype = {
   constructor: Row,
   get: function( name )           { return this.row_data[name] },
-  set: function( name, value )    { this.row_data[name] = value return this },
+  set: function( name, value )    { this.row_data[name] = value; return this },
   toString: function()           { return JSON.stringify(this.row_data) },
   clone: function()               { return new AQ.Row(this.relation, { columns: this.columns, pk: this.pk_column_name, result: [{ row: this.row_data }]}) },
   field: function( name ) {
