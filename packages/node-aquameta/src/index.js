@@ -1,6 +1,7 @@
 import { Connection } from './Connection'
 import { Schema } from './datum/Schema'
 import { datumRoutes } from './Datum'
+const debug = require('debug')('index')
 
 /*
  * TODOs
