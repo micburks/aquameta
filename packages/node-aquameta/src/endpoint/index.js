@@ -37,17 +37,17 @@ import { datumRoutes } from './Datum'
  */
 module.exports = ( app, config ) => {
 
-    /* ENDPOINT */
-    /* Defines the routes for retrieving client-side data */
-    /* Returns a function that can be used to retrieve database access server-side */
+  /* ENDPOINT */
+  /* Defines the routes for retrieving client-side data */
+  /* Returns a function that can be used to retrieve database access server-side */
 
-    const {
-        url = '/endpoint',
-        version = 'v1',
-        sessionCookie = 'SESSION_ID'
-    } = config
+  const {
+    url = '/endpoint',
+    version = 'v1',
+    sessionCookie = 'SESSION_ID'
+  } = config
 
-    /*
+  /*
     datum(req).schema('meta').table('relation').rows();
     let db = datum(req);
     let db = database(req);
@@ -58,20 +58,20 @@ module.exports = ( app, config ) => {
     let endpoint = endpointForRequest(req);
     */
 
-    /* Server-side API */
-    const datum = request => ({
-        schema: name => new Schema(Connection(request, config), name)
-    })
+  /* Server-side API */
+  const datum = request => ({
+    schema: name => new Schema(Connection(request, config), name)
+  })
 
-    /* If app is supplied... */
-    /* Register Client-side API route */
-    if(app) datumRoutes(app, config)
+  /* If app is supplied... */
+  /* Register Client-side API route */
+  if(app) datumRoutes(app, config)
 
-    // Probably not using
-    //pageRoutes(app)
+  // Probably not using
+  //pageRoutes(app)
 
-    // Return Server-side API
-    return datum
+  // Return Server-side API
+  return datum
 
 }
 
