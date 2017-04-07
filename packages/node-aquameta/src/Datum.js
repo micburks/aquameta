@@ -10,7 +10,7 @@ module.exports = function( app, config ) {
   /* Datum */
 
   const router = express.Router()
-  const connect = Connection().connect
+  const connect = Connection.connect
   const path = new RegExp(`^${config.url}/${config.version}`)
 
   function handleRequest(req, res) {
@@ -44,6 +44,16 @@ module.exports = function( app, config ) {
       })
 
   }
+
+
+  // TODO this should not be required
+  // Write without express
+  /* REQUIRED if using Server-Side API */
+  /*
+  app.use(cookieParser())
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
+  */
 
   router.use(cookieParser())
   router.use(bodyParser.json())

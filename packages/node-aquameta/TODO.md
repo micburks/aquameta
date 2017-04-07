@@ -9,8 +9,14 @@
 the possibility of including a package multiple times. This could be a problem?
 Or can it?
 
+- Webpack bundle mapping url to query?
+
 # Server
 Build logging/connection pooling on top of pg
+Try webpack programmatic bundle
+- Write loader
+- Write plugin
+- or write enhance-resolve plugin
 Test
 
 # Front end

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon ./bin/www",
-    "build": "webpack -p",
+    "build": "webpack",
     "dev": "webpack-dev-server"
   },
   "keywords": [],

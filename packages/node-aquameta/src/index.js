@@ -30,49 +30,56 @@ const debug = require('debug')('index')
  *
  */
 
-/* Usage
- * const app = require('express')();
- * const endpoint = require('./node-datum')(app, optionalConfig)
- * app.get('/contact', (req, res) =>
- *      endpoint.schema(...).table(...).rows().then(res.send));
- */
-module.exports = ( app, config ) => {
+
+function datum() {
 
   /* ENDPOINT */
   /* Defines the routes for retrieving client-side data */
   /* Returns a function that can be used to retrieve database access server-side */
 
-  const {
+  /* need 3 entry mechanisms */
+  /* 1. Configured in Node app HTTP request */
+  /* 2. Bundled for client-side */
+  /* 3. Configured from Webpack */
+
+  let defaultConfig = {
     url = '/endpoint',
-    version = 'v1',
-    sessionCookie = 'SESSION_ID'
-  } = config
+    version = 'v0.1',
+    sessionCookie = 'SESSION_ID',
+    cacheRequestMilliseconds = 5000
+  }
 
-  /*
-    datum(req).schema('meta').table('relation').rows();
-    let db = datum(req);
-    let db = database(req);
-    let endpoint = connect(req);
-    let database = connection(req);
-    let database = endpoint(req);
-    let database = connectionForRequest(req);
-    let endpoint = endpointForRequest(req);
-    */
-
-  /* Server-side API */
-  const datum = request => ({
-    schema: name => new Schema(Connection(request, config), name)
-  })
-
-  /* If app is supplied... */
-  /* Register Client-side API route */
-  if(app) datumRoutes(app, config)
-
-  // Probably not using
-  //pageRoutes(app)
-
-  // Return Server-side API
-  return datum
-
+  this.config = defaultConfig
+  this._schema = {}
 }
 
+/* Client-side API */
+datum.prototype.schema = function( name ) {
+  if ( !(name in this._schema) ) {
+    this._schema[name] = new Schema(Connection(), name)
+  }
+  return this._schema[name]
+}
+
+datum.prototype.routes = function( config, app ) {
+
+  this.config = Object.assign({}, this.config, config)
+
+  /* Register Client-side API route */
+  datumRoutes(app, this.config)
+
+  // Probably using
+  //pageRoutes(app)
+
+  /* Server-side */
+  return request => ({
+    schema: name => new Schema(Connection(request), name)
+  })
+}
+
+datum.prototype.connect = function( request ) {
+  // TODO: check that this is an HTTP request
+  return Connection(request)
+}
+
+module.exports = new datum()

@@ -81,30 +81,33 @@ const verifySession = function( req ) {
     })
 }
 
-
 module.exports = function( request, config ) {
+
+  // TODO: check that this is an HTTP request
 
   const query = method => {
     return ( metaId, args, data ) => {
       let query = new Query(config)
       query.fromDatum(method, metaId, args, data)
-      return query.execute(verifySession(request))
+
+      if (request) {
+        // Server-side
+        return query.execute(verifySession(request))
+      }
+      else {
+        // Client-side
+        return query.fetch()
+      }
     }
   }
 
-  /* Server-side API */
-  if (request) {
-    return {
-      get: query('GET'),
-      post: query('POST'),
-      patch: query('PATCH'),
-      delete: query('DELETE')
-    }
-  }
-
-  /* Internal */
+  /* Isomorphic API */
   return {
-    connect: verifySession
+    get: query('GET'),
+    post: query('POST'),
+    patch: query('PATCH'),
+    delete: query('DELETE')
   }
 }
+module.exports.connect = verifySession
 
