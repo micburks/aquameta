@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser')
 const debug = require('debug')('Datum')
 const express = require('express')
 const Query = require('./Query')
-const Conneciton = require('./Connection')
+const Connection = require('./Connection')
 
 module.exports = function( app, config ) {
 
@@ -15,6 +15,8 @@ module.exports = function( app, config ) {
 
   function handleRequest(req, res) {
 
+    // TODO
+    req.url = req.url.replace('/endpoint/v0.1/', '')
     debug('datum request', req.url, req.method, req.query, req.body)
 
     let query = new Query(config)
@@ -27,6 +29,7 @@ module.exports = function( app, config ) {
         // TODO these things are not available as of right now
         //res.status(result.status);
         //res.set(result.mimetype);
+        res.set('Content-Type', 'application/json');
 
         res.send(result)
 

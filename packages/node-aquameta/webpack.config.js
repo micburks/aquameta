@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/datum/index.js',
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'datum.js'
+    filename: 'bundle.js'
   },
   module: {
     rules: [{

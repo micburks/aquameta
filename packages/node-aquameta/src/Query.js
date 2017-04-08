@@ -165,7 +165,8 @@ Query.prototype.execute = function( connection ) {
 
       .then(result => {
 
-        client.release()
+        // releaes client
+        //client.release()
 
         result = result.rows[0];
         if (result.status >= 400) throw result

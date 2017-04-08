@@ -1,6 +1,6 @@
-import { Connection } from './Connection'
-import { Schema } from './datum/Schema'
-import { datumRoutes } from './Datum'
+const Connection = require('./Connection')
+const Schema = require('./datum/Schema')
+const datumRoutes = require('./Datum')
 const debug = require('debug')('index')
 
 /*
@@ -43,10 +43,11 @@ function datum() {
   /* 3. Configured from Webpack */
 
   let defaultConfig = {
-    url = '/endpoint',
-    version = 'v0.1',
-    sessionCookie = 'SESSION_ID',
-    cacheRequestMilliseconds = 5000
+    url: 'endpoint',
+    version: 'v0.1',
+    sessionCookie: 'SESSION_ID',
+    cacheRequestMilliseconds: 5000,
+    sockets: false
   }
 
   this.config = defaultConfig
@@ -54,6 +55,7 @@ function datum() {
 }
 
 /* Client-side API */
+// TODO: wait a second...
 datum.prototype.schema = function( name ) {
   if ( !(name in this._schema) ) {
     this._schema[name] = new Schema(Connection(), name)
