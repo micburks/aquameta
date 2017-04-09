@@ -10,18 +10,17 @@ module.exports = function( app, config ) {
   /* Datum */
 
   const router = express.Router()
-  const connect = Connection.connect
-  const path = new RegExp(`^${config.url}/${config.version}`)
+  const path = new RegExp(`^${config.url}/${config.version}/`)
 
   function handleRequest(req, res) {
 
-    // TODO
-    req.url = req.url.replace('/endpoint/v0.1/', '')
+    req.url = req.url.replace(path, '')
     debug('datum request', req.url, req.method, req.query, req.body)
 
-    let query = new Query(config)
+    const connect = Connection(req).connect
+    const query = new Query(config)
     query.fromRequest(req)
-    query.execute(connect(req))
+    query.execute(connect())
       .then(result => {
 
         debug(result)

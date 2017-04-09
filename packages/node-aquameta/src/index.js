@@ -60,8 +60,11 @@ module.exports = function( config, app ) {
   }
 
   /* Server-side */
-  return request => ({
-    schema: name => new Schema(Connection(request), name),
-    connect: () => Connection(request).connect
-  })
+  return request => {
+    const connection = Connection(request)
+    return {
+      schema: name => new Schema(connection, name),
+      connect: connection.connect
+    }
+  }
 }
