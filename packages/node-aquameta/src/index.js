@@ -1,5 +1,6 @@
 const Connection = require('./Connection')
 const datumRoutes = require('./Datum')
+const pages = require('./Page')
 const debug = require('debug')('index')
 const Schema = require('aquameta-datum/src/Schema')
 
@@ -46,25 +47,31 @@ module.exports = function( config, app ) {
     version: 'v0.1',
     sessionCookie: 'SESSION_ID',
     cacheRequestMilliseconds: 5000,
-    sockets: false
+    events: false,
+    client: true,
+    pages: true
   }
 
   config = Object.assign({}, defaultConfig, config)
 
-  if (app) {
-    /* Register Client-side API route */
-    datumRoutes(app, config)
-
-    // Probably using
-    //pageRoutes(app)
-  }
-
   /* Server-side */
-  return request => {
+  const datum = request => {
     const connection = Connection(request)
     return {
       schema: name => new Schema(connection, name),
       connect: connection.connect
     }
   }
+
+  if (app && config.client) {
+    /* Register Client-side API route */
+    datumRoutes(app, config)
+  }
+  
+  if (app && config.pages) {
+    /* Register middleware that looks for matching database-mounted resources */
+    pages(app)
+  }
+
+  return datum
 }
