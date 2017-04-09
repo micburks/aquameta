@@ -165,15 +165,13 @@ Query.prototype.execute = function( connection ) {
 
       .then(result => {
 
-        // releaes client
+        // release client
         //client.release()
 
         result = result.rows[0];
         if (result.status >= 400) throw result
-        //console.log('endpoint.request, result.rows:', result);
 
-        return result.response
-
+        return result
       })
 
       .catch(err => {
