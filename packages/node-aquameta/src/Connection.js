@@ -98,6 +98,6 @@ module.exports = function( request, config ) {
     post: query('POST'),
     patch: query('PATCH'),
     delete: query('DELETE'),
-    connect: verifySession
+    connect: () => verifySession(request)
   }
 }
