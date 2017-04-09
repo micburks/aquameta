@@ -89,25 +89,15 @@ module.exports = function( request, config ) {
     return ( metaId, args, data ) => {
       let query = new Query(config)
       query.fromDatum(method, metaId, args, data)
-
-      if (request) {
-        // Server-side
-        return query.execute(verifySession(request))
-      }
-      else {
-        // Client-side
-        return query.fetch()
-      }
+      return query.execute(verifySession(request))
     }
   }
 
-  /* Isomorphic API */
   return {
     get: query('GET'),
     post: query('POST'),
     patch: query('PATCH'),
-    delete: query('DELETE')
+    delete: query('DELETE'),
+    connect: verifySession
   }
 }
-module.exports.connect = verifySession
-

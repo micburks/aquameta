@@ -1,7 +1,7 @@
 const Connection = require('./Connection')
-const Schema = require('./datum/Schema')
 const datumRoutes = require('./Datum')
 const debug = require('debug')('index')
+const Schema = require('./datum/Schema')
 
 /*
  * TODOs
@@ -30,19 +30,18 @@ const debug = require('debug')('index')
  *
  */
 
-
-function datum() {
+module.exports = function( config, app ) {
 
   /* ENDPOINT */
   /* Defines the routes for retrieving client-side data */
-  /* Returns a function that can be used to retrieve database access server-side */
+  /* Returns a function that can be used for database access server-side */
 
   /* need 3 entry mechanisms */
-  /* 1. Configured in Node app HTTP request */
-  /* 2. Bundled for client-side */
-  /* 3. Configured from Webpack */
+  /* 1. Configured in Node app HTTP request */ /* aquameta           */
+  /* 2. Bundled for client-side */            /*  aquameta-datum    */
+  /* 3. Configured from Webpack */           /*   aquameta w/admin */
 
-  let defaultConfig = {
+  const defaultConfig = {
     url: 'endpoint',
     version: 'v0.1',
     sessionCookie: 'SESSION_ID',
@@ -50,38 +49,19 @@ function datum() {
     sockets: false
   }
 
-  this.config = defaultConfig
-  this._schema = {}
-}
+  config = Object.assign({}, defaultConfig, config)
 
-/* Client-side API */
-// TODO: wait a second...
-datum.prototype.schema = function( name ) {
-  if ( !(name in this._schema) ) {
-    this._schema[name] = new Schema(Connection(), name)
+  if (app) {
+    /* Register Client-side API route */
+    datumRoutes(app, config)
+
+    // Probably using
+    //pageRoutes(app)
   }
-  return this._schema[name]
-}
-
-datum.prototype.routes = function( config, app ) {
-
-  this.config = Object.assign({}, this.config, config)
-
-  /* Register Client-side API route */
-  datumRoutes(app, this.config)
-
-  // Probably using
-  //pageRoutes(app)
 
   /* Server-side */
   return request => ({
-    schema: name => new Schema(Connection(request), name)
+    schema: name => new Schema(Connection(request), name),
+    connect: () => Connection(request).connect
   })
 }
-
-datum.prototype.connect = function( request ) {
-  // TODO: check that this is an HTTP request
-  return Connection(request)
-}
-
-module.exports = new datum()
