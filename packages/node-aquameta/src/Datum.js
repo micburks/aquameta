@@ -25,20 +25,11 @@ module.exports = function( app, config ) {
 
         debug(result)
 
-        // TODO these things are not available as of right now
-        //res.status(result.status);
-        //res.set(result.mimetype);
-        res.set('Content-Type', 'application/json');
+        res.status(result.status);
+        res.set('Content-Type', result.mimetype);
 
-        res.send(result)
+        res.send(result.response)
 
-        /*
-                return Response(
-                    response=row.response,
-                    content_type=row.mimetype,
-                    status=row.status
-                )
-                */
       })
       .catch(error => {
         debug(error)
