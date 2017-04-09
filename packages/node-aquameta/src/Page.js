@@ -22,8 +22,10 @@ const build_directory_index = (path, rows) => {
                     )
                 )
 };
+*/
 
 
+/*
 const application = (env, start_response) => {
     request = Request(env)
 

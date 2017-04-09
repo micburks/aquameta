@@ -3,6 +3,7 @@ const Query = function( config ) {
   return this
 }
 
+/* Set query based on datum request */
 Query.prototype.fromRequest = function( req ) {
 
   this.method = req.method
@@ -18,6 +19,7 @@ Query.prototype.fromRequest = function( req ) {
   console.log('fromRequest args', this.args)
 }
 
+/* Set query based on programmatic api */
 Query.prototype.fromDatum = function( method, metaId, args, data ) {
 
   this.method = method
