@@ -94,6 +94,49 @@ const application = (env, start_response) => {
                                             return e
 };
 */
+const Connection = require('./Connection')
 
-module.exports = app => {
-};
+module.exports = function( app, datum ) {
+
+  function pageMiddleware( req, res, next ) {
+
+    Connection(req).connect()
+    .then(client => {
+
+      console.log('trying page', req.url)
+
+      return client.query(
+        'select r.content, m.mimetype ' +
+        'from endpoint.resource r ' +
+        'join endpoint.mimetype m on r.mimetype_id = m.id ' +
+        'where path = $1', [
+          req.url
+        ])
+    })
+    .then(result => {
+
+      // release client
+      //client.release()
+
+      if (result.rowCount == 0) {
+        return next()
+      }
+
+      result = result.rows[0];
+
+      res.status(200)
+      res.set('Content-Type', result.mimetype)
+      res.send(result.content)
+
+    })
+    .catch(err => {
+
+      console.log(err)
+      if (client.release) client.release()
+      console.log('error in endpoint.request query', err)
+      next()
+    })
+  }
+
+  app.use(pageMiddleware)
+}
