@@ -1,5 +1,5 @@
 {
-  "name": "node-aquameta",
+  "name": "aquameta",
   "version": "1.0.0",
   "description": "Aquameta server",
   "main": "src/index.js",
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aquameta-datum": "file:../node-aquameta-datum/",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
