@@ -27,10 +27,10 @@ const endpointConfig = {
 }
 
 /* Get api with default config */
-let datum = aquameta()
+// let datum = aquameta()
 
 /* Set config */
-let datum = aquameta(endpointConfig)
+// let datum = aquameta(endpointConfig)
 
 /* Register data routes by supplying your app */
 const datum = aquameta(endpointConfig, app)
