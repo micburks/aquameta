@@ -98,11 +98,11 @@ const application = (env, start_response) => {
 */
 const Connection = require('./Connection')
 
-module.exports = function( app, datum ) {
+module.exports = function( config, app ) {
 
   function pageMiddleware( req, res, next ) {
 
-    Connection(req).connect()
+    Connection(config, req).connect()
     .then(client => {
 
       console.log('trying page', req.url)

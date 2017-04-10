@@ -43,34 +43,73 @@ module.exports = function( config, app ) {
   /* 3. Configured from Webpack */           /*   aquameta w/admin */
 
   const defaultConfig = {
-    url: 'endpoint',
-    version: 'v0.1',
-    sessionCookie: 'SESSION_ID',
-    cacheRequestMilliseconds: 5000,
-    events: false,
+
+    /* Register client routes for datum */
     client: true,
-    pages: true
+
+    /* Client URL slug */
+    url: 'endpoint',
+
+    /* Client API version */
+    version: 'v0.1',
+
+    // cacheRequestMilliseconds: 5000, /* Client only? */
+
+    /* Register middleware to look in database for resources */
+    pages: true,
+
+    /* Use sockets for events, upgraded connection */
+    events: false,
+
+    /* Cookie to store session id */
+    sessionCookie: 'SESSION_ID',
+
+    /* Use supplied connection instead of roles */
+    roles: true,
+    //roles: false,
+
+    /* Connection override */
+    connection: null
+    /*
+    connection: {
+      user: 'aquameta',
+      password: 'datum',
+      database: 'aquameta'
+    }
+    */
   }
 
   config = Object.assign({}, defaultConfig, config)
+  let datum
 
-  /* Server-side */
-  const datum = request => {
-    const connection = Connection(request)
-    return {
+  /* Not using Postgres role authentication */
+  if (config.connection) {
+    const connection = Connection(config)
+    datum = {
       schema: name => new Schema(connection, name),
       connect: connection.connect
     }
   }
 
+  /* Postgres role received in HTTP request */
+  else {
+    datum = request => {
+      const connection = Connection(config, request)
+      return {
+        schema: name => new Schema(connection, name),
+        connect: connection.connect
+      }
+    }
+  }
+
   if (app && config.client) {
     /* Register Client-side API route */
-    datumRoutes(app, config)
+    datumRoutes(config, app)
   }
   
   if (app && config.pages) {
     /* Register middleware that looks for matching database-mounted resources */
-    pages(app)
+    pages(config, app)
   }
 
   return datum

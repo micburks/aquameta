@@ -5,7 +5,7 @@ const express = require('express')
 const Query = require('./Query')
 const Connection = require('./Connection')
 
-module.exports = function( app, config ) {
+module.exports = function( config, app ) {
 
   /* Datum */
   const router = express.Router()
@@ -16,7 +16,7 @@ module.exports = function( app, config ) {
     req.url = req.url.replace(path, '')
     debug('datum request', req.url, req.method, req.query, req.body)
 
-    const connect = Connection(req).connect
+    const connect = Connection(config, req).connect
     const query = new Query(config)
     query.fromRequest(req)
     query.execute(connect())
