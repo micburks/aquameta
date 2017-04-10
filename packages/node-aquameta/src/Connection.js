@@ -81,14 +81,18 @@ const verifySession = function( req ) {
     })
 }
 
-module.exports = function( request, config ) {
-
-  // TODO: check that this is an HTTP request
-
+module.exports = function( config, request ) {
+  
   const query = method => {
     return ( metaId, args, data ) => {
+
       let query = new Query(config)
       query.fromDatum(method, metaId, args, data)
+
+      if (!config.roles) {
+        return query.execute(pg.connect(config.connection))
+      }
+
       return query.execute(verifySession(request))
     }
   }
@@ -98,6 +102,11 @@ module.exports = function( request, config ) {
     post: query('POST'),
     patch: query('PATCH'),
     delete: query('DELETE'),
-    connect: () => verifySession(request)
+    connect: () => {
+      if (!config.roles) {
+        return pg.connect(config.connection)
+      }
+      return verifySession(request)
+    }
   }
 }
