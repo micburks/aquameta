@@ -1,4 +1,4 @@
-import Query from '../Query'
+import Query from 'aquameta-query'
 
 export default function Endpoint( config ) {
 

@@ -1,4 +1,4 @@
-function Function( schema, name, args ) {
+export default function Function( schema, name, args ) {
   this.schema = schema
   this.name = name
 
@@ -18,5 +18,3 @@ function Function( schema, name, args ) {
     return base_url + '/function/' + this.schema.name + '/' + this.name
   }
 }
-
-export default Function

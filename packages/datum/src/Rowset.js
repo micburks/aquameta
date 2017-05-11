@@ -1,7 +1,8 @@
+import Row from './Row'
 import Field from './Field'
 
 //function Rowset( relation, options ) {
-function Rowset( relation, response, server_arguments ) {
+export default function Rowset( relation, response, server_arguments ) {
   console.log('in rowset', response)
   this.relation = relation
   this.schema = relation.schema
@@ -188,5 +189,3 @@ Rowset.prototype.relatedRow = function( self_column_name, related_relation_name,
   return db.schema(schema_name).relation(relation_name).row(options)
 
 }
-
-export default Rowset

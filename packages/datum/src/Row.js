@@ -1,6 +1,6 @@
 import Field from './Field'
 
-function Row( relation, options ) {
+export default function Row( relation, options ) {
 
   this.relation = relation
   this.schema = relation.schema
@@ -135,5 +135,3 @@ Row.prototype.relatedRow = function( self_column_name, related_relation_name, re
 
   return db.schema(schema_name).relation(relation_name).row(options)
 }
-
-export default Row
