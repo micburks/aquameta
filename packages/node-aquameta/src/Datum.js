@@ -2,7 +2,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const debug = require('debug')('Datum')
 const express = require('express')
-const Query = require('./Query')
+const Query = require('aquameta-query')
 const Connection = require('./Connection')
 
 module.exports = function( config, app ) {
