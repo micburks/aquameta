@@ -6,7 +6,7 @@ export default function Row( relation, options ) {
   this.schema = relation.schema
   this.row_data = response.result[0].row
 
-  this.cached_fields = {}
+  this._fields = {}
   this.columns = response.columns || null
   this.pk_column_name = null
   this.pk_value = null
@@ -48,10 +48,10 @@ Row.prototype = {
   toString: function()           { return JSON.stringify(this.row_data) },
   clone: function()               { return new AQ.Row(this.relation, { columns: this.columns, pk: this.pk_column_name, result: [{ row: this.row_data }]}) },
   field: function( name ) {
-    if (typeof this.cached_fields[name] == 'undefined') {
-      this.cached_fields[name] = new AQ.Field(this, name, name === this.pk_column_name)
+    if ( !(name in this._fields[name]) ) {
+      this._fields[name] = new AQ.Field(this, name, name === this.pk_column_name)
     }
-    return this.cached_fields[name]
+    return this._fields[name]
   },
   fields: function() {
     if (this.columns != null) {

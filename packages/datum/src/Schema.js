@@ -5,10 +5,14 @@ export default function Schema( endpoint, name ) {
   this.endpoint = endpoint
   this.name = name
   this.id = { name: this.name }
+  this._relations = {}
 }
 
 Schema.prototype.relation = function( name ) {
-  return new Relation(this, name)
+  if( !(name in this._relations) ) {
+    this._relations[name] = new Relation(this, name)
+  }
+  return this._relations[name]
 }
 
 Schema.prototype.function = function( identifier, args, options ) {

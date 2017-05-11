@@ -6,6 +6,8 @@ export default function Relation(schema, name) {
   this.name = name
   //console.log('Relation', schema.endpoint.connectionForRequest, name)
   this.id = { schema_id: this.schema.id, name: this.name }
+  this._rows = {}
+  this._columns = {}
 }
 
 Relation.prototype.toUrl = function() {
@@ -17,7 +19,10 @@ Relation.prototype.toUrl = function() {
 }
 
 Relation.prototype.column = function( name ) {
-  return new AQ.Column(this, name)
+  if( !(name in this._columns) ) {
+    this._columns[name] = new AQ.Column(this, name)
+  }
+  return this._columns[name]
 }
 
 Relation.prototype.rows = function( options ) {
