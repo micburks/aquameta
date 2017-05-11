@@ -1,6 +1,6 @@
 const debug = require('debug')('Connection')
 const pg = require('pg')
-const Query = require('./Query')
+const Query = require('aquameta-query')
 
 const anonConfig = {
   /*
