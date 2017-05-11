@@ -1,7 +1,7 @@
 import Relation from './Relation'
 import Fn from './Function'
 
-function Schema( endpoint, name ) {
+export default function Schema( endpoint, name ) {
   this.endpoint = endpoint
   this.name = name
   this.id = { name: this.name }
@@ -65,5 +65,3 @@ Schema.prototype.function = function( identifier, args, options ) {
       throw 'Function call request failed: ' + err
     })
 }
-
-export default Schema

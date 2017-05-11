@@ -1,7 +1,7 @@
 import Rowset from './Rowset'
 import Row from './Row'
 
-function Relation(schema, name) {
+export default function Relation(schema, name) {
   this.schema = schema
   this.name = name
   //console.log('Relation', schema.endpoint.connectionForRequest, name)
@@ -125,5 +125,3 @@ Relation.prototype.insert = function( data, options ) {
       throw 'Insert failed: ' + err
     })
 }
-
-export default Relation

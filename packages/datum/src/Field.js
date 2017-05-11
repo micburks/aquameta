@@ -1,4 +1,4 @@
-function Field = function( row, name, pk ) {
+export default function Field( row, name, pk ) {
   this.row = row
   this.column = new AQ.Column(row.relation, name)
   this.is_primary_key = pk
@@ -33,5 +33,3 @@ Field.prototype = {
     return this.row.update()
   } // TODO: This is wrong
 }
-
-export default Field

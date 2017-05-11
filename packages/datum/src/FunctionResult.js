@@ -1,4 +1,4 @@
-function FunctionResult( fn, response ) {
+export default function FunctionResult( fn, response ) {
   this.function = fn
   this.schema = fn.schema
   this.row_data = response.result[0].row
@@ -67,5 +67,3 @@ FunctionResult.prototype.related_row = function( self_column_name, related_relat
 
   return db.schema(schema_name).relation(relation_name).row(options)
 }
-
-export default FunctionResult
