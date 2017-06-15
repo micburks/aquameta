@@ -1,3 +1,5 @@
+import FunctionResult from './FunctionResult'
+
 export default function FunctionResultSet (fn, response) {
   this.function = fn
   this.schema = fn.schema
@@ -19,54 +21,54 @@ FunctionResultSet.prototype.forEach = function (fn) {
   }).forEach(fn)
 }
 
-FunctionResultSet.prototype.related_rows = function (self_column_name, related_relation_name, related_column_name, options) {
-  var relation_parts = related_relation_name.split('.')
-  if (relation_parts.length < 2) {
-    console.error("Related relation name must be schema qualified (schema_name.relation_name)")
-    // throw "Related relation name must be schema qualified (schema_name.relation_name)"
+FunctionResultSet.prototype.relatedRows = function (selfColumnName, relatedRelationName, relatedColumnName, options) {
+  var relationParts = relatedRelationName.split('.')
+  if (relationParts.length < 2) {
+    console.error('Related relation name must be schema qualified (schema_name.relation_name)')
+    // throw 'Related relation name must be schema qualified (schema_name.relation_name)'
   }
 
-  var schema_name = relation_parts[0]
-  var relation_name = relation_parts[1]
+  var schemaName = relationParts[0]
+  var relationName = relationParts[1]
   var db = this.function.schema.database
 
   var values = this.map(function (row) {
-    return row.get(self_column_name)
+    return row.get(selfColumnName)
   })
 
   options = options || {}
-  options.where = options.where instanceof Array ? options.where : (typeof options.where == 'undefined' ?  [] : [options.where])
+  options.where = options.where instanceof Array ? options.where : (typeof options.where === 'undefined' ? [] : [options.where])
   options.where.push({
-    name: related_column_name,
+    name: relatedColumnName,
     op: 'in',
     value: values
   })
 
-  return db.schema(schema_name).relation(relation_name).rows(options)
+  return db.schema(schemaName).relation(relationName).rows(options)
 }
 
-FunctionResultSet.prototype.related_row = function (self_column_name, related_relation_name, related_column_name, options) {
-  var relation_parts = related_relation_name.split('.')
-  if (relation_parts.length < 2) {
-    console.error("Related relation name must be schema qualified (schema_name.relation_name)")
-    // throw "Related relation name must be schema qualified (schema_name.relation_name)"
+FunctionResultSet.prototype.relatedRow = function (selfColumnName, relatedRelationName, relatedColumnName, options) {
+  var relationParts = relatedRelationName.split('.')
+  if (relationParts.length < 2) {
+    console.error('Related relation name must be schema qualified (schema_name.relation_name)')
+    // throw 'Related relation name must be schema qualified (schema_name.relation_name)'
   }
 
-  var schema_name = relation_parts[0]
-  var relation_name = relation_parts[1]
+  var schemaName = relationParts[0]
+  var relationName = relationParts[1]
   var db = this.function.schema.database
 
   var values = this.map(function (row) {
-    return row.get(self_column_name)
+    return row.get(selfColumnName)
   })
 
   options = options || {}
-  options.where = options.where instanceof Array ? options.where : (typeof options.where == 'undefined' ?  [] : [options.where])
+  options.where = options.where instanceof Array ? options.where : (typeof options.where === 'undefined' ? [] : [options.where])
   options.where.push({
-    name: related_column_name,
+    name: relatedColumnName,
     op: 'in',
     value: values
   })
 
-  return db.schema(schema_name).relation(relation_name).row(options)
+  return db.schema(schemaName).relation(relationName).row(options)
 }
