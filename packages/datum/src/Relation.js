@@ -1,16 +1,17 @@
 import Rowset from './Rowset'
 import Row from './Row'
+import Column from './Column'
 
-export default function Relation(schema, name) {
+export default function Relation (schema, name) {
   this.schema = schema
   this.name = name
-  //console.log('Relation', schema.endpoint.connectionForRequest, name)
+  // console.log('Relation', schema.endpoint.connectionForRequest, name)
   this.id = { schema_id: this.schema.id, name: this.name }
   this._rows = {}
   this._columns = {}
 }
 
-Relation.prototype.toUrl = function() {
+Relation.prototype.toUrl = function () {
   return `relation/${this.schema.name}/${this.name}`
   /* idOnly param
   return id_only ? '/relation/' + this.schema.name + '/' + this.name :
@@ -18,33 +19,31 @@ Relation.prototype.toUrl = function() {
     */
 }
 
-Relation.prototype.column = function( name ) {
-  if( !(name in this._columns) ) {
-    this._columns[name] = new AQ.Column(this, name)
+Relation.prototype.column = function (name) {
+  if (!(name in this._columns)) {
+    this._columns[name] = new Column(this, name)
   }
   return this._columns[name]
 }
 
-Relation.prototype.rows = function( options ) {
-  return this.schema.endpoint.get(this, options)
-    .then(rows => {
+Relation.prototype.rows = async function (options) {
+  let rows
+  try {
+    rows = await this.schema.endpoint.get(this, options)
 
-      if (rows == null) {
-        throw 'Empty response'
-      }
-      else if (rows.result.length < 1) {
-        throw 'No rows returned'
-      }
+    if (rows == null) {
+      throw new Error('Empty response')
+    } else if (rows.result.length < 1) {
+      throw new Error('No rows returned')
+    }
+  } catch (err) {
+    throw new Error('Rows request failed: ' + err)
+  }
 
-      return new Rowset(this, rows, options)
-
-    })
-    .catch(err => {
-      throw 'Rows request failed: ' + err
-    })
+  return new Rowset(this, rows, options)
 }
 
-Relation.prototype.row = function( options ) {
+Relation.prototype.row = function (options) {
   this.schema.endpoint.get(this, options).then(result => {
     return new Row(this, result)
   })
@@ -106,27 +105,25 @@ Relation.prototype.row = function( options ) {
     */
 }
 
-Relation.prototype.insert = function( data, options ) {
-
+Relation.prototype.insert = async function (data, options) {
   if (typeof data === 'undefined') {
     // table.insert({}) is equivalent to table.insert()
     // both will insert default values
     data = {}
   }
 
-  return this.schema.endpoint.patch(this, {}, data)
-    .then(result => {
+  let result
+  try {
+    result = await this.schema.endpoint.patch(this, {}, data)
+    if (!result) {
+      throw new Error('Empty response')
+    }
+  } catch (err) {
+    throw new Error('Insert failed: ' + err)
+  }
 
-      if (!result) {
-        throw 'Empty response'
-      }
-      if (result.length === 1) {
-        return new Rowset(this, result, null)
-      }
-      return new Row(this, result)
-
-    })
-    .catch(err => {
-      throw 'Insert failed: ' + err
-    })
+  if (result.length === 1) {
+    return new Rowset(this, result, null)
+  }
+  return new Row(this, result)
 }

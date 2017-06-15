@@ -1,6 +1,6 @@
 import Field from './Field'
 
-export default function Row( relation, options ) {
+export default function Row (relation, options) {
 
   this.relation = relation
   this.schema = relation.schema
@@ -11,7 +11,7 @@ export default function Row( relation, options ) {
   this.pk_column_name = null
   this.pk_value = null
   this.id = null
-  this.to_url = function() {
+  this.to_url = function () {
     console.error('You must call a row with "meta_data: true" in order to use the to_url function')
     throw 'Datum.js: Programming Error'
   }
@@ -28,7 +28,7 @@ export default function Row( relation, options ) {
       pk_value: this.pk_value
     }
 
-    this.to_url = function( id_only ) {
+    this.to_url = function (id_only) {
       return id_only ? '/row/' + this.relation.schema.name + '/' + this.relation.name + '/' + /*JSON.stringify(this.pk_value)*/ this.pk_value :
         this.relation.schema.database.endpoint.url + '/row/' + this.relation.schema.name + '/' + this.relation.name + '/' + /*JSON.stringify(this.pk_value)*/ this.pk_value
     }
@@ -43,17 +43,25 @@ Row.prototype.delete = function() {}
 
 Row.prototype = {
   constructor: Row,
-  get: function( name )           { return this.row_data[name] },
-  set: function( name, value )    { this.row_data[name] = value; return this },
-  toString: function()           { return JSON.stringify(this.row_data) },
-  clone: function()               { return new AQ.Row(this.relation, { columns: this.columns, pk: this.pk_column_name, result: [{ row: this.row_data }]}) },
-  field: function( name ) {
+  get (name) {
+    return this.row_data[name]
+  },
+  set (name, value) {
+    this.row_data[name] = value; return this
+  },
+  toString () {
+    return JSON.stringify(this.row_data)
+  },
+  clone () {
+    return new AQ.Row(this.relation, { columns: this.columns, pk: this.pk_column_name, result: [{ row: this.row_data }]})
+  },
+  field (name) {
     if ( !(name in this._fields[name]) ) {
       this._fields[name] = new AQ.Field(this, name, name === this.pk_column_name)
     }
     return this._fields[name]
   },
-  fields: function() {
+  fields () {
     if (this.columns != null) {
       return this.columns.map(function(c) {
         return this.field(c.name)
@@ -63,35 +71,34 @@ Row.prototype = {
   }
 }
 
-Row.prototype.update = function() {
-  return this.relation.schema.database.endpoint.patch(this, this.row_data)
-    .then(function(response) {
-
-      if(response == null) {
-        throw 'Empty response'
-      }
-      return this
-
-    }.bind(this)).catch(function(err) {
-      throw 'Update failed: ' + err
-    })
+Row.prototype.update = async function () {
+  let response
+  try {
+    response = await this.relation.schema.database.endpoint.patch(this, this.row_data)
+    if(response == null) {
+      throw 'Empty response'
+    }
+  } catch (err) {
+    throw 'Update failed: ' + err
+  }
+  return this
 }
 
-Row.prototype.delete = function() { 
-  return this.relation.schema.database.endpoint.delete(this)
-    .then(function(response) {
+Row.prototype.delete = async function () { 
+  let response
+  try {
+    response = await this.relation.schema.database.endpoint.delete(this)
 
-      if(response == null) {
-        throw 'Empty response'
-      }
-
-    }).catch(function(err) {
-      throw 'Delete failed: ' + err
-    })
+    if(response == null) {
+      throw 'Empty response'
+    }
+  } catch (err) {
+    throw 'Delete failed: ' + err
+  }
+  return true
 }
 
-Row.prototype.relatedRows = function( self_column_name, related_relation_name, related_column_name, options )  {
-
+Row.prototype.relatedRows = function (self_column_name, related_relation_name, related_column_name, options)  {
   var relation_parts = related_relation_name.split('.')
   if (relation_parts.length < 2) {
     console.error("Related relation name must be schema qualified (schema_name.relation_name)")
@@ -113,8 +120,7 @@ Row.prototype.relatedRows = function( self_column_name, related_relation_name, r
   return db.schema(schema_name).relation(relation_name).rows(options)
 }
 
-Row.prototype.relatedRow = function( self_column_name, related_relation_name, related_column_name, options ) {
-
+Row.prototype.relatedRow = function (self_column_name, related_relation_name, related_column_name, options) {
   var relation_parts = related_relation_name.split('.')
   if (relation_parts.length < 2) {
     console.error("Related relation name must be schema qualified (schema_name.relation_name)")

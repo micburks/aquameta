@@ -1,4 +1,4 @@
-export default function Column( relation, name ) {
+export default function Column (relation, name) {
   this.relation = relation
   this.name = name
   this.id = { relation_id: relation.id, name: name }
