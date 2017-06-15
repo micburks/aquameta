@@ -1,4 +1,4 @@
-export default function Field( row, name, pk ) {
+export default function Field (row, name, pk) {
   this.row = row
   this.column = new AQ.Column(row.relation, name)
   this.is_primary_key = pk
@@ -12,24 +12,24 @@ export default function Field( row, name, pk ) {
     }
     return id_only ? '/field/' + this.row.relation.schema.name +
       '/' + this.row.relation.name +
-      '/' + /*JSON.stringify(this.row.pk_value)*/ this.row.pk_value +
+      '/' + /* JSON.stringify(this.row.pk_value) */ this.row.pk_value +
       '/' + this.column.name :
         this.row.relation.schema.database.endpoint.url +
         '/field/' + this.row.relation.schema.name +
         '/' + this.row.relation.name +
-        '/' + /*JSON.stringify(this.row.pk_value)*/ this.row.pk_value +
+        '/' + /* JSON.stringify(this.row.pk_value) */ this.row.pk_value +
         '/' + this.column.name
   }
 }
 
 Field.prototype = {
-  get: function() {
+  get () {
     return this.row.get(this.name)
   },
-  set: function( value ) {
+  set (value) {
     this.value = value; return this.row.set(this.name, value)
   },
-  update: function() {
+  update () {
     return this.row.update()
   } // TODO: This is wrong
 }

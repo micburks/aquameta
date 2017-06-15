@@ -1,4 +1,4 @@
-export default function FunctionResult( fn, response ) {
+export default function FunctionResult (fn, response) {
   this.function = fn
   this.schema = fn.schema
   this.row_data = response.result[0].row
@@ -8,23 +8,27 @@ export default function FunctionResult( fn, response ) {
 
 FunctionResult.prototype = {
   constructor: FunctionResult,
-  get: function( name )           { return this.row_data[name] },
-  to_string: function()           { return JSON.stringify(this.row_data) }
+  get (name) {
+      return this.row_data[name]
+  },
+  to_string () {
+      return JSON.stringify(this.row_data)
+  }
 }
 
-FunctionResult.prototype.map = function(fn) {
-  return this.rows.map(function(row) {
+FunctionResult.prototype.map = function (fn) {
+  return this.rows.map(row => {
     return new FunctionResult(this.function, { columns: this.columns, result: [ row ] })
-  }.bind(this)).map(fn)
+  }).map(fn)
 }
 
-FunctionResult.prototype.forEach = function(fn) {
-  return this.rows.map(function(row) {
+FunctionResult.prototype.forEach = function (fn) {
+  return this.rows.map(row => {
     return new FunctionResult(this.function, { columns: this.columns, result: [ row ] })
-  }.bind(this)).forEach(fn)
+  }).forEach(fn)
 }
 
-FunctionResult.prototype.related_rows = function( self_column_name, related_relation_name, related_column_name, options )  {
+FunctionResult.prototype.related_rows = function (self_column_name, related_relation_name, related_column_name, options)  {
   var relation_parts = related_relation_name.split('.')
   if (relation_parts.length < 2) {
     console.error("Related relation name must be schema qualified (schema_name.relation_name)")
@@ -46,7 +50,7 @@ FunctionResult.prototype.related_rows = function( self_column_name, related_rela
   return db.schema(schema_name).relation(relation_name).rows(options)
 }
 
-FunctionResult.prototype.related_row = function( self_column_name, related_relation_name, related_column_name, options ) {
+FunctionResult.prototype.related_row = function (self_column_name, related_relation_name, related_column_name, options) {
   var relation_parts = related_relation_name.split('.')
   if (relation_parts.length < 2) {
     console.error("Related relation name must be schema qualified (schema_name.relation_name)")

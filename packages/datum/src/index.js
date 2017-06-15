@@ -10,16 +10,17 @@ const defaultConfig = {
 }
 
 /* TODO: server-side rendering is unsolved */
-export default function datum( config ) {
+export default function datum (config) {
   // Object.assign
   this.config = Object.keys(config).reduce((acc, key) => {
-    return acc[key] = config[key]
+    acc[key] = config[key]
+    return acc
   }, defaultConfig)
   this._schema = {}
 }
 
-datum.prototype.schema = function( name ) {
-  if ( !(name in this._schema) ) {
+datum.prototype.schema = function (name) {
+  if (!(name in this._schema)) {
     this._schema[name] = new Schema(Endpoint(this.config), name)
   }
   return this._schema[name]

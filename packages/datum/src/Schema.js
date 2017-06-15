@@ -1,30 +1,30 @@
 import Relation from './Relation'
 import Fn from './Function'
+import FnResult from './FunctionResult'
+import FnResultSet from './FunctionResultSet'
 
-export default function Schema( endpoint, name ) {
+export default function Schema (endpoint, name) {
   this.endpoint = endpoint
   this.name = name
   this.id = { name: this.name }
   this._relations = {}
 }
 
-Schema.prototype.relation = function( name ) {
-  if( !(name in this._relations) ) {
+Schema.prototype.relation = function (name) {
+  if (!(name in this._relations)) {
     this._relations[name] = new Relation(this, name)
   }
   return this._relations[name]
 }
 
-Schema.prototype.function = function( identifier, args, options ) {
-
+Schema.prototype.function = async function (identifier, args, options) {
+  let name
   // Function identifier (name and parameter list)
-  if (typeof identifier == 'object') {
-    var name = identifier.name
-    var parameter_type_list = identifier.parameters
-  }
-  // Selecting a function without specifying the parameters
-  else {
-    var name = identifier
+  if (typeof identifier === 'object') {
+    name = identifier.name
+    var parameterTypeList = identifier.parameters
+  } else { // Selecting a function without specifying the parameters
+    name = identifier
   }
 
   options = options || {}
@@ -33,14 +33,11 @@ Schema.prototype.function = function( identifier, args, options ) {
   options.args = {}
 
   // `args = undefined` will pass no arguments into the server-side function
-  if (typeof args != 'undefined') {
-
+  if (typeof args !== 'undefined') {
     // some_function?args={ kwargs: {} } -- Key/value object
     if (!(args instanceof Array) && args instanceof Object) {
       options.args.kwargs = args
-    }
-    // some_function?args={ vals: [] } -- Array
-    else {
+    } else { // some_function?args={ vals: [] } -- Array
       if (!(args instanceof Array)) {
         // Regular value is placed into array
         args = [ args ]
@@ -49,23 +46,23 @@ Schema.prototype.function = function( identifier, args, options ) {
     }
   }
 
-  var fn = new Fn(this, name, parameter_type_list)
+  var fn = new Fn(this, name, parameterTypeList)
 
-  return this.database.endpoint.get(fn, options)
-    .then(function(response) {
+  let response
+  try {
+    response = await this.database.endpoint.get(fn, options)
 
-      if (!response) {
-        throw 'Empty response'
-      }
-      else if (!response.result.length) {
-        throw 'Result set empty'
-      }
-      if(response.result.length > 1) {
-        return new FnResultSet(fn, response)
-      }
-      return new FnResult(fn, response)
+    if (!response) {
+      throw new Error('Empty response')
+    } else if (!response.result.length) {
+      throw new Error('Result set empty')
+    }
+  } catch (err) {
+    throw new Error('Function call request failed: ' + err)
+  }
 
-    }.bind(this)).catch(function(err) {
-      throw 'Function call request failed: ' + err
-    })
+  if (response.result.length > 1) {
+    return new FnResultSet(fn, response)
+  }
+  return new FnResult(fn, response)
 }
