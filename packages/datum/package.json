@@ -1,17 +1,27 @@
 {
   "name": "aquameta-datum",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/build.js",
-  "module": "dist/build.es.js",
+  "version": "0.0.1",
+  "description": "Service layer for the Aquameta database API",
+  "main": "dist/datum.js",
+  "module": "dist/datum.es.js",
+  "jsnext:main": "dist/datum.es.js",
   "scripts": {
-    "postinstall": "rollup -c",
+    "build:browser": "rollup -c rollup.config.browser.js",
     "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "rollup -c -w"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "datum",
+    "aquameta",
+    "postgres"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micburks/aquameta-datum.git"
+  },
+  "homepage": "https://github.com/micburks/aquameta-datum",
+  "author": "Mickey Burks",
+  "license": "MIT",
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-syntax-async-functions": "^6.13.0",
@@ -25,11 +35,14 @@
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-eslint": "^3.0.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
+    "rollup-watch": "^4.0.0",
     "uglify-es": "github:mishoo/UglifyJS2#harmony"
   },
   "dependencies": {
-    "aquameta-query": "0.0.1"
-  }
+    "aquameta-query": "0.0.2"
+  },
+  "files": [
+    "dist"
+  ]
 }
