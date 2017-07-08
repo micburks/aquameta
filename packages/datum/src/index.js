@@ -1,5 +1,6 @@
 import Endpoint from './Endpoint'
 import Schema from './Schema'
+import { curry, getOrCreate } from './utils'
 
 const cache = {}
 const defaultConfig = {
@@ -12,22 +13,11 @@ const defaultConfig = {
 
 /* TODO: server-side rendering is unsolved */
 
-const curry = fn => {
-  const len = fn.length
-  const cb = (...args) => {
-    return args.length >= len ? fn(...arguments) : cb.bind(null, ...args)
-  }
-  return cb.apply(null, arguments)
-}
-
 const getOrCreateSchema = curry((endpoint, name) => {
   const { url, version } = endpoint.config()
   const symbol = Symbol.for(`${url} v${version}`)
-  const schemata = cache[symbol]
-  if (!(name in schemata)) {
-    schemata[name] = new Schema(endpoint, name)
-  }
-  return schemata[name]
+  const schemata = getOrCreate(symbol, cache)
+  return getOrCreate(name, schemata, () => new Schema(endpoint, name))
 })
 
 const datum = config => {
