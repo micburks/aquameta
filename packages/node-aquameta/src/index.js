@@ -2,7 +2,7 @@ const Connection = require('./Connection')
 const datumRoutes = require('./Datum')
 const pages = require('./Page')
 const debug = require('debug')('index')
-const Schema = require('aquameta-datum/src/Schema')
+const { schema } = require('aquameta-datum')
 
 /*
  * TODOs
