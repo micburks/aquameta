@@ -1,17 +1,29 @@
 {
   "name": "aquameta",
-  "version": "1.0.0",
-  "description": "Aquameta server",
-  "main": "src/index.js",
+  "version": "0.0.1",
+  "description": "Node implementation of the Aquameta server",
+  "main": "dist/aquameta.js",
+  "module": "dist/aquameta.es.js",
+  "jsnext:main": "dist/aquameta.es.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon ./bin/www",
     "build": "webpack",
     "dev": "webpack-dev-server"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "bin": "./bin/www",
+  "keywords": [
+    "datum",
+    "aquameta",
+    "postgres"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micburks/node-aquameta.git"
+  },
+  "homepage": "https://github.com/micburks/node-aquameta",
+  "author": "Mickey Burks",
+  "license": "MIT",
   "dependencies": {
     "aquameta-datum": "file:../node-aquameta-datum/",
     "body-parser": "^1.15.2",
