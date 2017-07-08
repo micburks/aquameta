@@ -8,7 +8,9 @@
   "scripts": {
     "build:browser": "rollup -c rollup.config.browser.js",
     "build": "rollup -c",
-    "watch": "rollup -c -w"
+    "watch": "rollup -c -w",
+    "test": "mocha",
+    "prepublish": "npm test"
   },
   "keywords": [
     "datum",
@@ -32,6 +34,7 @@
     "eslint-plugin-node": "^5.0.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^3.4.2",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-eslint": "^3.0.0",
@@ -40,7 +43,7 @@
     "uglify-es": "github:mishoo/UglifyJS2#harmony"
   },
   "dependencies": {
-    "aquameta-query": "0.0.2"
+    "aquameta-query": "0.0.3"
   },
   "files": [
     "dist"
