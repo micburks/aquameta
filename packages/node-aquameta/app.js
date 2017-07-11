@@ -23,7 +23,7 @@ app.use(logger('dev'))
 /* Optional Configuration */
 const endpointConfig = {
   url: '/endpoint',
-  version: 'v0.1'
+  version: '0.1'
 }
 
 /* Get api with default config */
