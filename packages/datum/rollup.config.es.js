@@ -12,8 +12,8 @@ export default {
   format: 'es',
   dest: pkg.module,
   plugins: [
-    babel(),
-    eslint()
+    eslint(),
+    babel()
   ],
   external: [
     'aquameta-query'

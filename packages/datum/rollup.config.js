@@ -13,8 +13,8 @@ export default {
   dest: pkg.main,
   moduleName: 'datum',
   plugins: [
-    babel(),
-    eslint()
+    eslint(),
+    babel()
   ],
   external: [
     'aquameta-query'
