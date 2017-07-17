@@ -1,5 +1,6 @@
 const assert = require('assert')
-const { datum, schema, endpoint } = require('..')
+const path = require('path')
+const { datum, schema, endpoint } = require(path.join(__dirname, '..'))
 
 describe('datum', function() {
   it('will return the api with a default endpoint', function() {
