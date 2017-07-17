@@ -17,7 +17,7 @@ Schema.prototype.relation = function (name) {
   return this._relations[name]
 }
 
-Schema.prototype.function = async function (identifier, args, options) {
+Schema.prototype.function = function (identifier, args, options) {
   let name
   // Function identifier (name and parameter list)
   if (typeof identifier === 'object') {
@@ -48,21 +48,18 @@ Schema.prototype.function = async function (identifier, args, options) {
 
   var fn = new Fn(this, name, parameterTypeList)
 
-  let response
-  try {
-    response = await this.database.endpoint.get(fn, options)
-
-    if (!response) {
-      throw new Error('Empty response')
-    } else if (!response.result.length) {
-      throw new Error('Result set empty')
-    }
-  } catch (err) {
-    throw new Error('Function call request failed: ' + err)
-  }
-
-  if (response.result.length > 1) {
-    return new FnResultSet(fn, response)
-  }
-  return new FnResult(fn, response)
+  return this.database.endpoint.get(fn, options)
+    .then(response => {
+      if (!response) {
+        throw new Error('Empty response')
+      } else if (!response.result.length) {
+        throw new Error('Result set empty')
+      }
+      if (response.result.length > 1) {
+        return new FnResultSet(fn, response)
+      }
+      return new FnResult(fn, response)
+    }).catch(err => {
+      throw new Error('Function call request failed: ' + err)
+    })
 }
