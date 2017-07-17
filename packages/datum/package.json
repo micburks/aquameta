@@ -5,7 +5,10 @@
   "main": "dist/datum.js",
   "module": "dist/datum.es.js",
   "jsnext:main": "dist/datum.es.js",
+  "browser": "dist/datum.browser.js",
   "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "build:es": "rollup -c rollup.config.es.js",
     "build:browser": "rollup -c rollup.config.browser.js",
     "build": "rollup -c",
     "watch": "rollup -c -w",
