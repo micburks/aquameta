@@ -10,10 +10,9 @@
     "build": "rollup -c rollup.config.js",
     "build:es": "rollup -c rollup.config.es.js",
     "build:browser": "rollup -c rollup.config.browser.js",
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
-    "test": "mocha",
-    "prepublish": "npm test"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "prepublish": "npm test",
+    "test": "nyc mocha"
   },
   "keywords": [
     "datum",
