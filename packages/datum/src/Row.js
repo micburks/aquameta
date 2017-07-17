@@ -70,31 +70,28 @@ Row.prototype = {
   }
 }
 
-Row.prototype.update = async function () {
-  let response
-  try {
-    response = await this.relation.schema.database.endpoint.patch(this, this.rowData)
-    if (response === null) {
-      throw new Error('Empty response')
-    }
-  } catch (err) {
-    throw new Error('Update failed: ' + err)
-  }
-  return this
+Row.prototype.update = function () {
+  return this.relation.schema.database.endpoint.patch(this, this.rowData)
+    .then(response => {
+      if (response === null) {
+        throw new Error('Empty response')
+      }
+      return this
+    }).catch(err => {
+      throw new Error('Update failed: ' + err)
+    })
 }
 
-Row.prototype.delete = async function () {
-  let response
-  try {
-    response = await this.relation.schema.database.endpoint.delete(this)
-
-    if (response === null) {
-      throw new Error('Empty response')
-    }
-  } catch (err) {
-    throw new Error('Delete failed: ' + err)
-  }
-  return true
+Row.prototype.delete = function () {
+  return this.relation.schema.database.endpoint.delete(this)
+    .then(response => {
+      if (response === null) {
+        throw new Error('Empty response')
+      }
+      return true
+    }).catch(err => {
+      throw new Error('Delete failed: ' + err)
+    })
 }
 
 Row.prototype.relatedRows = function (selfColumnName, relatedRelationName, relatedColumnName, options) {
