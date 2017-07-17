@@ -1,11 +1,10 @@
-import Query from 'aquameta-query'
+import { fromDatum, toFetch } from 'aquameta-query'
 
 export default function Endpoint (config) {
   const query = method =>
     (metaId, args, data) => {
-      let query = new Query(config)
-      query.fromDatum(method, metaId, args, data)
-      return query.fetch()
+      let query = fromDatum(method, metaId, args, data)
+      return toFetch(query)
     }
 
   return {
