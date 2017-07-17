@@ -16,6 +16,12 @@ export default {
   dest: pkg.browser,
   moduleName: 'datum',
   plugins: [
+    eslint(),
+    babel(),
+    commonjs(),
+    nodeResolve({
+      browser: true
+    }),
     uglify({
       output: {
         comments (node, comment) {
@@ -23,13 +29,7 @@ export default {
           return /aquameta-datum/i.test(value)
         }
       }
-    }),
-    commonjs(),
-    nodeResolve({
-      browser: true
-    }),
-    babel(),
-    eslint()
+    })
   ],
   banner,
   sourceMap: true
