@@ -9,9 +9,8 @@ const banner = readFileSync('./banner.js', 'utf-8')
 
 export default {
   entry: 'src/index.js',
-  format: 'umd',
-  dest: pkg.main,
-  moduleName: 'datum',
+  format: 'es',
+  dest: pkg.module,
   plugins: [
     babel(),
     eslint()
@@ -19,9 +18,6 @@ export default {
   external: [
     'aquameta-query'
   ],
-  globals: {
-    'aquameta-query': 'aquametaQuery'
-  },
   banner,
   sourceMap: true
 }
