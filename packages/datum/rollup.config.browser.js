@@ -28,7 +28,7 @@ export default {
     nodeResolve({
       browser: true
     }),
-    babel()
+    babel(),
     eslint()
   ],
   banner,
