@@ -20,11 +20,11 @@ const getOrCreateSchema = curry((endpoint, name) => {
   return getOrCreate(name, schemata, () => new Schema(endpoint, name))
 })
 
-const datum = config => {
+const database = config => {
   config = Object.assign(defaultConfig, config)
   const endpoint = Endpoint(config)
   const schema = getOrCreateSchema(endpoint)
   return { schema }
 }
 
-export { datum, getOrCreateSchema as schema, Endpoint as endpoint }
+export { database, getOrCreateSchema as schema, Endpoint as endpoint }
