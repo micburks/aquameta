@@ -1,6 +1,6 @@
 /*
   aquameta-datum
   v${version}
-  https://github.com/mickburks/datum
+  https://github.com/micburks/aquameta-datum
   MIT License
 */
