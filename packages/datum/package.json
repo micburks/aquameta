@@ -7,13 +7,14 @@
   "jsnext:main": "dist/datum.es.js",
   "browser": "dist/datum.browser.js",
   "scripts": {
-    "build": "rollup -c rollup.config.js",
-    "build:es": "rollup -c rollup.config.es.js",
-    "build:browser": "rollup -c rollup.config.browser.js",
+    "build": "rollup -c rollup/rollup.config.js",
+    "build:es": "rollup -c rollup/rollup.config.es.js",
+    "build:browser": "rollup -c rollup/rollup.config.browser.js",
     "build:all": "npm run build && npm run build:es && npm run build:browser",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "demo": "nodemon --watch dist demo/server.js",
-    "preversion": "npm run build:es && npm run build:browser && npm run test",
+    "preversion": "npm run test",
+    "version": "npm run build:all",
     "postversion": "git push && git push --tags",
     "test": "npm run build && nyc mocha",
     "watch:browser": "npm run build:browser -- -w"
