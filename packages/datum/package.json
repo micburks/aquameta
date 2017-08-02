@@ -12,7 +12,11 @@
     "build:browser": "rollup -c rollup.config.browser.js",
     "build:all": "npm run build && npm run build:es && npm run build:browser",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "test": "nyc mocha"
+    "demo": "nodemon --watch dist demo/server.js",
+    "preversion": "npm run test",
+    "postversion": "git push && git push --tags",
+    "test": "nyc mocha",
+    "watch:browser": "npm run build:browser -- -w"
   },
   "keywords": [
     "datum",
@@ -37,7 +41,9 @@
     "eslint-plugin-node": "^5.0.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "express": "^4.15.3",
     "mocha": "^3.4.2",
+    "nodemon": "^1.11.0",
     "nyc": "^11.0.3",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
