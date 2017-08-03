@@ -83,6 +83,9 @@ const verifySession = function( req ) {
 
 // TODO: turn into class
 module.exports = function( config, request ) {
+
+  // TODO: what happens when request is not passed in
+  // connection override
   
   const query = method => {
     return ( metaId, args, data ) => {

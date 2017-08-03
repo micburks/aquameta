@@ -91,26 +91,6 @@ module.exports = function( config, app ) {
 
   config = Object.assign({}, defaultConfig, config)
 
-  /* Not using Postgres role authentication */
-  if (config.connection) {
-    const connection = Connection(config)
-    datum = {
-      schema: name => new Schema(connection, name),
-      connect: connection.connect
-    }
-  }
-
-  /* Postgres role received in HTTP request */
-  else {
-    datum = request => {
-      const connection = Connection(config, request)
-      return {
-        schema: name => new Schema(connection, name),
-        connect: connection.connect
-      }
-    }
-  }
-
   if (config.client) {
     /* Register Client-side API route */
     app.use(datumRoutes(config))
