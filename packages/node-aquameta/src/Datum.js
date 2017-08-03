@@ -13,6 +13,7 @@ module.exports = function( config, app ) {
 
   function handleRequest(req, res) {
 
+    // is this necessary since its a router with its own path
     req.url = req.url.replace(path, '')
     debug('datum request', req.url, req.method, req.query, req.body)
 
@@ -50,5 +51,5 @@ module.exports = function( config, app ) {
     .patch(handleRequest)
     .delete(handleRequest)
 
-  app.use(router)
+  return router
 }

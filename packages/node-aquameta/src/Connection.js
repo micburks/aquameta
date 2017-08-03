@@ -81,6 +81,7 @@ const verifySession = function( req ) {
     })
 }
 
+// TODO: turn into class
 module.exports = function( config, request ) {
   
   const query = method => {
