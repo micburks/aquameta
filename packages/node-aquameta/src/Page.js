@@ -140,5 +140,5 @@ module.exports = function( config, app ) {
     })
   }
 
-  app.use(pageMiddleware)
+  return pageMiddleware
 }

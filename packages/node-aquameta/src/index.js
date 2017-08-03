@@ -1,8 +1,10 @@
+const datumMiddleware = require('aquameta-express-middleware')
+const { schema } = require('aquameta-datum')
+
 const Connection = require('./Connection')
 const datumRoutes = require('./Datum')
-const pages = require('./Page')
+const pageMiddleware = require('./Page')
 const debug = require('debug')('index')
-const { schema } = require('aquameta-datum')
 
 /*
  * TODOs
@@ -47,6 +49,12 @@ module.exports = function( config, app ) {
     /* Register client routes for datum */
     client: true,
 
+    /* Register middleware to look in database for resources */
+    pages: true,
+
+    /* Register server-side datum-from-request middleware */
+    server: false,
+
     /* Client URL slug */
     url: 'endpoint',
 
@@ -55,14 +63,16 @@ module.exports = function( config, app ) {
 
     // cacheRequestMilliseconds: 5000, /* Client only? */
 
-    /* Register middleware to look in database for resources */
-    pages: true,
-
     /* Use sockets for events, upgraded connection */
     events: false,
 
     /* Cookie to store session id */
     sessionCookie: 'SESSION_ID',
+
+
+    /* not sure about these next two */
+    /* might be better somewhere else */
+
 
     /* Use supplied connection instead of roles */
     roles: true,
@@ -80,7 +90,6 @@ module.exports = function( config, app ) {
   }
 
   config = Object.assign({}, defaultConfig, config)
-  let datum
 
   /* Not using Postgres role authentication */
   if (config.connection) {
@@ -102,15 +111,21 @@ module.exports = function( config, app ) {
     }
   }
 
-  if (app && config.client) {
+  if (config.client) {
     /* Register Client-side API route */
-    datumRoutes(config, app)
+    app.use(datumRoutes(config))
   }
-  
-  if (app && config.pages) {
+
+  if (config.pages) {
     /* Register middleware that looks for matching database-mounted resources */
-    pages(config, app)
+    app.use(pageMiddleware(config))
+  }
+
+  if (config.server) {
+    /* Add datum to the request object */
+    app.use(datumMiddleware(config))
   }
 
   return datum
 }
+
