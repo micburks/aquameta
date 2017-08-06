@@ -27,6 +27,7 @@
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {
+    "aquameta-connection": "0.0.2",
     "aquameta-datum": "0.0.2",
     "aquameta-query": "0.0.3",
     "body-parser": "^1.15.2",
