@@ -4,21 +4,17 @@ const logger = require('morgan')
 const app = express()
 app.use(logger('dev'))
 
-
-
 /**********************************************************/
 /* CLIENT-SIDE USAGE: */
 /**********************************************************/
 // import datum from 'aquameta-datum'
 // datum.schema('').table('').rows()
 
-
-
 /**********************************************************/
 /* SERVER-SIDE USAGE: */
 /**********************************************************/
 /* Include this in your project */
-// const aquameta = require('aquameta')
+const aquameta = require('aquameta')
 
 /* Optional Configuration */
 const endpointConfig = {
@@ -26,33 +22,27 @@ const endpointConfig = {
   version: '0.1'
 }
 
-/* Get api with default config */
-// let datum = aquameta()
+// Register data routes by supplying your app
+const endpoint = aquameta(app, endpointConfig)
 
-/* Set config */
-// let datum = aquameta(endpointConfig)
+// If some application bootstrapping is necessary
+endpoint.schema('my_app').relation('config').row('name', 'bootstrap.json')
+  .then(performApplicationBootstrapping)
 
-/* Register data routes by supplying your app */
-const datum = aquameta(endpointConfig, app)
-
-/* Pass endpoint into app-specific routes to use */
-//require('./server/routes')(app, datum)
-
-
+// Register application routes
+require('./server/routes')(app)
 
 /**********************************************************/
 /* IN ROUTES: */
 /**********************************************************/
 /* Server-side API usage */
-// datum(req).schema('').table('').rows()
+// request.endpoint(req).schema('').table('').rows()
 
 /* Get a role-verified connection */
-// datum(req).connect().then().catch()
+// request.endpoint(req).connect().then().catch()
 
 /* If you want to do something different with server-side notifications */
 // endpointConfig = { sockets: false }
-// datum(req).connect().then(client => client.on('notification', ()=>{}))
-
-
+// request.endpoint(req).connect().then(client => client.on('notification', ()=>{}))
 
 module.exports = app
