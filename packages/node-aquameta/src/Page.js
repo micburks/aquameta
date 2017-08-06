@@ -96,49 +96,40 @@ const application = (env, start_response) => {
                                             return e
 };
 */
-const Connection = require('./Connection')
+import Connection from 'aquameta-connection'
 
-module.exports = function( config, app ) {
-
-  function pageMiddleware( req, res, next ) {
-
+module.exports = function (config, app) {
+  function pageMiddleware (req, res, next) {
     Connection(config, req).connect()
-    .then(client => {
+      .then(client => {
+        console.log('trying page', req.url)
+        return client.query(
+          'select r.content, m.mimetype ' +
+          'from endpoint.resource r ' +
+          'join endpoint.mimetype m on r.mimetype_id = m.id ' +
+          'where path = $1',
+          [ req.url ]
+        )
+      })
+      .then(result => {
+        // release client
+        //client.release()
+        if (result.rowCount == 0) {
+          return next()
+        }
 
-      console.log('trying page', req.url)
+        result = result.rows[0];
 
-      return client.query(
-        'select r.content, m.mimetype ' +
-        'from endpoint.resource r ' +
-        'join endpoint.mimetype m on r.mimetype_id = m.id ' +
-        'where path = $1', [
-          req.url
-        ])
-    })
-    .then(result => {
-
-      // release client
-      //client.release()
-
-      if (result.rowCount == 0) {
-        return next()
-      }
-
-      result = result.rows[0];
-
-      res.status(200)
-      res.set('Content-Type', result.mimetype)
-      res.send(result.content)
-
-    })
-    .catch(err => {
-
-      console.log(err)
-      if (client.release) client.release()
-      console.log('error in endpoint.request query', err)
-      next()
-    })
+        res.status(200)
+        res.set('Content-Type', result.mimetype)
+        res.send(result.content)
+      })
+      .catch(err => {
+        console.log(err)
+        if (client.release) client.release()
+        console.log('error in endpoint.request query', err)
+        next()
+      })
   }
-
   return pageMiddleware
 }
