@@ -1,7 +1,7 @@
 const datumMiddleware = require('aquameta-express-middleware')
 const { schema } = require('aquameta-datum')
 
-const Connection = require('./Connection')
+import Connection from 'aquameta-connection'
 const datumRoutes = require('./Datum')
 const pageMiddleware = require('./Page')
 const debug = require('debug')('index')
@@ -33,7 +33,7 @@ const debug = require('debug')('index')
  *
  */
 
-module.exports = function( config, app ) {
+module.exports = function (app, config) {
 
   /* ENDPOINT */
   /* Defines the routes for retrieving client-side data */
