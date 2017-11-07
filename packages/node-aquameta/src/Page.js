@@ -98,7 +98,7 @@ const application = (env, start_response) => {
 */
 import Connection from 'aquameta-connection'
 
-module.exports = function (config, app) {
+export default function (config, app) {
   function pageMiddleware (req, res, next) {
     Connection(config, req).connect()
       .then(client => {

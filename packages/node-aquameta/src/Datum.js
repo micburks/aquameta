@@ -1,11 +1,13 @@
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const debug = require('debug')('Datum')
-const express = require('express')
-import Query from 'aquameta-query'
 import Connection from 'aquameta-connection'
+import Query from 'aquameta-query'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+import log from 'debug'
+import express from 'express'
 
-module.exports = function( config, app ) {
+const debug = log('Datum')
+
+export default function (config, app) {
   const router = express.Router()
   const path = new RegExp(`^${config.url}/${config.version}/`)
 
