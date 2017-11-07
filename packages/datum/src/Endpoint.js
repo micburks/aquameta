@@ -1,6 +1,10 @@
 import { fromDatum, toFetch } from 'aquameta-query'
 
 export default function Endpoint (config) {
+
+  // TODO: endpoint needs to look for a cookie override in config
+  // cookie override could come from server-side datum request
+
   const query = method =>
     (metaId, args, data) => {
       let query = fromDatum(method, metaId, args, data)
