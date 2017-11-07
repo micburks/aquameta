@@ -1,4 +1,7 @@
 import { readFileSync } from 'fs'
+import nodeResolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
+import json from 'rollup-plugin-json'
 import babel from 'rollup-plugin-babel'
 import eslint from 'rollup-plugin-eslint'
 
@@ -10,11 +13,15 @@ const banner = readFileSync('./banner.js', 'utf-8')
 export default {
   entry: 'src/index.js',
   plugins: [
+    json(),
+    nodeResolve(),
+    commonjs(),
     eslint(),
     babel()
   ],
   external: [
-    'aquameta-query'
+    'aquameta-query',
+    'pg'
   ],
   banner,
   sourceMap: true,

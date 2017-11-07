@@ -1,10 +1,11 @@
-const datumMiddleware = require('aquameta-express-middleware')
-const { schema } = require('aquameta-datum')
-
+import datumMiddleware from 'aquameta-express-middleware'
 import Connection from 'aquameta-connection'
-const datumRoutes = require('./Datum')
-const pageMiddleware = require('./Page')
-const debug = require('debug')('index')
+import log from 'debug'
+
+import datumRoutes from './Datum'
+import pageMiddleware from './Page'
+
+const debug = log('index')
 
 /*
  * TODOs
@@ -33,7 +34,7 @@ const debug = require('debug')('index')
  *
  */
 
-module.exports = function (app, config) {
+export default function (app, config) {
 
   /* ENDPOINT */
   /* Defines the routes for retrieving client-side data */
@@ -46,39 +47,39 @@ module.exports = function (app, config) {
 
   const defaultConfig = {
 
-    /* Register client routes for datum */
+    // Register client routes for datum
     client: true,
 
-    /* Register middleware to look in database for resources */
+    // Register middleware to look in database for resources
     pages: true,
 
-    /* Register server-side datum-from-request middleware */
+    // Register server-side datum-from-request middleware
     server: false,
 
-    /* Client URL slug */
+    // Client URL slug
     url: 'endpoint',
 
-    /* Client API version */
+    // Client API version
     version: 'v0.1',
 
     // cacheRequestMilliseconds: 5000, /* Client only? */
 
-    /* Use sockets for events, upgraded connection */
+    // Use sockets for events, upgraded connection
     events: false,
 
-    /* Cookie to store session id */
+    // Cookie to store session id
     sessionCookie: 'SESSION_ID',
 
 
-    /* not sure about these next two */
-    /* might be better somewhere else */
+    // not sure about these next two
+    // might be better somewhere else
 
 
-    /* Use supplied connection instead of roles */
+    // Use supplied connection instead of roles
     roles: true,
-    //roles: false,
+    // roles: false,
 
-    /* Connection override */
+    // Connection override
     connection: null
     /*
     connection: {
@@ -92,20 +93,17 @@ module.exports = function (app, config) {
   config = Object.assign({}, defaultConfig, config)
 
   if (config.client) {
-    /* Register Client-side API route */
+    // Register Client-side API route
     app.use(datumRoutes(config))
   }
 
   if (config.pages) {
-    /* Register middleware that looks for matching database-mounted resources */
+    // Register middleware that looks for matching database-mounted resources
     app.use(pageMiddleware(config))
   }
 
   if (config.server) {
-    /* Add datum to the request object */
+    // Add datum to the request object
     app.use(datumMiddleware(config))
   }
-
-  return datum
 }
-
