@@ -1,6 +1,6 @@
 {
   "name": "aquameta-datum",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Service layer for the Aquameta database API",
   "main": "dist/datum.js",
   "module": "dist/datum.es.js",
