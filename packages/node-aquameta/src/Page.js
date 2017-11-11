@@ -100,7 +100,7 @@ import Connection from 'aquameta-connection'
 
 export default function (config, app) {
   function pageMiddleware (req, res, next) {
-    Connection(config, req).connect()
+    (new Connection(config, req)).connect()
       .then(client => {
         console.log('trying page', req.url)
         return client.query(
@@ -115,6 +115,7 @@ export default function (config, app) {
         // release client
         //client.release()
         if (result.rowCount == 0) {
+          console.log('page not found')
           return next()
         }
 

@@ -1,5 +1,4 @@
 import datumMiddleware from 'aquameta-express-middleware'
-import Connection from 'aquameta-connection'
 import log from 'debug'
 
 import datumRoutes from './Datum'

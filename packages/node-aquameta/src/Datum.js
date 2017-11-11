@@ -16,7 +16,7 @@ export default function (config, app) {
     req.url = req.url.replace(path, '')
     debug('datum request', req.url, req.method, req.query, req.body)
 
-    const connect = Connection(config, req).connect
+    const connect = new Connection(config, req).connect
     const query = new Query(config)
     query.fromRequest(req)
     query.execute(connect())
