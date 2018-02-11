@@ -1,0 +1,22 @@
+<!--
+  Products widget
+  views: products
+  events: showCreate, toggleProduct
+  lang: noProducts, createProductAction
+-->
+<template>
+  <div meta-if="products.length === 0">
+    <div class="Error">{{ lang.noProducts }}</div>
+  </div>
+
+  <button meta-if="!createVisible" @click="showCreate">{{ lang.createProductAction }}</button>
+  <create-product meta-if="createVisible" />
+
+  <div class="sidebar">
+    <product-widget meta-each="product in products" @click="toggleProduct" meta-datum="product" />
+  </div>
+
+  <div class="body">
+    <product-detail meta-if="selectedProduct" :product="selectedProduct" />
+  </div>
+</template>
