@@ -1,0 +1,12 @@
+<!--
+  Create-product widget
+  events: formChanged
+-->
+<template>
+  <form meta-action="insert" :relation="beehive.products" @change.debounce="formChanged">
+    <input type="text" :field="name" />
+    <input type="text" :field="beehive.breakdown:name" />
+    <semantic-input :field="beehive.products:quantity" />
+    <input type="submit" />
+  </form>
+</template>

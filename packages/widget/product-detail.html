@@ -1,0 +1,13 @@
+<!--
+  Product-detail widget
+  input: product
+  lang: productAvailable
+-->
+<template>
+  <div meta-if="product.status === 'AVAILABLE'">
+    {{ lang.productAvailable }}
+  </div>
+
+  <span>{{ product.name }}</span>
+  <span>{{ product.type }}</span>
+</template>
