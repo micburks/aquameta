@@ -1,6 +1,7 @@
 const assert = require('assert')
 
-const tagRegex = /\<([\w-]+)(.*)\>/g
+const startTagRegex = /\<([\w-]+)(.*)\>/g
+const endTagRegex = /\<\/([\w-]+)\>/g
 const attrsRegex = /([\w:@-]+)(\s*=\s*(['"]?)(.+?)\3)?(?:\s)/g
 const conditionRegex = /\{\{(.+?)\}\}/g
 
@@ -19,26 +20,15 @@ function parseAttrs (attrList) {
   return attrs
 }
 
-function parseChildren () {
-  return {}
-}
-
-/**
- * TODO: sanity checks
- * is there only one root node
- * is every tag closed
- */
 function buildTemplateTree (template) {
   template = template.trim()
 
   if (template[0] !== '<') {
-    throw new Error('failed to parse template')
+    throw new Error('template parse error: template must begin with a tag')
   }
 
   let state = {
     tagEncountered: false,
-    inTag: false,
-    node: '',
     textNode: '',
     content: '',
     currentTag: {
@@ -47,60 +37,68 @@ function buildTemplateTree (template) {
     }
   }
 
-  template.split('').forEach(char => {
+  for (let index = 0; index < template.length; index++) {
+    const char = template[index]
+
     if (state.tagEncountered) {
-      // Decide what type of tag
       state.tagEncountered = false
-      state.inTag = true
-      state.node += char
+
+      // Decide what type of tag
       if (char === '/') {
-        state.endTag = true
+        // Deal with end tag
+        startTagRegex.lastIndex = index - 1
+        const match = endTagRegex.exec(template)
+        const [ , tagName ] = match
+
+        if (tagName !== state.currentTag.name) {
+          throw new Error('template parse error: mismatched tag in template')
+        }
+
+        state.currentTag.closed = true
+        state.currentTag = state.currentTag.parent
+
+        // Continue reading template at the end of the regex match
+        index = endTagRegex.lastIndex
       } else {
-        state.startTag = true
+        // Deal with start tag
+        startTagRegex.lastIndex = index - 1
+        const match = startTagRegex.exec(template)
+
+        const newTag = {
+          type: 'tag',
+          name: match[1],
+          attrs: match[2],
+          attrMap: parseAttrs(match[2]),
+          tag: match[0],
+          parent: state.currentTag,
+          children: [],
+          renderFn: '?'
+        }
+        state.currentTag.children.push(newTag)
+        state.currentTag = newTag
+
+        // Continue reading template at the end of the regex match
+        index = startTagRegex.lastIndex
       }
     } else if (char === '<') {
       // Start new tag
       state.tagEncountered = true
-      state.node += char
 
+      // Add current text node to currentTag
       if (state.textNode.trim() !== '') {
         state.currentTag.children.push({
           type: 'text',
           content: state.textNode,
           parent: state.currentTag
         })
-        state.textNode = ''
       }
-    } else if (state.inTag) {
-      // Build tag node
-      state.node += char
 
-      if (char === '>') {
-        // End current tag
-        state.inTag = false
-        if (state.endTag) {
-          state.endTag = false
-          state.currentTag = state.currentTag.parent
-        } else if (state.startTag) {
-          state.startTag = false
-          if (state.node !== '') {
-            const newTag = {
-              type: 'tag',
-              content: state.node,
-              parent: state.currentTag,
-              children: []
-            }
-            state.currentTag.children.push(newTag)
-            state.currentTag = newTag
-          }
-        }
-        state.node = ''
-      }
+      state.textNode = ''
     } else {
       // Build text node
       state.textNode += char
     }
-  })
+  }
 
   return state.currentTag
 }
@@ -111,41 +109,21 @@ function parseTemplate (template) {
   }
 
   const tree = buildTemplateTree(template)
-  return tree
 
-  const indices = []
-  let index = 0
-  const ast = {}
-  let element = ast
-  let match = tagRegex.exec(template)
-  while (match !== null) {
-    indices[index] = {
-      start: match.index,
-      end: tagRegex.lastIndex
-    }
-    if (index > 0) {
-      let textContent = template.slice(indices[index-1].end, indices[index].start).trim()
-      if (textContent !== '') {
-        indices[index].textContent = textContent
-      }
-    }
-    index++
-
-    const [ , tag, attrs ] = match
-    element.tag = tag
-    element.attrs = parseAttrs(attrs)
-    element.children = parseChildren()
-    element.renderFn = ''
-    element = element.children
-    match = tagRegex.exec(template)
+  if (tree.children.length !== 1) {
+    throw new Error('template parse error: templates cannot contain multiple root elements')
   }
 
-  return { ast, indices }
+  if (tree.children[0].name !== 'template') {
+    throw new Error('template parse error: root tag must be a `template`')
+  }
+
+  return tree
 }
 
 const str = `
 <template>
-  <double-name-tag notFound isFound=true or="id={{id}}" dog ="bark" :bind = "var" meta-if=" more " @click="this.something = 'abc';" @another="this.a=12">
+  <double-name-tag notFound isFound=true or="id={{id}}" dog ="bark" :bind = "var" meta-if=" more > 3 " @click="this.something = 'abc';" @another="this.a=12">
     <div meta-if="hideDiv">
       {{again}}
       <span>
