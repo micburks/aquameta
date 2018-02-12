@@ -1,16 +1,14 @@
-const assert = require('assert')
-
-const startTagRegex = /\<([\w-]+)(.*)\>/g
+const startTagRegex = /\<([\w-]+)(.*?)(\/)?\>/g
 const endTagRegex = /\<\/([\w-]+)\>/g
 const commentRegex = /\<\!\-\-.*\-\-\>/g
 const attrsRegex = /([\w:@-]+)(\s*=\s*(['"]?)(.+?)\3)?(?:\s)/g
 const conditionRegex = /\{\{(.+?)\}\}/g
 
 function parseAttrs (attrList) {
+  const attrs = {}
+
   // Use artificial space at the end of the line for RegExp sake
   attrList = `${attrList.trim()} `
-
-  const attrs = {}
   let match = attrsRegex.exec(attrList)
   while (match !== null) {
     const [ , name, , , value ] = match
@@ -21,6 +19,9 @@ function parseAttrs (attrList) {
   return attrs
 }
 
+/**
+ * TODO implicit self-closing tags
+ */
 function buildTemplateTree (template) {
   template = template.replace(commentRegex, '')
   template = template.trim()
@@ -48,9 +49,8 @@ function buildTemplateTree (template) {
       // Decide what type of tag
       if (char === '/') {
         // Deal with end tag
-        startTagRegex.lastIndex = index - 1
-        const match = endTagRegex.exec(template)
-        const [ , tagName ] = match
+        endTagRegex.lastIndex = index - 1
+        const [ , tagName ] = endTagRegex.exec(template)
 
         if (tagName !== state.currentTag.name) {
           throw new Error('template parse error: mismatched tag in template')
@@ -74,10 +74,14 @@ function buildTemplateTree (template) {
           tag: match[0],
           parent: state.currentTag,
           children: [],
-          renderFn: '?'
+          renderFn: '?',
+          closed: match[3] === '/'
         }
         state.currentTag.children.push(newTag)
-        state.currentTag = newTag
+
+        if (!newTag.closed) {
+          state.currentTag = newTag
+        }
 
         // Continue reading template at the end of the regex match
         index = startTagRegex.lastIndex
@@ -105,9 +109,9 @@ function buildTemplateTree (template) {
   return state.currentTag
 }
 
-function parseTemplate (template) {
+export function parseTemplate (template) {
   if (!template) {
-    throw new Error('template not found')
+    throw new Error('template parse error: template not found')
   }
 
   const tree = buildTemplateTree(template)
@@ -122,25 +126,3 @@ function parseTemplate (template) {
 
   return tree
 }
-
-const str = `
-<!--
-  This is a comment
-
--->
-<template>
-  <double-name-tag notFound isFound=true or="id={{id}}" dog ="bark" :bind = "var" meta-if=" more > 3 " @click="this.something = 'abc';" @another="this.a=12">
-    <div meta-if="hideDiv">
-      {{again}}
-      <!-- another comment -->
-      <span>
-        {{here}}
-      </span>
-    </div>
-    {{ secondChild }}
-  </double-name-tag>
-</template>
-`
-
-const parsed = parseTemplate(str)
-console.log(parsed)
