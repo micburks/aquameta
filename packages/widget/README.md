@@ -1,4 +1,42 @@
-Templates
+# Widgets
+
+widget.widget
+
+| id | name | html | css | state | documentation |
+| -- | ---- | ---- | --- | ----- | ------------- |
+
+
+widget.view
+
+| id | widget id | view id |
+| -- | --------- | ------- |
+
+
+widget.input
+
+| id | name | default | required |
+| -- | ---- | ------- | -------- |
+
+
+widget.event
+
+| id | name | script |
+| -- | ---- | ------ |
+
+
+widget.lang
+
+| id | locale | data |
+| -- | ------ | ---- |
+
+
+## Future features
+
+widget.js_dependency
+widget.css_dependency
+
+
+# Templates
 
 :bind
 ---
