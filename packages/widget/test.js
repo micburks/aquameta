@@ -2,6 +2,7 @@ const assert = require('assert')
 
 const startTagRegex = /\<([\w-]+)(.*)\>/g
 const endTagRegex = /\<\/([\w-]+)\>/g
+const commentRegex = /\<\!\-\-.*\-\-\>/g
 const attrsRegex = /([\w:@-]+)(\s*=\s*(['"]?)(.+?)\3)?(?:\s)/g
 const conditionRegex = /\{\{(.+?)\}\}/g
 
@@ -21,6 +22,7 @@ function parseAttrs (attrList) {
 }
 
 function buildTemplateTree (template) {
+  template = template.replace(commentRegex, '')
   template = template.trim()
 
   if (template[0] !== '<') {
@@ -122,10 +124,15 @@ function parseTemplate (template) {
 }
 
 const str = `
+<!--
+  This is a comment
+
+-->
 <template>
   <double-name-tag notFound isFound=true or="id={{id}}" dog ="bark" :bind = "var" meta-if=" more > 3 " @click="this.something = 'abc';" @another="this.a=12">
     <div meta-if="hideDiv">
       {{again}}
+      <!-- another comment -->
       <span>
         {{here}}
       </span>
