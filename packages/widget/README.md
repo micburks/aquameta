@@ -1,33 +1,41 @@
 # Widgets
 
-widget.widget
+## All widget tables
+
+### widget.widget
 
 | id | name | html | css | state | documentation |
 | -- | ---- | ---- | --- | ----- | ------------- |
 
 
-widget.view
+### widget.view
 
 | id | widget id | view id |
 | -- | --------- | ------- |
 
 
-widget.input
+### widget.input
 
 | id | name | default | required |
 | -- | ---- | ------- | -------- |
 
 
-widget.event
+### widget.event
 
 | id | name | script |
 | -- | ---- | ------ |
 
 
-widget.lang
+### widget.lang
 
 | id | locale | data |
 | -- | ------ | ---- |
+
+
+### widget.dependencies
+
+| id | parent_widget_id | child_widget_id |
+| -- | ---------------- | --------------- |
 
 
 ## Future features
@@ -36,7 +44,12 @@ widget.js_dependency
 widget.css_dependency
 
 
-# Templates
+# Templates attributes
+
+{{var}}
+---
+Interpolate variable value
+example: `{{name}}`
 
 :bind
 ---
