@@ -1,8 +1,14 @@
 import { datum } from 'aquameta-datum'
+import { uuid } from './uuid'
 import { fetchWidget } from './fetch'
 import { parseTemplate } from './parser'
 import { renderTemplate } from './renderer'
-const uuid = require('uuid').v4
+
+export {
+  fetchWidget,
+  parseTemplate,
+  renderTemplate
+}
 
 export async function mount (widgetIdentifier, container) {
   if (typeof selector === 'string') {
@@ -12,15 +18,20 @@ export async function mount (widgetIdentifier, container) {
   }
 
   const mark = document.createElement('div')
-  mark.id = uuid.v4()
+  mark.id = uuid()
   selector.appendChild(mark)
 
-  const widget = await fetchWidget(widgetIdentifier)
-  const [ template, context ] = await Promise.all([
-    parseTemplate(widget),
-    buildContext(widget) // ?
-  ])
+  try {
+    const widget = await fetchWidget(widgetIdentifier)
+    const [ template, context ] = await Promise.all([
+      parseTemplate(widget),
+      buildContext(widget) // ?
+    ])
 
-  const renderedFragment = await renderTemplate(template, context)
-  selector.replaceChild(renderedFragment, mark)
+    const renderedFragment = await renderTemplate(template, context)
+    selector.replaceChild(renderedFragment, mark)
+  } catch (e) {
+    console.error('widget mount error')
+    console.error(e)
+  }
 }
