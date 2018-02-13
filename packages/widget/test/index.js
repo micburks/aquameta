@@ -1,4 +1,5 @@
-import { parseTemplate } from './src'
+const assert = require('assert')
+const { parseTemplate } = require('../dist/build.js')
 
 const str = `
 <!--
@@ -21,5 +22,9 @@ const str = `
 </template>
 `
 
-const parsed = parseTemplate(str)
-console.log(parsed)
+describe('parseTemplate', () => {
+  it('works', () => {
+    const parsed = parseTemplate(str)
+    assert(true)
+  })
+})
