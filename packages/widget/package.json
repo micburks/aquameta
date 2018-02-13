@@ -1,7 +1,7 @@
 {
   "name": "aquameta-widget",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "Widget rendering framework built on top of Aquameta",
   "main": "dist/build.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
@@ -11,8 +11,19 @@
     "pretest": "npm run build",
     "test": "nyc mocha"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "widget",
+    "datum",
+    "aquameta",
+    "postgres"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micburks/aquameta-widget.git"
+  },
+  "homepage": "https://github.com/micburks/aquameta-widget",
+  "author": "Mickey Burks",
+  "license": "MIT",
   "dependencies": {
     "aquameta-datum": "0.0.6",
     "babel-polyfill": "^6.26.0"
