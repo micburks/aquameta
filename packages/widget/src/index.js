@@ -10,16 +10,25 @@ export {
   renderTemplate
 }
 
-export async function mount (widgetIdentifier, container) {
-  if (typeof selector === 'string') {
-    selector = document.querySelector(selector)
-  } else if (!(selector instanceof Node)) {
+/**
+ * mount
+ *
+ * Mount widget to container
+ *
+ * @params {string} widgetIdentifier
+ * @params {string|Node} container
+ * @returns {Promise}
+ */
+export async function mount (widgetIdentifier, container = document) {
+  if (typeof container === 'string') {
+    container = document.querySelector(container)
+  } else if (!(container instanceof Node)) {
     throw new Error('widget mount error: container must be string or DOM Node')
   }
 
   const mark = document.createElement('div')
   mark.id = uuid()
-  selector.appendChild(mark)
+  container.appendChild(mark)
 
   try {
     const widget = await fetchWidget(widgetIdentifier)
@@ -29,7 +38,7 @@ export async function mount (widgetIdentifier, container) {
     ])
 
     const renderedFragment = await renderTemplate(template, context)
-    selector.replaceChild(renderedFragment, mark)
+    container.replaceChild(renderedFragment, mark)
   } catch (e) {
     console.error('widget mount error')
     console.error(e)
