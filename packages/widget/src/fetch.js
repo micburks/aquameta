@@ -7,7 +7,7 @@ async function getWidget (identifier) {
 
   try {
     widget = await widgetTable.row('name', identifier)
-  } catch () {
+  } catch (e) {
     throw new Error('widget fetch failed: widget not found')
   }
 
@@ -19,7 +19,7 @@ async function getInputs (widgetId) {
 
   try {
     inputs = await widgetInputs.rows('widget_id', widgetId)
-  } catch () {
+  } catch (e) {
     throw new Error('widget fetch failed: widget inputs not found')
   }
 
