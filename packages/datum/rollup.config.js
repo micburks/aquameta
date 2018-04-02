@@ -7,21 +7,20 @@ const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
 const banner = readFileSync('./banner.js', 'utf-8')
   .replace('${version}', pkg.version)
 
-export default {
-  entry: 'src/index.js',
-  format: 'umd',
-  dest: pkg.main,
-  moduleName: 'datum',
-  plugins: [
-    eslint(),
-    babel()
-  ],
-  external: [
-    'aquameta-query'
-  ],
-  globals: {
-    'aquameta-query': 'aquametaQuery'
-  },
-  banner,
-  sourceMap: true
-}
+export default [{
+    input: 'src/index.js',
+    output: {
+      banner,
+      file: pkg.main,
+      format: 'umd',
+      name: 'datum'
+    }
+  }, {
+    input: 'src/index.js',
+    output: {
+      banner,
+      file: pkg.module,
+      format: 'es'
+    }
+  }
+]

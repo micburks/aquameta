@@ -4,21 +4,15 @@
   "description": "Service layer for the Aquameta database API",
   "main": "dist/datum.js",
   "module": "dist/datum.es.js",
-  "jsnext:main": "dist/datum.es.js",
-  "browser": "dist/datum.browser.js",
   "scripts": {
-    "build": "rollup -c rollup/rollup.config.js",
-    "build:es": "rollup -c rollup/rollup.config.es.js",
-    "build:browser": "rollup -c rollup/rollup.config.browser.js",
-    "build:all": "npm run build && npm run build:es && npm run build:browser",
+    "build": "rollup -c rollup.config.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "demo": "nodemon --watch dist demo/server.js",
     "preversion": "npm run test",
-    "version": "npm run build:all",
+    "version": "npm run build",
     "postversion": "git push && git push --tags",
     "pretest": "npm run build",
-    "test": "nyc mocha",
-    "watch:browser": "npm run build:browser -- -w"
+    "test": "nyc mocha"
   },
   "keywords": [
     "datum",
@@ -47,14 +41,15 @@
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
     "nyc": "^11.0.3",
-    "rollup": "^0.41.6",
+    "rollup": "^0.57.1",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-eslint": "^3.0.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "rollup-watch": "^4.0.0",
-    "uglify-es": "github:mishoo/UglifyJS2#harmony"
+    "uglify-es": "github:mishoo/UglifyJS2#harmony",
+    "veggie": "^2.4.1"
   },
   "dependencies": {
     "aquameta-query": "0.0.6"
