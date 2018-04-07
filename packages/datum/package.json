@@ -34,7 +34,9 @@
     "nodemon": "^1.11.0",
     "parallelshell": "^3.0.2",
     "rollup": "^0.57.1",
-    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-pluginutils": "^2.0.1",
+    "snazzy": "^7.1.1",
+    "standard": "^11.0.1",
     "veggie": "^2.4.1"
   },
   "dependencies": {
