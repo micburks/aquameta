@@ -3,7 +3,7 @@ import ramda from 'ramda'
 const { cond, curry, identity, T } = ramda
 
 export function relation (name) {
-  const [ schemaName, relationName ] = name.split('.')
+  let [ schemaName, relationName ] = name.split('.')
   if (!relationName) {
     relationName = schemaName
     schemaName = 'public'
@@ -23,10 +23,16 @@ const isArray = arr => (arr instanceof Array)
 const asArray = arr => cond([
   [isFalsy, () => ([])],
   [isArray, identity],
-  [T,       val => ([val])]
+  [T, val => ([val])]
 ])
 
-const push = (arr, item) => (arr.push(item), arr)
+/*
+const push = (arr, item) => {
+  arr.push(item)
+  return arr
+}
+*/
+
 const concat = (arr, item) => ([...arr, item])
 
 // (any, any, any) => any
@@ -36,7 +42,10 @@ const identity2of3 = (v1, v2, v3) => v2
 const concatObjKey = (key, value, obj) => concat(asArray(obj[key]), value)
 
 // (fn, str, any, obj) => any
-const setKey = curry((functor, key, value, obj) => (obj[key] = functor(key, value, obj), obj))
+const setKey = curry((functor, key, value, obj) => {
+  obj[key] = functor(key, value, obj)
+  return obj
+})
 
 // TODO: need to create new object with new args
 // const seKey = (key, value, chainable) => setKey(functor, key, value, chainable.args)
