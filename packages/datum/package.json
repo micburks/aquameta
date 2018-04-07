@@ -5,14 +5,16 @@
   "main": "dist/datum.js",
   "module": "dist/datum.es.js",
   "scripts": {
-    "build": "rollup -c rollup.config.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "build": "rollup -c",
+    "build:watch": "nodemon -w src -e mjs -x 'npm run build'",
     "demo": "nodemon --watch dist demo/server.js",
     "preversion": "npm run test",
     "version": "npm run build",
     "postversion": "git push && git push --tags",
     "pretest": "npm run build",
-    "test": "nyc mocha"
+    "test": "node --experimental-modules test/index.mjs",
+    "test:watch": "nodemon -w dist -w test -e mjs,js -x 'node --experimental-modules test/index.mjs'",
+    "watch": "parallelshell 'npm run test:watch' 'npm run build:watch'"
   },
   "keywords": [
     "datum",
@@ -27,32 +29,16 @@
   "author": "Mickey Burks",
   "license": "MIT",
   "devDependencies": {
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-syntax-async-functions": "^6.13.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-latest": "^6.24.1",
-    "coveralls": "^2.13.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.3.0",
-    "eslint-plugin-node": "^5.0.0",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "express": "^4.15.3",
-    "mocha": "^3.4.2",
+    "chai": "^4.1.2",
+    "chalk": "^2.3.2",
     "nodemon": "^1.11.0",
-    "nyc": "^11.0.3",
+    "parallelshell": "^3.0.2",
     "rollup": "^0.57.1",
-    "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-eslint": "^3.0.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
-    "rollup-watch": "^4.0.0",
-    "uglify-es": "github:mishoo/UglifyJS2#harmony",
     "veggie": "^2.4.1"
   },
   "dependencies": {
-    "aquameta-query": "0.0.6"
+    "ramda": "^0.25.0"
   },
   "files": [
     "dist"
