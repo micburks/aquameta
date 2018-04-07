@@ -1,3 +1,4 @@
+/* globals location Headers fetch */
 /**
  * Fetch query results client-side
  * @returns {Promise}
@@ -51,6 +52,7 @@ export default function toFetch (query) {
     })
 }
 
+/*
 function toQueryString (query) {
   // Map the keys of the args object to an array of encoded url components
   const mappedArgs = Object
@@ -65,7 +67,7 @@ function toQueryString (query) {
         case 'where':
           // where: { name: 'column_name', op: '=', value: 'value' }
           // where: [{ name: 'column_name', op: '=', value: 'value' }]
-          arg = asArray(args)
+          arg = asArray(arg)
           key = null
           value = arg
             .map(w => {
@@ -82,7 +84,7 @@ function toQueryString (query) {
           // order_by: [{ 'column_name': 'asc|desc' }]
           // order_by: { column: 'column_name', direction: 'asc|desc' }
           // order_by: [{ column: 'column_name', direction: 'asc|desc' }]
-          arg = asArray(args)
+          arg = asArray(arg)
           const columnList = concatMap(arg, col => {
             if (typeof col === 'string') {
               return col
@@ -154,3 +156,4 @@ function concatMap (arr) {
     return acc
   }, [])
 }
+*/

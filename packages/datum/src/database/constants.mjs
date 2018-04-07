@@ -18,9 +18,9 @@ export const HTTP = {
 }
 
 export const getMethodFromType = type => cond([
-  [equals(DELETE),  always(HTTP.DELETE)],
-  [equals(INSERT),  always(HTTP.POST)],
-  [equals(SELECT),  always(HTTP.GET)],
-  [equals(UPDATE),  always(HTTP.PUT)],
-  [T,               () => { throw new TypeError(`unknown type: ${type}`) }]
+  [equals(DELETE), always(HTTP.DELETE)],
+  [equals(INSERT), always(HTTP.POST)],
+  [equals(SELECT), always(HTTP.GET)],
+  [equals(UPDATE), always(HTTP.PUT)],
+  [T, () => { throw new TypeError(`unknown type: ${type}`) }]
 ])

@@ -1,3 +1,5 @@
+import pg from 'pg'
+
 /**
  * Execute query server-side
  * @returns {Promise}
@@ -28,11 +30,6 @@ export default function toExecute (query, connection) {
   })
 }
 
-  /*
-import pg from 'pg'
-import { fromDatum, toExecute } from 'aquameta-query'
-*/
-
 const anonConfig = {
   user: 'anonymous',
   password: null,
@@ -57,7 +54,7 @@ const anonConfig = {
  *
  * var pool = new pg.Pool(config)
  * pool.connect(callback)
- * 
+ *
  * is the same as
  *
  * pg.connect(config, callback)
@@ -79,7 +76,7 @@ export class Connection {
   query (method) {
     return (metaId, args, data) => {
       // let query = new Query(config)
-      fromDatum(method, metaId, args, data)
+      // fromDatum(method, metaId, args, data)
       return toExecute(this.connect())
     }
   }

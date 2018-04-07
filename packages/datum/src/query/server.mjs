@@ -1,10 +1,9 @@
-/* global location fetch Headers */
 import ramda from 'ramda'
 import { CLIENT, EXECUTABLE } from '../database/constants.mjs'
 import toFetch from './toFetch.mjs'
 import toExecute from './toExecute.mjs'
 
-const { always, compose, cond, curry, identity, T, when } = ramda
+const { compose, cond, curry, identity, T, when } = ramda
 
 const usesEndpoint = client => client.endpoint
 const usesConnection = client => client.connection
@@ -12,9 +11,9 @@ const evented = client => client.evented
 const makeEvented = identity
 const execute = identity
 const establishConnection = client => cond([
-  [usesEndpoint,    toExecute],
-  [usesConnection,  toFetch],
-  [T,               () => { throw new Error('must specify endpoint or connection for client') }]
+  [usesEndpoint, toExecute],
+  [usesConnection, toFetch],
+  [T, () => { throw new Error('must specify endpoint or connection for client') }]
 ])
 
 /**
