@@ -1,16 +1,17 @@
-import executable from './executable'
-import { __, curry } from 'ramda'
-import { getMethodFromType } from './constants'
-import { DELETE, INSERT, SELECT, UPDATE } from './constants'
+import ramda from 'ramda'
+import { DELETE, EXECUTABLE, INSERT, SELECT, UPDATE, getMethodFromType } from './constants.mjs'
+
+const { __, curry } = ramda
 
 /**
  * DOESN'T allow chainables to be called on executables
  */
 const executable = curry((type, chainable, data) => ({
-  method: getMethodFromType(type)
+  method: getMethodFromType(type),
   url: chainable.url,
   args: chainable.args,
-  data
+  data,
+  [EXECUTABLE]: true
 }))
 
 /**
@@ -24,7 +25,7 @@ export const update = executable(UPDATE)
 /**
  * returns executable
  */
-export default function http (req) {
+export function http (req) {
   return {
     method: req.method,
     url: req.url.split('?')[0],
@@ -36,7 +37,7 @@ export default function http (req) {
 /**
  * returns executable
  */
-export default function source (sourceUrl) {
+export function source (sourceUrl) {
   const method = 'GET'
   const url = `/${sourceUrl.replace(/\/db\//, '')}`
   const args = {} // ?

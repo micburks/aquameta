@@ -1,13 +1,13 @@
 /* global location fetch Headers */
-import { always, compose, cond, curry, T, when } from 'ramda'
-import toFetch from './toFetch'
-import toExecute from './toExecute'
+import ramda from 'ramda'
+import toFetch from './toFetch.mjs'
+
+const { always, compose, cond, curry, T, when } = ramda
 
 const usesEndpoint = client => client.endpoint
 const usesConnection = client => client.connection
 const evented = client => client.evented
 const establishConnection = client => cond([
-  [usesEndpoint,    toExecute],
   [usesConnection,  toFetch],
   [T,               () => { throw new Error('must specify endpoint or connection for client') }]
 ])

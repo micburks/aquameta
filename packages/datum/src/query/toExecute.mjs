@@ -2,7 +2,7 @@
  * Execute query server-side
  * @returns {Promise}
  */
-export function toExecute (query, connection) {
+export default function toExecute (query, connection) {
   connection.then(client => {
     console.log('trying connection', query.config.version, query.method, query.metaId, JSON.stringify(query.args), JSON.stringify(query.data))
     return client.query(
@@ -28,8 +28,10 @@ export function toExecute (query, connection) {
   })
 }
 
+  /*
 import pg from 'pg'
 import { fromDatum, toExecute } from 'aquameta-query'
+*/
 
 const anonConfig = {
   user: 'anonymous',
@@ -64,7 +66,7 @@ const anonConfig = {
  * the same config has been passed in twice
 */
 
-export default class Connection {
+export class Connection {
   constructor (config, request) {
     this.config = config
     this.connection = this.config.connection

@@ -1,11 +1,18 @@
 /* global location fetch Headers */
-import { always, compose, cond, curry, T, when } from 'ramda'
-import toFetch from './toFetch'
+import ramda from 'ramda'
+import { CLIENT, EXECUTABLE } from '../database/constants.mjs'
+import toFetch from './toFetch.mjs'
+import toExecute from './toExecute.mjs'
+
+const { always, compose, cond, curry, identity, T, when } = ramda
 
 const usesEndpoint = client => client.endpoint
 const usesConnection = client => client.connection
 const evented = client => client.evented
+const makeEvented = identity
+const execute = identity
 const establishConnection = client => cond([
+  [usesEndpoint,    toExecute],
   [usesConnection,  toFetch],
   [T,               () => { throw new Error('must specify endpoint or connection for client') }]
 ])
@@ -22,16 +29,19 @@ const establishConnection = client => cond([
  */
 export default curry(
   async function (client, query) {
-    if (!(client instanceof Client)) {
-      throw new Error('query: invalid client')
+    if (!client[CLIENT]) {
+      throw new TypeError('query: invalid client')
+    }
+    if (!query[EXECUTABLE]) {
+      throw new TypeError('query: invalid executable')
     }
 
     let promise
 
     try {
       promise = compose(
-        when(evented, eventResult),
-        execute
+        when(evented, makeEvented),
+        execute,
         establishConnection
       )(client, query)
     } catch (e) {
