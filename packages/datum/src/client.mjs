@@ -1,3 +1,5 @@
+import { CLIENT } from './database/constants.mjs'
+
 const defaultConfig = {
   url: 'endpoint',
   version: '0.1',
@@ -7,5 +9,9 @@ const defaultConfig = {
 }
 
 export default function (config) {
-  return Object.assign({}, defaultConfig, config)
+  return Object.assign(
+    { [CLIENT]: true },
+    defaultConfig,
+    config
+  )
 }

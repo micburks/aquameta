@@ -2,7 +2,7 @@
  * Fetch query results client-side
  * @returns {Promise}
  */
-export function toFetch (query) {
+export default function toFetch (query) {
   let baseUrl = `/${query.config.url}/${query.config.version}`.replace(/\/+/g, '/')
   console.log('base url for fetch', baseUrl)
 
