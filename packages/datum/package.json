@@ -42,6 +42,7 @@
     "veggie": "^2.4.1"
   },
   "dependencies": {
+    "pg": "^7.4.1",
     "ramda": "^0.25.0"
   },
   "files": [
