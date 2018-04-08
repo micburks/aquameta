@@ -1,2 +1,5 @@
 import './query.mjs'
 import './executable.mjs'
+import './database/relation.mjs'
+import './database/where.mjs'
+import './database/clauses.mjs'
