@@ -1,15 +1,13 @@
 import ramda from 'ramda'
 import executeEndpoint from './endpoint.mjs'
-import executeConnection from './connection.mjs'
 import { CLIENT, EXECUTABLE } from '../database/constants.mjs'
 
 const { compose, cond, curry, T, when } = ramda
 
 const getKey = curry((key, obj) => obj[key])
 const execute = cond([
-  [getKey('connection'), executeConnection],
   [getKey('endpoint'), executeEndpoint],
-  [T, () => { throw new Error('must specify endpoint or connection for client') }]
+  [T, () => { throw new Error('must specify endpoint for client') }]
 ])
 
 const makeEvented = i => i
@@ -32,6 +30,8 @@ export default curry(
     if (!query[EXECUTABLE]) {
       throw new TypeError('query: invalid executable')
     }
+
+    console.log(client, query)
 
     try {
       return compose(
