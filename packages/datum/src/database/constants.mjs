@@ -17,10 +17,10 @@ export const HTTP = {
   DELETE: 'DELETE'
 }
 
-export const getMethodFromType = type => cond([
+export const getMethodFromType = cond([
   [equals(DELETE), always(HTTP.DELETE)],
   [equals(INSERT), always(HTTP.POST)],
   [equals(SELECT), always(HTTP.GET)],
   [equals(UPDATE), always(HTTP.PUT)],
-  [T, () => { throw new TypeError(`unknown type: ${type}`) }]
+  [T, type => { throw new TypeError(`unknown type: ${type}`) }]
 ])

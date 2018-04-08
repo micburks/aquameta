@@ -23,14 +23,28 @@ it('will throw with invalid query datum', async function () {
   }
 })
 
-it('will not throw with sane input', async function () {
+xit('will not throw with sane input', async function () {
   const rel = database.relation('widget.widget')
   const exec = database.select(rel)
-  await query(client({}), exec)
+  await query(client({ connection: true }), exec)
+
   assert(true)
 })
 
-xit('will execute db connection', function () {
+it('will execute db connection', async function () {
+  const rel = database.relation('bundle.commit')
+  const executeConnection = query(
+    client({
+      connection: true
+    })
+  )
+
+  const rows = await executeConnection(
+    database.select(rel)
+  )
+  const response = JSON.parse(rows.response).result
+
+  assert.typeOf(response, 'array')
 })
 
 xit('will execute fetch', function () {

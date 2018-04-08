@@ -10,11 +10,21 @@ const { blue, green, red } = chalk
 const { curry } = ramda
 
 export function describe (desc, fn) {
-  const log = [ blue(desc) ]
+  const log = { jobs: {}, default: [ blue(desc) ] }
 
-  setImmediate(() => {
-    console.log(log.join('\n'))
-  })
+  const checkJobs = () => {
+    if (itJobs === 0) {
+      const jobs = Object.keys(log.jobs).map(id => log.jobs[id])
+
+      console.log(
+        log.default.concat(...jobs).join('\n')
+      )
+    } else {
+      setImmediate(checkJobs)
+    }
+  }
+
+  setImmediate(checkJobs)
 
   return {
     it: it(log),

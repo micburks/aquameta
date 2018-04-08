@@ -7,14 +7,14 @@ const { compose, cond, curry, identity, T, when } = ramda
 
 const usesEndpoint = client => client.endpoint
 const usesConnection = client => client.connection
-const evented = client => client.evented
-const makeEvented = identity
-const execute = identity
-const establishConnection = client => cond([
-  [usesEndpoint, toExecute],
-  [usesConnection, toFetch],
+const execute = cond([
+  [usesConnection, toExecute],
+  [usesEndpoint, toFetch],
   [T, () => { throw new Error('must specify endpoint or connection for client') }]
 ])
+
+const evented = client => client.evented
+const makeEvented = identity
 
 /**
  * query
@@ -35,18 +35,13 @@ export default curry(
       throw new TypeError('query: invalid executable')
     }
 
-    let promise
-
     try {
-      promise = compose(
+      return compose(
         when(evented, makeEvented),
-        execute,
-        establishConnection
+        execute
       )(client, query)
     } catch (e) {
       console.error(e)
     }
-
-    return promise
   }
 )
