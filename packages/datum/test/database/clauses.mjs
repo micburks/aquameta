@@ -1,4 +1,4 @@
-import ramda from 'ramda'
+import { compose } from 'ramda'
 import chai from 'chai'
 import { describe } from '../utils.mjs'
 import {
@@ -10,7 +10,6 @@ import {
   args
 } from '../../src/database/chainable.mjs'
 
-const { compose } = ramda
 const { assert } = chai
 const { it, xit } = describe('database/chainable')
 const rel = relation('widget.widget')
