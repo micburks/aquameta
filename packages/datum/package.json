@@ -4,7 +4,9 @@
   "description": "Service layer for the Aquameta database API",
   "main": "dist/datum.js",
   "module": "dist/datum.es.js",
+  "browser": "dist/datum.browser.js",
   "scripts": {
+    "prebuild": "npm run lint",
     "build": "rollup -c",
     "build:watch": "nodemon -w src -e mjs -x 'npm run build'",
     "demo": "nodemon --watch dist demo/server.js",
@@ -36,6 +38,7 @@
     "nodemon": "^1.11.0",
     "parallelshell": "^3.0.2",
     "rollup": "^0.57.1",
+    "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-pluginutils": "^2.0.1",
     "snazzy": "^7.1.1",
     "standard": "^11.0.1",

@@ -1,8 +1,6 @@
-import ramda from 'ramda'
 import executeEndpoint from './endpoint.mjs'
+import { compose, cond, curry, T, when } from 'ramda'
 import { CLIENT, EXECUTABLE } from '../database/constants.mjs'
-
-const { compose, cond, curry, T, when } = ramda
 
 const getKey = curry((key, obj) => obj[key])
 const execute = cond([

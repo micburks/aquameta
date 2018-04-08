@@ -1,7 +1,5 @@
-import ramda from 'ramda'
+import { __, curry } from 'ramda'
 import { DELETE, EXECUTABLE, INSERT, SELECT, UPDATE, getMethodFromType } from './constants.mjs'
-
-const { __, curry } = ramda
 
 /**
  * DOESN'T allow chainables to be called on executables

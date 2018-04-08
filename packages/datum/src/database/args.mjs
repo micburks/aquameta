@@ -1,6 +1,4 @@
-import ramda from 'ramda'
-
-const { cond, curry, identity, T } = ramda
+import { cond, curry, identity, T } from 'ramda'
 
 // (a) => bool
 const isFalsy = val => !val
