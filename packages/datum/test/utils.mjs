@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import ramda from 'ramda'
+import { curry } from 'ramda'
 
 const heavy = true
 const checkmark = heavy ? '\u2714' : '\u2713'
@@ -7,7 +7,6 @@ const X = heavy ? '\u2718' : '\u2717'
 const O = '\u25CF'
 
 const { blue, green, red } = chalk
-const { curry } = ramda
 
 export function describe (desc, fn) {
   const log = { jobs: {}, default: [ blue(desc) ] }

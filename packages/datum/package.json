@@ -16,8 +16,8 @@
     "pretest": "npm run build",
     "lint": "standard --verbose src/**/*.mjs | snazzy",
     "lint:watch": "nodemon -w src -e mjs -x 'npm run lint'",
-    "test": "node --experimental-modules test/index.mjs",
-    "test:watch": "nodemon -w test -e mjs -x 'node --experimental-modules test/index.mjs'",
+    "test": "node --experimental-modules --loader ./loader.mjs test/index.mjs",
+    "test:watch": "nodemon -w test -e mjs -x 'node --experimental-modules --loader ./loader.mjs test/index.mjs'",
     "watch": "parallelshell 'npm run test:watch' 'npm run build:watch'"
   },
   "keywords": [
