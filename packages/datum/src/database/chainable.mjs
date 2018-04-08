@@ -1,7 +1,5 @@
-import ramda from 'ramda'
+import { __ } from 'ramda'
 import { addArg, addArrayArg, addOrder, addWhere } from './args.mjs'
-
-const { __ } = ramda
 
 export function relation (name) {
   let [ schemaName, relationName ] = name.split('.')

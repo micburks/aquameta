@@ -1,6 +1,4 @@
-import ramda from 'ramda'
-
-const { always, cond, equals, T } = ramda
+import { always, cond, equals, T } from 'ramda'
 
 export const CLIENT = Symbol('client')
 export const EXECUTABLE = Symbol('executable')
