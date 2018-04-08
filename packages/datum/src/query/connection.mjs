@@ -45,7 +45,7 @@ async function verifySession (config) {
  * Execute query server-side
  * @returns {Promise}
  */
-export default async function toExecute (client, query) {
+export default async function executeConnection (client, query) {
   let connection
 
   try {
