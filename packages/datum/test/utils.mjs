@@ -22,15 +22,31 @@ export function describe (desc, fn) {
   }
 }
 
-const it = curry(async (log, desc, fn) => {
+let itJobs = 0
+const xit = curry((log, desc) => log.default.push(` ${blue(O)} ${desc}`))
+const it = log => async (...args) => {
+  itJobs++
+
+  if (args.length < 2) {
+    throw new Error('test utils: invalid call to `it`')
+  }
+
+  const id = args.slice(0, -2).join(' - ')
+  const desc = args[args.length - 2]
+  const fn = args[args.length - 1]
+
+  let logRef = log.default
+  if (id) {
+    log.jobs[id] = log.jobs[id] || [ ` ${blue(id)}` ]
+    logRef = log.jobs[id]
+  }
+
   try {
     await fn()
-    log.push(` ${green(checkmark)} ${desc}`)
+    logRef.push(` ${green(checkmark)} ${desc}`)
   } catch (e) {
-    log.push(` ${red(X)} ${desc} \n    ${e.message}`)
+    logRef.push(` ${red(X)} ${desc} \n    ${e.message}`)
   }
-})
 
-const xit = curry((log, desc, fn) => {
-  log.push(` ${blue(O)} ${desc}`)
-})
+  itJobs--
+}
