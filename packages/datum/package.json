@@ -12,8 +12,10 @@
     "version": "npm run build",
     "postversion": "git push && git push --tags",
     "pretest": "npm run build",
+    "lint": "standard --verbose src/**/*.mjs | snazzy",
+    "lint:watch": "nodemon -w src -e mjs -x 'npm run lint'",
     "test": "node --experimental-modules test/index.mjs",
-    "test:watch": "nodemon -w dist -w test -e mjs,js -x 'node --experimental-modules test/index.mjs'",
+    "test:watch": "nodemon -w test -e mjs -x 'node --experimental-modules test/index.mjs'",
     "watch": "parallelshell 'npm run test:watch' 'npm run build:watch'"
   },
   "keywords": [
