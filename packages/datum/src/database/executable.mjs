@@ -1,3 +1,4 @@
+import url from 'url'
 import { __, curry } from 'ramda'
 import { DELETE, EXECUTABLE, INSERT, SELECT, UPDATE, getMethodFromType } from './constants.mjs'
 
@@ -24,11 +25,14 @@ export const update = executable(UPDATE)
  * returns executable
  */
 export function http (req) {
+  const parsed = url.parse(req.url, true)
+
   return {
     method: req.method,
-    url: req.url.split('?')[0],
-    args: req.query,
-    data: req.body
+    url: parsed.pathname,
+    args: parsed.query || {},
+    data: req.body,
+    [EXECUTABLE]: true
   }
 }
 
@@ -47,6 +51,7 @@ export function source (sourceUrl) {
     method,
     url,
     args,
-    data
+    data,
+    [EXECUTABLE]: true
   }
 }
