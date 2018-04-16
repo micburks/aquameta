@@ -1,33 +1,37 @@
 import { readFileSync } from 'fs'
-import nodeResolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import json from 'rollup-plugin-json'
-import babel from 'rollup-plugin-babel'
-import eslint from 'rollup-plugin-eslint'
+import resolve from 'rollup-plugin-node-resolve'
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
+
+const external = [
+  'debug',
+  'koa',
+  'koa-bodyparser',
+  'koa-mount',
+  'koa-router',
+  'koa-session',
+  'pg'
+]
 
 const banner = readFileSync('./banner.js', 'utf-8')
   .replace('${version}', pkg.version)
 
 export default {
-  entry: 'src/index.js',
+  input: 'src/index.mjs',
+  external,
   plugins: [
-    json(),
-    nodeResolve(),
-    commonjs(),
-    eslint(),
-    babel()
+    resolve({
+      only: ['aquameta-datum', 'isomorphic-fetch', 'ramda']
+    })
   ],
-  external: [
-    'aquameta-query',
-    'pg'
-  ],
-  banner,
-  sourceMap: true,
-  moduleName: 'aquameta',
-  targets: [
-    { dest: pkg.main, format: 'cjs' },
-    { dest: pkg.module, format: 'es' }
-  ]
+  output: [{
+    banner,
+    name: 'aquameta',
+    file: pkg.main,
+    format: 'cjs'
+  }, {
+    banner,
+    file: pkg.module,
+    format: 'es'
+  }]
 }
