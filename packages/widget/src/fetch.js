@@ -1,6 +1,8 @@
+import { client, database, query } from 'aquameta-datum'
 import { widgetTable, inputTable, eventTable, langTable, viewTable } from './database'
 
 const widgetIdentifierRegex = /(.*)\:(.*)/
+const query = query(client({ connection: true }))
 
 async function getWidget (identifier) {
   let widget
