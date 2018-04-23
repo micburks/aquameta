@@ -1,18 +1,21 @@
-import babel from 'rollup-plugin-babel'
-import nodeResolve from 'rollup-plugin-node-resolve'
-
-const external = require('repl')._builtinLibs.concat([
-  'isomorphic-fetch'
-])
+import commonjs from 'rollup-plugin-commonjs'
+import resolve from 'rollup-plugin-node-resolve'
+import globals from 'rollup-plugin-node-globals'
+import builtins from 'rollup-plugin-node-builtins'
 
 export default {
-  entry: 'src/index.js',
-  format: 'umd',
-  dest: 'dist/build.js',
-  moduleName: 'widget',
-  external,
+  input: 'src/widget.js',
   plugins: [
-    nodeResolve(),
-    babel()
-  ]
+    globals(),
+    builtins(),
+    commonjs({
+      include: 'node_modules/**',
+    }),
+    resolve()
+  ],
+  output: {
+    file: 'dist/build.js',
+    format: 'umd',
+    name: 'widget',
+  }
 }
