@@ -1,59 +1,54 @@
-import 'babel-polyfill'
+// import 'babel-polyfill'
 import js from './app/app.js'
 import css from './app/app.css.js'
 import html from './app/app.html.js'
 
-let counter = 0
+import element from './element'
+import renderTemplate from './renderTemplate'
+
+import scope from 'scope-css'
+
 const input = {
   variant: 'Component--cool',
   title: 'Hello World',
   paragraph: 'We made it',
   color: 'red'
 }
+const events = []
+const widget = { html, css, js, events }
 
-Promise.all([
-  import('dot'),
-  import('parse5'),
-  import('scope-css')
-]).then(([ dot, parse, scope ]) => {
-  console.log('got', { dot, parse, scope })
-  const jsPath = './app/app.js'
-
-  /*
-  const template = document.createElement('template')
-  template.id = '1'
-  template.innerHTML = html
-  document.body.appendChild(template)
+async function render ({ html, css, js, events }) {
+    /*
+  document.body.append(
+    element('script', {
+      type: 'module',
+      src: jsPath
+    })
+  )
   */
 
-  const script = document.createElement('script')
-  script.setAttribute('type', 'module')
-  script.setAttribute('src', jsPath)
-  document.body.append(script)
+  const handlers = events.reduce(async (acc, curr) => {
+    const module = await import(curr)
+    acc[curr] = module.default
 
-  ;(async function () {
-    const id = counter++
-    const idAttribute = 'data-widget-name'
-    const idSelector = `[${idAttribute}="${id}"]`
-    // const { default: appJs } = await import(jsPath)
-    js()
+    return acc
+  }, {})
 
-    dot.templateSettings.varname = 'input'
-    const templateFunction = dot.template(html)
-    const nodeContent = templateFunction(input)
-    document.body.firstElementChild.setAttribute(idAttribute, id)
-    document.body.firstElementChild.innerHTML = nodeContent
-    for (let prop in input) {
-      document.body.firstElementChild.style.setProperty(`--${prop}`, input[prop])
-    }
+  const { id, idAttribute, fragment } = renderTemplate(html, input, handlers)
+  const idSelector = `[${idAttribute}="${id}"]`
 
-    const style = document.createElement('style')
-    style.setAttribute('rel', 'stylesheet')
-    style.setAttribute('type', 'text/css')
-    style.setAttribute(`${idAttribute}-style`, id)
-    // gonna need a more complicated build here becuase :root
-    style.textContent = scope.default(css, idSelector)
+  document.body.append(fragment)
+
+  document.head.appendChild(
+    element('style', {
+      rel: 'stylesheet',
+      type: 'text/css',
+      [`${idAttribute}-style`]: id
+    },
+      scope(css, idSelector)
+    )
     //style.textContent = `${idSelector} { ${css} }`
-    document.head.appendChild(style)
-  })()
-})
+  )
+}
+
+render(widget)
