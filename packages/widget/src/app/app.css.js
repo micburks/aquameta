@@ -1,5 +1,5 @@
 export default `
-  .Component {
+  :host.Component {
     background-color: var(--color, blue);
     border: 2px dashed magenta;
   }
