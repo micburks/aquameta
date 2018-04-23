@@ -1,0 +1,11 @@
+{
+  "result": [{
+    "row": {
+      "id": "123",
+      "name": "my_widget",
+      "html": "<div class='Component {{= input.variant }}'> <h1 onClick=\"clickEvent\">{{= input.title }}</h1> <p>{{= input.paragraph }}</p> </div>",
+      "css": ":host.Component { background-color: var(--color, blue); border: 2px dashed magenta; }",
+      "js": "import util from './app.mjs'; export default function () { console.log('running'); util(); }"
+    }
+  }]
+}
