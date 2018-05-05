@@ -1,5 +1,4 @@
 /* globals location fetch */
-import 'isomorphic-fetch'
 
 /**
  * Fetch query results client-side
