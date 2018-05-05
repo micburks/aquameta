@@ -32,6 +32,11 @@
   "homepage": "https://github.com/micburks/aquameta-datum",
   "author": "Mickey Burks",
   "license": "MIT",
+  "dependencies": {
+    "pg": "^7.4.1",
+    "ramda": "^0.25.0",
+    "whatwg-fetch": "^2.0.4"
+  },
   "devDependencies": {
     "chai": "^4.1.2",
     "chalk": "^2.3.2",
@@ -43,11 +48,6 @@
     "snazzy": "^7.1.1",
     "standard": "^11.0.1",
     "veggie": "^2.4.1"
-  },
-  "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "pg": "^7.4.1",
-    "ramda": "^0.25.0"
   },
   "files": [
     "dist"

@@ -2,7 +2,7 @@ import { CLIENT } from './database/constants.mjs'
 
 const defaultConfig = {
   url: 'endpoint',
-  version: '0.1',
+  version: 'v1',
   sessionCookie: 'SESSION_ID',
   cacheRequestMilliseconds: 5000,
   sockets: false

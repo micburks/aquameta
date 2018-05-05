@@ -7,9 +7,9 @@ const banner = readFileSync('./banner.js', 'utf-8')
   .replace('${version}', pkg.version)
 
 const external = [
-  'isomorphic-fetch',
   'pg',
-  'ramda'
+  'ramda',
+  'whatwg-fetch'
 ]
 
 export default [{
@@ -31,7 +31,6 @@ export default [{
   }
 }, {
   input: 'src/browser-index.mjs',
-  external: ['isomorphic-fetch'],
   plugins: [
     resolve({ only: ['ramda'] })
   ],
