@@ -1,6 +1,14 @@
-<body>
-  <div>
-    hello
-  </div>
-  <script type="module" src="/build.js"></script>
-</body>
+<!doctype html>
+<html>
+  <head></head>
+  <body>
+    <my-widget title="My Title" paragraph="My paragraph" variant="Component--cool" color="purple"></my-widget>
+    <my-widget></my-widget>
+
+    <script type="module">
+      import widget from './build.js'
+
+      widget('my-widget')
+    </script>
+  </body>
+</html>
