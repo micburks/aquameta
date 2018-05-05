@@ -1,8 +1,8 @@
 {
-  "presets": [
-    '@babel/preset-env'
-  ],
+  "presets": [],
   "plugins": [
-    '@babel/plugin-syntax-dynamic-import'
+    "external-helpers",
+    "transform-object-rest-spread",
+    "syntax-dynamic-import"
   ]
 }
