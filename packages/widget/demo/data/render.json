@@ -1,0 +1,13 @@
+{
+  "result": [{
+    "row": {
+      "id": "123",
+      "name": "my-widget",
+      "html": "<div class='Component {{= input.variant }}'> <h1 onClick=\"clickEvent\">{{= input.title }}</h1> <p>{{= input.paragraph }}</p> </div>",
+      "css": ":host.Component { background-color: var(--color, blue); border: 2px dashed magenta; }",
+      "events": ["log"],
+      "inputs": [{ "name": "variant", "default": "Component--default", "required": true }, { "name": "title", "default": "Default title", "required": false }, { "name": "paragraph", "default": "Default paragraph" }, { "name": "color", "default": "red", "css": true }],
+      "view_id": null
+    }
+  }]
+}
