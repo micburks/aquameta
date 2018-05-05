@@ -38,7 +38,7 @@ export default [{
   output: {
     banner,
     file: pkg.browser,
-    format: 'umd',
+    format: 'es',
     name: 'datum'
   }
 }]
