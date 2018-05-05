@@ -1,23 +1,33 @@
 import dot from 'dot'
-import parser from 'parse5'
 import element from './element'
+import parser from 'parse5'
+import { NAME_ATTRIBUTE } from './constants'
 
-console.log({ parser })
-
+//dot.templateSettings.spreadContext = true
 dot.templateSettings.varname = 'input'
 
 const domHandlers = [
-  'onclick'
+  'onclick',
+  'onkeyup',
+  'onkeydown',
+  'onkeypress',
+  'onmouseover',
+  'onmouseout',
+  'onmousemove',
+  'onmousedown',
+  'onmouseup'
 ]
 
 let counter = 0
 export default function render (template, input, handlers) {
-  const domString = compile(template, input)
+  const context = Object.assign({}, input, handlers)
+  const domString = compile(template, context)
   const dom = parse(domString)
 
-  return renderTemplate(dom, input, handlers)
+  return renderTemplate(dom, context)
 }
 
+// Compile dot template
 function compile (template, input) {
   const templateFunction = dot.template(template)
   const nodeContent = templateFunction(input)
@@ -25,27 +35,17 @@ function compile (template, input) {
   return nodeContent
 }
 
+// Parse html string into AST
 function parse (domString) {
-  const a = parser.parseFragment(domString)
-  console.log(a)
-  return a
+  return parser.parseFragment(domString)
 }
 
-function renderTemplate (vdom, input, handlers) {
+// Render root of AST into DOM elements
+function renderTemplate (vdom, input) {
   const id = counter++
-  const idAttribute = 'data-widget-name'
-
   const root = vdom.childNodes.find(el => el.nodeName !== '#text')
 
-  const fragment = renderElement(root, input, handlers)
-  fragment.setAttribute(idAttribute, id)
-  console.log(fragment)
-
-  for (let prop in input) {
-    fragment.style.setProperty(`--${prop}`, input[prop])
-  }
-
-  return { id, idAttribute, fragment }
+  return renderElement(root, input)
 }
 
 function renderElement (el, input, handlers = {}) {
@@ -84,19 +84,3 @@ function renderElement (el, input, handlers = {}) {
     return domElement
   }
 }
-
-  /*
-const cache = {}
-function update (id, render) {
-  const container = document.getElementById(id)
-  const newChild = render()
-
-  if (cache[id]) {
-    container.replaceChild(newChild, cache[id])
-  } else {
-    container.appendChild(newChild)
-  }
-
-  cache[id] = newChild
-}
-*/
