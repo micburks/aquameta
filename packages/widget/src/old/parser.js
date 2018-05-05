@@ -40,6 +40,7 @@ function buildTemplateTree (template) {
     }
   }
 
+  // Iterate through template - character by character
   for (let index = 0; index < template.length; index++) {
     const char = template[index]
 
