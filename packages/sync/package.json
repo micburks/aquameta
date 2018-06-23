@@ -12,5 +12,9 @@
     "postgres"
   ],
   "author": "Mickey Burks",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "aquameta-datum": "0.0.10",
+    "ramda": "^0.25.0"
+  }
 }

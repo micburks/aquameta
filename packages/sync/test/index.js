@@ -1,4 +1,4 @@
-const { dropTestTable, getTestRows } = require('./utils.js')
+const { createTestTable, dropTestTable, getTestRows } = require('./utils.js')
 const { importDir } = require('../lib')
 
 describe('import', () => {
@@ -7,12 +7,7 @@ describe('import', () => {
 
   before(async () => {
     await dropTestTable()
-    const rows = await getTestRows()
-
-    if (rows.length !== 0) {
-      throw new Error('test.user is not empty')
-    }
-
+    await createTestTable()
     returnedRows = await importDir('./test.user')
     testRows = await getTestRows()
   })
@@ -21,7 +16,9 @@ describe('import', () => {
     assert(returnedRows.length === 5)
   })
 
-  it('inserts rows properly', () => {
+  it('inserts all rows', () => {
     assert(testRows.length === 5)
   })
+
+  xit('inserts all fields', () => {})
 })
