@@ -12,13 +12,14 @@ export const HTTP = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
+  PATCH: 'PATCH',
   DELETE: 'DELETE'
 }
 
 export const getMethodFromType = cond([
   [equals(DELETE), always(HTTP.DELETE)],
-  [equals(INSERT), always(HTTP.POST)],
+  [equals(INSERT), always(HTTP.PATCH)],
   [equals(SELECT), always(HTTP.GET)],
-  [equals(UPDATE), always(HTTP.PUT)],
+  [equals(UPDATE), always(HTTP.PATCH)],
   [T, type => { throw new TypeError(`unknown type: ${type}`) }]
 ])
