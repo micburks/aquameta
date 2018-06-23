@@ -7,22 +7,30 @@ module.exports = {
   getTestRows
 }
 
-const executeQuery = query(client({ connection: true }))
-const metaRelationRel = db.relation('meta.relation')
+const executeQuery = (...args) => {
+  return query(client({ connection: true }))(...args)
+    .then(res => {
+      return Object.assign({}, res, {
+        response: JSON.parse(res.response)
+      })
+    })
+}
 const metaSchemaRel = db.relation('meta.schema')
+const metaTableRel = db.relation('meta.table')
+const metaColumnRel = db.relation('meta.column')
 const testUserRel = db.relation('test.user')
 
 const testUserMetaRow = compose(
-  db.where('schema_name', 'test')
+  db.where('schema_name', 'test'),
   db.where('name', 'user')
-)(metaRelationRel)
+)(metaTableRel)
 
 const testMetaRow = compose(
   db.where('name', 'test')
 )(metaSchemaRel)
 
 async function executeEach (...args) {
-  for (let q of arg) {
+  for (let q of args) {
     await executeQuery(q)
   }
 }
@@ -30,18 +38,30 @@ async function executeEach (...args) {
 async function createTestTable () {
   await executeEach(
     db.insert(metaSchemaRel, { name: 'test' }),
-    db.insert(metaRelationRel, {
-      schema_name: 'test'
+    db.insert(metaTableRel, {
+      schema_name: 'test',
       name: 'user'
+    }),
+    db.insert(metaColumnRel, {
+      schema_name: 'test',
+      relation_name: 'user',
+      name: 'name',
+      type_name: 'text'
+    }),
+    db.insert(metaColumnRel, {
+      schema_name: 'test',
+      relation_name: 'user',
+      name: 'age',
+      type_name: 'text'
     })
   )
 }
 
 async function dropTestTable () {
   await executeEach(
-    db.delete(testUserRel),
-    db.delete(testUserMetaRow),
-    db.delete(testMetaRow)
+    db.del(testUserRel),
+    db.del(testUserMetaRow),
+    db.del(testMetaRow)
   )
 }
 
