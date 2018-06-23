@@ -27,7 +27,7 @@ async function executeEach (...args) {
   }
 }
 
-export async function createTestTable () {
+async function createTestTable () {
   await executeEach(
     db.insert(metaSchemaRel, { name: 'test' }),
     db.insert(metaRelationRel, {
@@ -37,7 +37,7 @@ export async function createTestTable () {
   )
 }
 
-export async function dropTestTable () {
+async function dropTestTable () {
   await executeEach(
     db.delete(testUserRel),
     db.delete(testUserMetaRow),
@@ -45,7 +45,7 @@ export async function dropTestTable () {
   )
 }
 
-export function getTestRows () {
+function getTestRows () {
   return executeQuery(
     db.select(testUserRel)
   )
