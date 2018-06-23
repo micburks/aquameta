@@ -13,11 +13,13 @@ describe('import', () => {
   })
 
   it('inserts returns inserted rows', () => {
-    assert(returnedRows.length === 5)
+    console.log({ returnedRows })
+    expect(returnedRows).to.have.lengthOf(5)
   })
 
   it('inserts all rows', () => {
-    assert(testRows.length === 5)
+    console.log(testRows.response.result)
+    expect(testRows).to.have.lengthOf(5)
   })
 
   xit('inserts all fields', () => {})
