@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "Import from and export to filesystem from Aquameta database",
   "main": "lib/index.js",
+  "bin": {
+    "aq-import": "bin/import"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,6 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "aquameta-datum": "0.0.10",
+    "meow": "^5.0.0",
     "ramda": "^0.25.0"
   },
   "devDependencies": {

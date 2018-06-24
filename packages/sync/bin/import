@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+const meow = require('meow')
+const { importDir } = require('..')
+
+const cli = meow(`
+    Usage
+      $ aq-import <directory>
+
+      Where <directory> is the path to a directory containing your tables
+ 
+    Examples
+      $ aq-import path/to/data
+      Imported endpoint.session
+      Imported endpoint.user
+`)
+
+const [ path ] = cli.input
+
+if (typeof path !== 'string') {
+  cli.showHelp()
+}
+ 
+importDir(path)
+  .then(tables => {
+    tables.forEach(({ table }) => {
+      console.log(`Imported ${table}`)
+    })
+  })
