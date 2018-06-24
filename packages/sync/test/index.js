@@ -3,18 +3,25 @@ const { importDir } = require('../lib')
 
 describe('import', () => {
   let testRows,
-    returnedRows
+    returnedTables
 
   before(async () => {
     await dropTestTable()
     await createTestTable()
-    returnedRows = await importDir('./test/data')
+    returnedTables = await importDir('./test/data')
     testRows = await getTestRows()
   })
 
+  it('returns an array of tables', () => {
+    const [ table ] = returnedTables
+
+    expect(table).to.have.all.keys(['table', 'rows'])
+    expect(table.table).to.equal('test.user')
+  })
+
   it('inserts returns inserted rows', () => {
-    const result = returnedRows[0]
-    expect(result).to.have.lengthOf(5)
+    const { rows } = returnedTables[0]
+    expect(rows).to.have.lengthOf(5)
   })
 
   it('inserts all rows', () => {
