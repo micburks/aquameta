@@ -8,19 +8,24 @@ describe('import', () => {
   before(async () => {
     await dropTestTable()
     await createTestTable()
-    returnedRows = await importDir('./test.user')
+    returnedRows = await importDir('./test/data')
     testRows = await getTestRows()
   })
 
   it('inserts returns inserted rows', () => {
-    console.log({ returnedRows })
-    expect(returnedRows).to.have.lengthOf(5)
+    const result = returnedRows[0]
+    expect(result).to.have.lengthOf(5)
   })
 
   it('inserts all rows', () => {
-    console.log(testRows.response.result)
-    expect(testRows).to.have.lengthOf(5)
+    const { result } = testRows.response
+    expect(result).to.have.lengthOf(5)
   })
 
-  xit('inserts all fields', () => {})
+  it('inserts all fields', () => {
+    const { row } = testRows.response.result[0]
+
+    expect(row).to.have.all.keys(['name', 'age'])
+    expect(row.name).to.equal(`mickey${row.age}`)
+  })
 })
