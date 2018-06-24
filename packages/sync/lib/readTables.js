@@ -23,9 +23,11 @@ async function readTables (path) {
         db.insert(rel)
       )
 
-      return Promise.all(
+      const rows = await Promise.all(
         await readRows(tablePath, insertRow)
       )
+
+      return { table, rows }
     })
 
   return tables
