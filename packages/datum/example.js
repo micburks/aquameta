@@ -1,11 +1,10 @@
-import { compose } from 'ramda'
-import { client, database: db, query } from 'aquameta-datum'
+import { client, database: db, util, query } from 'aquameta-datum'
 
 const executeQuery = query(client({ endpoint: true }))
 const widgetRel = db.relation('widget.widget')
 
 /* Widget creator function */
-const createWidget = compose(
+const createWidget = util.compose(
   executeQuery,
   db.insert(widgetRel)
 )
@@ -13,30 +12,34 @@ const createWidget = compose(
 createWidget({
   name: 'new_widget'
 })
-  .then(newRow)
-  .catch(error)
+  .then(handleNewRow)
+  .catch(logError)
 
 /* Compose query */
-const newRowWidgets = compose(
+const latestProductFilter = util.compose(
   db.limit(10),
   db.orderBy('created_at'),
-  db.whereLike('name', '%new_row')
-)(widgetRel)
-
-executeQuery(
-  db.select(newRowWidgets)
+  db.whereLike('name', '%_product')
 )
-  .then(rows)
-  .catch(error)
+
+const latestProductWidgets = latestProductFilter(widgetRel)
+ 
+executeQuery(
+  db.select(latestProductWidgets)
+)
+  .then(handleRows)
+  .catch(logError)
 
 /* Operate on composed query */
-const newWidget = compose(
+const newWidgetFilter = util.compose(
   db.where('name', 'new_widget')
-)(widgetRel)
+)
+
+const newWidget = newWidgetFilter(widgetRel)
 
 executeQuery(
   db.delete(newWidget)
 )
-  .then(deletedRow)
-  .catch(error)
+  .then(handleDeletedRow)
+  .catch(logError)
 
