@@ -173,14 +173,14 @@ const sessionRows = await selectRows(
 )
 
 // Update `updated_at` column of rows matching filter
-const updatedSessionRows = updateRows(
+const updatedSessionRows = await updateRows(
   tenLatestFilter(sessionRel, {
     'updated_at': new Date()
   })
 )
 
 // Delete rows matching filter
-const deletedSessionRows = deleteRows(
+const deletedSessionRows = await deleteRows(
   tenLatestFilter(sessionRel)
 )
 
