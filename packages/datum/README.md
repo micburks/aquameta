@@ -9,7 +9,7 @@ Service layer for the Aquameta database API
 database. The API is intentionally split into small, composable parts to allow
 partially applying queries. This lends itself to a UI built with modular,
 reusable components, such as the widget framework
-[aquameta-widget](https://github.com/micburks/aquameta-widget).
+([aquameta-widget](https://github.com/micburks/aquameta-widget)).
 
 ## Create a query executor
 
