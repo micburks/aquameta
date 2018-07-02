@@ -28,6 +28,7 @@
   "dependencies": {
     "aquameta-datum": "0.0.10",
     "dot": "^1.1.2",
+    "jsx-transform": "^2.4.0",
     "parse5": "^4.0.0",
     "ramda": "^0.25.0",
     "scope-css": "^1.1.0"

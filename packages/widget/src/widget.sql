@@ -72,6 +72,7 @@ select endpoint.set_mimetype('widget', 'js_dep', 'js', 'text/javascript');
 
 -- create table widget.lang();
 
+-- TODO: widget.bundled_render
 create view widget.render as
 select
   w.*,
