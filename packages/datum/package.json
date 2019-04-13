@@ -11,14 +11,13 @@
   },
   "scripts": {
     "build": "cup build",
-    "build:watch": "nodemon -w src -e mjs -x 'npm run build'",
-    "demo": "nodemon --watch dist demo/server.js",
-    "preversion": "npm run test",
+    "build:watch": "nodemon -w src -x 'npm run build'",
+    "start": "./demo/server.js",
+    "preversion": "npm test",
     "version": "npm run build",
     "postversion": "git push && git push --tags",
     "pretest": "npm run build",
-    "test": "node dist-node-cjs/__tests__/index.js",
-    "watch": "parallelshell 'npm run test:watch' 'npm run build:watch'"
+    "test": "node dist-node-cjs/__tests__/index.js"
   },
   "keywords": [
     "datum",
@@ -33,19 +32,16 @@
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {
+    "just-compose": "^1.1.0",
+    "just-curry-it": "^3.1.0",
     "pg": "^7.4.1",
-    "ramda": "^0.25.0",
-    "whatwg-fetch": "^2.0.4"
+    "unfetch": "^4.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "chalk": "^2.3.2",
     "create-universal-package": "^4.1.0",
-    "nodemon": "^1.17.5",
-    "parallelshell": "^3.0.2",
-    "rollup": "^0.57.1",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-pluginutils": "^2.6.0",
+    "nodemon": "^1.18.11",
     "veggie": "^2.4.1"
   },
   "files": [
