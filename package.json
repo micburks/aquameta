@@ -1,7 +1,17 @@
 {
-  "name": "root",
+  "name": "aquameta-monorepo",
   "private": true,
+  "scripts": {
+    "lint": "eslint .",
+    "flow": "flow"
+  },
   "devDependencies": {
-    "lerna": "^3.13.2"
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-flowtype": "^3.6.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "flow-bin": "^0.97.0",
+    "lerna": "^3.13.2",
+    "prettier": "^1.17.0"
   }
 }
