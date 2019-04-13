@@ -1,6 +1,6 @@
 import chai from 'chai'
-import { describe } from './utils.mjs'
-import { client, database, query } from '../src/server-index.mjs'
+import { describe } from './utils.js'
+import { client, database, query } from '../index.js'
 
 const { assert } = chai
 const { it, xit } = describe('query')

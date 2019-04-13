@@ -1,6 +1,6 @@
 import chai from 'chai'
-import { describe } from './utils.mjs'
-import { database } from '../src/server-index.mjs'
+import { describe } from './utils.js'
+import { database } from '../index.js'
 
 const { assert } = chai
 const { it, xit } = describe('executable http')

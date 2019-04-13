@@ -1,5 +1,5 @@
-import * as chainable from './chainable.mjs'
-import * as executable from './executable.mjs'
+import * as chainable from './chainable.js'
+import * as executable from './executable.js'
 
 const database = {
   ...chainable,

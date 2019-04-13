@@ -1,6 +1,6 @@
 import url from 'url'
 import { __, curry } from 'ramda'
-import { DELETE, EXECUTABLE, INSERT, SELECT, UPDATE, getMethodFromType } from './constants.mjs'
+import { DELETE, EXECUTABLE, INSERT, SELECT, UPDATE, getMethodFromType } from './constants.js'
 
 /**
  * DOESN'T allow chainables to be called on executables
