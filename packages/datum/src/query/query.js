@@ -1,12 +1,12 @@
-import executeEndpoint from './endpoint.mjs'
-import executeConnection from './connection.mjs'
+import executeEndpoint from './endpoint.js'
+import executeConnection from './connection.js'
 import { compose, cond, curry, T, when } from 'ramda'
-import { CLIENT, EXECUTABLE } from '../database/constants.mjs'
+import { CLIENT, EXECUTABLE } from '../database/constants.js'
 
 const getKey = curry((key, obj) => obj[key])
 const execute = cond([
   [getKey('connection'), executeConnection],
-  [getKey('endpoint'), executeEndpoint],
+  __NODE__ && [getKey('endpoint'), executeEndpoint],
   [T, () => { throw new Error('must specify endpoint or connection for client') }]
 ])
 
