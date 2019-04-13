@@ -12,12 +12,14 @@ module.exports = {
     'eslint-plugin-flowtype'
   ],
   rules: {
+    'no-console': 'off',
     'prettier/prettier': [
       'error',
       {
         bracketSpacing: false,
         parser: 'babel',
         singleQuote: true,
+        trailingComma: "all",
       },
     ]
   }
