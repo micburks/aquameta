@@ -34,11 +34,6 @@ export default curry(async function(client: Client, query: Executable): Query {
   }
 });
 
-const invoke = compose(
-  when(getKey('evented'), makeEvented),
-  execute
-);
-
 // TODO
 const makeEvented = i => i;
 
@@ -54,3 +49,9 @@ const execute = cond(
     ]
   ].filter(Boolean)
 );
+
+const invoke = compose(
+  when(getKey('evented'), makeEvented),
+  execute
+);
+

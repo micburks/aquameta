@@ -1,3 +1,5 @@
+import curry from 'just-curry-it';
+
 import type {Client, Executable, Query} from './types.js';
 
 type Case = [(?any) => boolean, (any, ?any) => Query];
