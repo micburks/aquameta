@@ -1,39 +1,58 @@
-/* globals location fetch */
+// @flow
+/* eslint-env browser */
+// TODO this can also be run from node
+
+import fetch from 'unfetch';
+import type {Client, Executable, QueryResult} from '../types.js';
+
+type Request = {
+  method: string,
+  credentials?: string,
+  headers: {[string]: string},
+  body?: string,
+};
 
 /**
  * Fetch query results client-side
  * @returns {Promise}
  */
-export default async function executeEndpoint (client, query) {
-  let requestUrl = `/${client.url}/${client.version}/${query.url}`.replace(/\/+/g, '/')
-  const urlWithQuery = `${requestUrl}?${getQueryString(query.args)}`
+export default async function executeEndpoint(
+  client: Client,
+  query: Executable,
+): Promise<QueryResult> {
+  let requestUrl = `/${client.url}/${client.version}/${query.url}`.replace(
+    /\/+/g,
+    '/',
+  );
+  const urlWithQuery = `${requestUrl}?${getQueryString(query.args)}`;
 
-  const options = {
+  const options: Request = {
     method: query.method,
     credentials: 'same-origin',
     headers: {
-      'Content-Type': 'application/json'
-    }
-  }
+      'Content-Type': 'application/json',
+    },
+  };
 
   // If query string is too long, upgrade GET method to POST
   if (query.method === 'GET') {
     if ((location.host + urlWithQuery).length > 1000) {
-      options.method = 'POST'
+      options.method = 'POST';
       // This doesn't make sense - stringifying data instead of args
       // TODO: is this promotion/check even worth it
-      options.body = JSON.stringify(query.data)
+      options.body = JSON.stringify(query.data);
     } else {
-      requestUrl = urlWithQuery
+      requestUrl = urlWithQuery;
     }
   } else if (query.data) {
-    options.body = JSON.stringify(query.data)
+    options.body = JSON.stringify(query.data);
   }
 
-  console.log('endpoint:', { requestUrl, options })
+  console.log('endpoint:', {requestUrl, options});
 
   try {
-    const response = await fetch(requestUrl, options)
+    const response = await fetch(requestUrl, options);
+
     /*
     if (response.status < 200 || response.status >= 300) {
       // If bad request (code 300 or higher), reject promise
@@ -41,104 +60,100 @@ export default async function executeEndpoint (client, query) {
     }
     */
     // Read json stream
-    return response.json()
+    return response.json();
   } catch (error) {
     // Log error in collapsed group
-    console.groupCollapsed(query.method, error.statusCode, error.title)
+    console.groupCollapsed(query.method, error.statusCode, error.title);
     if ('message' in error) {
-      console.error(error.message)
+      console.error(error.message);
     }
-    console.groupEnd()
-    throw error.title
+    console.groupEnd();
+    throw error.title;
   }
 }
 
 // Map the keys of the args object to an array of encoded url components
-function getQueryString (args) {
-  return Object
-    .keys(args)
+function getQueryString(args) {
+  return Object.keys(args)
     .sort()
     .map(argName => getQueryPart(argName, args[argName]))
-    .map(({key, value}) => key ? `${key}=${value}` : value)
+    .map(({key, value}) => (key ? `${key}=${value}` : value))
     .join('&')
-    .replace(/&&/g, '&')
+    .replace(/&&/g, '&');
 }
 
-function getQueryPart (argName, arg) {
-  let key = argName
-  let value = null
+// TODO wtf
+function getQueryPart(argName, arg) {
+  let key = argName;
+  let value = null;
 
   switch (argName) {
     case 'where': // where: [{ name: 'column_name', op: '=', value: 'value' }]
-      arg = asArray(arg)
-      key = null
+      arg = asArray(arg);
+      key = null;
       value = arg
         .map(w => {
-          let value = encodeURIComponent(JSON.stringify(w))
-          return `where=${value}`
+          const value = encodeURIComponent(JSON.stringify(w));
+          return `where=${value}`;
         })
-        .join('&')
-      break
+        .join('&');
+      break;
 
     case 'order_by': // order_by: [{ column: 'column_name', direction: 'asc|desc' }]
-      arg = asArray(arg)
+      arg = asArray(arg);
       const columnList = concatMap(arg, col => {
         if (typeof col === 'string') {
-          return col
+          return col;
         } else {
           if ('column' in col && 'direction' in col) {
-            let { column, direction } = col
-            return direction !== 'asc' ? `-${column}` : `${column}`
+            const {column, direction} = col;
+            return direction !== 'asc' ? `-${column}` : `${column}`;
           } else {
-            return Object
-              .keys(col)
-              .map(columnName => {
-                return col[columnName] !== 'asc' ? `-${columnName}` : `${columnName}`
-              })
+            return Object.keys(col).map(columnName => {
+              return col[columnName] !== 'asc'
+                ? `-${columnName}`
+                : `${columnName}`;
+            });
           }
         }
-      })
-      value = encodeURIComponent(columnList.join(','))
-      break
+      });
+      value = encodeURIComponent(columnList.join(','));
+      break;
 
     case 'limit': // limit: number
     case 'offset': // offset: number
-      let parsedNum = parseInt(arg)
+      const parsedNum = parseInt(arg);
       if (!isNaN(parsedNum)) {
-        value = parsedNum
-        break
+        value = parsedNum;
+      } else {
+        key = null;
+        value = null;
       }
-      key = value = null
-      break
+      break;
 
     case 'evented':
-      key = 'session_id'
+      key = 'session_id';
 
     case 'metaData': // eslint-disable-line no-fallthrough
     case 'args':
     case 'exclude':
     case 'include':
-      value = encodeURIComponent(JSON.stringify(arg))
-      break
+      value = encodeURIComponent(JSON.stringify(arg));
+      break;
 
     default:
-      key = value = null
+      key = value = null;
   }
 
-  return { key, value }
+  return {key, value};
 }
 
-function asArray (arg) {
-  return !arg.length ? [arg] : arg
+function asArray(arg) {
+  return arg instanceof Array ? arg : [arg];
 }
 
-function concatMap (arr) {
+function concatMap(arr, fn) {
   return arr.reduce((acc, item) => {
-    if (item instanceof Array) {
-      acc.concat(item)
-    } else {
-      acc.push(item)
-    }
-    return acc
-  }, [])
+    return acc.concat(fn(item));
+  }, []);
 }
