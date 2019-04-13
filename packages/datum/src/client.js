@@ -1,25 +1,33 @@
-import { CLIENT } from './database/constants.js'
+// @flow
 
-const defaultConfig = {
+import type {Client} from './types.js';
+// import {CLIENT} from './database/constants.js';
+
+type ClientOptions = {
+  connection?: boolean,
+  endpoint?: boolean,
+  url?: string,
+  version?: string,
+  sessionCookie?: string,
+  cacheRequestMilliseconds?: number,
+  sockets?: boolean,
+};
+
+const defaultConfig: Client = {
   url: 'endpoint',
   version: 'v1',
   sessionCookie: 'SESSION_ID',
   cacheRequestMilliseconds: 5000,
-  sockets: false
+  sockets: false,
+};
+
+export default function client(config?: ClientOptions): Client {
+  return Object.assign({}, defaultConfig, config);
 }
 
-type Client = {
-  url: String,
-  version: String,
-  sessionCookie: String,
-  cacheRequestMilliseconds: Number,
-  sockets: Boolean,
-}
-
-export default function client (config): Client {
-  return Object.assign(
-    { [CLIENT]: true },
-    defaultConfig,
-    config
-  )
-}
+/* test calls */
+/*
+client({});
+client();
+client({connection: true});
+*/

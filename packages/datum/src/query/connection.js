@@ -1,78 +1,105 @@
-import pg from 'pg'
+// @flow
+
+import pg from 'pg';
+import type {Client, Executable, QueryResult} from '../types.js';
 
 const anonConfig = {
-  user: 'mickey',
+  user: 'anonymous',
   password: null,
   database: 'aquameta',
   host: 'localhost',
   port: 5432,
   max: 4,
-  idleTimeoutMilliseconds: 30000
-}
+  idleTimeoutMilliseconds: 30000,
+};
 
-async function verifySession (config) {
-  const client = new pg.Client(anonConfig)
+type PgConnection = {
+  sessionId?: string,
+  connect: () => Promise<void>,
+  query: (string, Array<any>) => Promise<QueryResult>,
+  end: () => Promise<void>,
+};
+
+async function verifySession(config: any): Promise<PgConnection> {
+  const client: PgConnection = new pg.Client(
+    Object.assign({}, anonConfig, config),
+  );
 
   if (!client.sessionId) {
-    return client
+    return client;
   }
 
-  await client.connect()
+  await client.connect();
 
   const result = await client.query(
     'select (role_id).name as role_name from endpoint.session where id = $1::uuid',
-    [ client.sessionId ]
-  )
+    [client.sessionId],
+  );
 
   // Logged in
-  console.log('connection: logged in', result.rows.length, result.rows)
+  console.log('connection: logged in', result.rows.length, result.rows);
 
   if (result.rows.length === 0) {
-    throw new Error('connection: login failed')
+    throw new Error('connection: login failed');
   }
 
   // Release Client
-  await client.end()
+  await client.end();
 
   // Copy anonymous config and modify user
-  const userConfig = Object.assign({}, anonConfig, { user: result.rows[0].role_name })
-  console.log('connection: configs -', userConfig, anonConfig)
+  const userConfig = Object.assign({}, anonConfig, {
+    user: result.rows[0].role_name,
+  });
+  console.log('connection: configs -', userConfig, anonConfig);
 
-  return new pg.Client(userConfig)
+  return new pg.Client(userConfig);
 }
 
 /**
  * Execute query server-side
  * @returns {Promise}
  */
-export default async function executeConnection (client, query) {
-  let connection
+export default async function executeConnection(
+  client: Client,
+  query: Executable,
+): Promise<QueryResult> {
+  let connection;
 
   try {
-    connection = await verifySession(client)
-    await connection.connect()
+    connection = await verifySession(client);
+    await connection.connect();
 
-    console.log('trying connection', client.version, query.method, query.url, JSON.stringify(query.args), JSON.stringify(query.data))
-    let result = await connection.query(
+    console.log(
+      'trying connection',
+      client.version,
+      query.method,
+      query.url,
+      JSON.stringify(query.args),
+      JSON.stringify(query.data),
+    );
+    const result = await connection.query(
       'select status, message, response, mimetype ' +
-      'from endpoint.request($1, $2, $3, $4::json, $5::json)', [
+        'from endpoint.request($1, $2, $3, $4::json, $5::json)',
+      [
         client.version,
         query.method,
         query.url,
         JSON.stringify(query.args),
-        JSON.stringify(query.data)
-      ]
-    )
+        JSON.stringify(query.data),
+      ],
+    );
 
-    await connection.end()
+    await connection.end();
 
-    return result.rows[0]
+    return result.rows[0];
   } catch (e) {
     // Problem logging in
-    console.error(`connection: ${e.message}`)
-    await connection.end()
+    console.error(`connection: ${e.message}`);
+    if (connection) {
+      await connection.end();
+    }
 
-    return null
+    return null;
   }
 }
 
