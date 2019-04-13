@@ -15,8 +15,9 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
+        bracketSpacing: false,
+        parser: 'babel',
         singleQuote: true,
-        parser: 'babel'
       },
     ]
   }
