@@ -1,8 +1,5 @@
-import browserQuery from './query/browser.mjs'
-import serverQuery from './query/server.mjs'
-import client from './client.mjs'
-import database from './database/index.mjs'
-
-const query = __NODE__ ? serverQuery : browserQuery;
+import query from './query/index.js'
+import client from './client.js'
+import database from './database/index.js'
 
 export { client, database, query  }

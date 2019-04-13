@@ -1,6 +1,6 @@
 import { compose } from 'ramda'
 import chai from 'chai'
-import { describe } from '../utils.mjs'
+import { describe } from '../utils.js'
 import {
   relation,
   where, whereNot,
@@ -9,7 +9,7 @@ import {
   whereLike, whereNotLike,
   whereSimilarTo, whereNotSimilarTo,
   whereNull, whereNotNull,
-} from '../../src/database/chainable.mjs'
+} from '../../database/chainable.js'
 
 const { assert } = chai
 const { it, xit } = describe('database/chainable')

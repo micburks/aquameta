@@ -1,6 +1,6 @@
 import chai from 'chai'
-import { describe } from '../utils.mjs'
-import { relation } from '../../src/database/chainable.mjs'
+import { describe } from '../utils.js'
+import { relation } from '../../database/chainable.js'
 
 const { assert } = chai
 const { it, xit } = describe('database/relation')

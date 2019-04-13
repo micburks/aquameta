@@ -1,6 +1,6 @@
 import { compose } from 'ramda'
 import chai from 'chai'
-import { describe } from '../utils.mjs'
+import { describe } from '../utils.js'
 import {
   relation,
   order, orderByAsc, orderByDesc, orderRandom,
@@ -8,7 +8,7 @@ import {
   evented, metaData,
   exclude, include,
   args
-} from '../../src/database/chainable.mjs'
+} from '../../database/chainable.js'
 
 const { assert } = chai
 const { it, xit } = describe('database/chainable')

@@ -2,6 +2,7 @@
   "name": "aquameta-datum",
   "version": "0.0.11",
   "description": "Service layer for the Aquameta database API",
+  "sideEffects": false,
   "main": "./dist-node-cjs/index.js",
   "module": "./dist-node-esm/index.js",
   "browser": {
@@ -16,8 +17,7 @@
     "version": "npm run build",
     "postversion": "git push && git push --tags",
     "pretest": "npm run build",
-    "test": "node --experimental-modules --loader ./loader.mjs test/index.mjs",
-    "test:watch": "nodemon -w test -e mjs -x 'node --experimental-modules --loader ./loader.mjs test/index.mjs'",
+    "test": "node dist-node-cjs/__tests__/index.js",
     "watch": "parallelshell 'npm run test:watch' 'npm run build:watch'"
   },
   "keywords": [
