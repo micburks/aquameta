@@ -1,6 +1,8 @@
 {
   "name": "aquameta-monorepo",
+  "description": "Experimental Aquameta monorepo",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "lint": "eslint .",
     "flow": "flow"
