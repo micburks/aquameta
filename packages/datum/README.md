@@ -5,13 +5,16 @@
 
 Service layer for the Aquameta database API
 
+
+## Getting started
+
 `aquameta-datum` provides a functional API for fetching data from an Aquameta
 database. The API is intentionally split into small, composable parts to allow
 partially applying queries. This lends itself to a UI built with modular,
 reusable components, such as the widget framework
 ([aquameta-widget](https://github.com/micburks/aquameta-widget)).
 
-## Create a query executor
+### Create a query executor
 
 ```javascript
 import { client, query } from 'aquameta-datum'
@@ -36,7 +39,7 @@ fetching code and allows your application to be rendered server-side when
 possible.
 
 
-## Execute an operation
+### Execute an operation
 
 ```javascript
 import { client, database, query } from 'aquameta-datum'
@@ -106,7 +109,7 @@ const resourceRows = await selectRows(
 ```
 
 
-## Adding clauses
+### Adding clauses
 
 In real life, we'll want to control our query a bit more.
 
@@ -135,7 +138,7 @@ the next section, let's look at why we may want to separate or operation from
 the filter.
 
 
-## CRUDing
+### CRUDing
 
 As a first principle, Aquameta believes in datafication of the programming
 stack. Data has 4 basic operations, collectively known as CRUD (create, read, update, delete).
