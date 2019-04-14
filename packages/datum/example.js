@@ -103,3 +103,10 @@ app.use(async (ctx, next) => {
   }
   return next();
 });
+
+
+/* functions */
+query(
+  client.connection(),
+  db.fn('bundle.checkout', {commit_id: commitId})
+);

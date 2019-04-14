@@ -221,3 +221,199 @@ try {
 
 What we did in this second example is create a resuable, context-aware insert
 function. Not too bad.
+
+
+## API Reference
+
+**Prerequisite: Familiarize yourself with `compose` and `curry` functional programming techniques.**
+
+`aquameta-datum` has a functional API that can be quite a mental load when starting out. This API take all the relevant database concepts and splits them into independent parts. This creates an incredibly flexible approach to writing queries. Mastery of the library requires an understanding of how to orchestrate the 5 distinct parts:
+
+- a query - something that runs it all
+- a client - where to run the query (connection, endpoint)
+- an operation - what to do (select, update, insert, delete)
+- an entity - what to perform this on (table, function)
+- optional filters - what to resulting data looks like (where, limit, order, include)
+
+### query
+
+The `query` function is the actual executor of all elements of a query (i.e. client and executable).
+
+```js
+query(
+  client: Client<Endpoint|Connection>,
+  executable: Executable,
+): Promise<QueryResult, QueryError>
+```
+
+
+### client
+
+Clients can be created with one of 2 client creator functions available on the `client` object.
+
+##### client.endpoint
+
+```js
+client.endpoint(
+  config: ClientOptions
+): Client<Endpoint>
+```
+
+
+##### client.connection
+
+```js
+client.connection(
+  config: ClientOptions
+): Client<Connection>
+```
+
+
+### database
+
+Operations, entities, and filters are representative of elements of a SQL query. These are all grouped together on the `database` object.
+
+#### database - operations
+
+Operations take an `Entity` and return an `Executable` to run. These map directly to CRUD operations in the database.
+
+##### database.select
+
+```js
+database.select(
+  entity: Entity<Relation|Fn>
+): Executable
+```
+
+Perform `SELECT` on a relation or a function.
+
+
+##### database.insert
+
+```js
+database.insert(
+  entity: Entity<Relation>
+): Executable
+```
+
+Perform `INSERT` on a relation.
+
+
+##### database.update
+
+```js
+database.update(
+  entity: Entity<Relation>
+): Executable
+```
+
+Perform `UPDATE` on a relation.
+
+
+##### database.del
+
+```js
+database.del(
+  entity: Entity<Relation>
+): Executable
+```
+
+Perform `DELETE` on a relation.
+
+
+#### database - other executable creators
+
+Special cases to create an `Executable` from an intermediate contruct.
+
+##### database.http
+
+```js
+database.http(
+  request: HTTPRequest
+): Executable
+```
+
+`database.http` is unlike the rest of the `database` properties. This is a server-side only method that parses an HTTP query made from an `aquameta-datum` client. The result of this function is an `Executable`, therefore it doesn't need to be passed to an operation function. The anatomy of the HTTP request contains all the necessary information to make a query.
+
+```js
+// Example route in a `koa` server
+app.use(async (ctx, next) => {
+  if (ctx.req.url.startsWith('/api')) {
+    const result = await query(
+      client.connection(),
+      db.http(ctx.req);
+    )
+    ctx.res.body = JSON.stringify(result);
+  }
+  return next();
+});
+```
+
+
+#### database - objects
+
+Create an entity (i.e. database object).
+
+##### database.relation
+
+```js
+database.relation(
+  schemaQualifiedName: string
+): Entity<Relation>
+```
+
+A relation can be a table or a view in the database. `schemaQualifiedName`, as implied, must be a schema-qualified relation name with a `.` separating the schema name and relation name (e.g. `public.my_table`).
+
+**Note that inserting, updating, or deleting from a view must be supported in the database with `instead of` triggers.**
+
+
+##### database.fn
+
+```js
+database.fn(
+  schemaQualifiedName: string,
+  params: Params|Array<any>),
+): Entity<Fn>
+```
+
+Execute a function in the database. Again, `schemaQualifiedName` must be a schema-qualified function name (e.g. `public.uuid_generate_v4`).
+
+TODO: Functions are very difficult to get right. When fleshing out the implementation of this method, give detailed instructions for how to use from the client. This is a difficult function to run even if you know what you're doing.
+
+
+#### database - filters
+
+Apply a filter to an entity.
+
+TODO: Add the rest of the filters.
+
+##### database.where
+
+```js
+database.where<T: Relation|Fn>(
+  column: string,
+  value: any,
+  entity: Entity<T>,
+): Entity<T>
+```
+
+
+##### database.limit
+
+```js
+database.limit<T: Relation|Fn>(
+  value: number,
+  entity: Entity<T>,
+): Entity<T>
+```
+
+
+##### database.order
+
+```js
+database.order<T: Relation|Fn>(
+  direction: "asc"|"desc",
+  column: string,
+  entity: Entity<T>,
+): Entity<T>
+```
