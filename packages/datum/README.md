@@ -350,7 +350,7 @@ app.use(async (ctx, next) => {
 ```
 
 
-#### database - objects
+#### database - entities
 
 Create an entity (i.e. database object).
 
