@@ -95,7 +95,7 @@ app.use(async (ctx, next) => {
       )
     } else {
       rows = await query(
-        client.endpoint({ host: 'registry.aquameta.com' }),
+        client.endpoint({ host: 'hub.aquameta.com' }),
         executable,
       )
     }
