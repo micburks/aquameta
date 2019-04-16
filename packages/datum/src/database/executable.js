@@ -1,32 +1,55 @@
+// @flow
+
 import url from 'url';
 import {__, curry} from 'ramda';
 import {
   DELETE,
-  EXECUTABLE,
   INSERT,
   SELECT,
   UPDATE,
   getMethodFromType,
 } from './constants.js';
+import type {Executable, HTTPRequest} from '../types.js';
 
+const EXECUTABLE = new Object();
 /**
  * DOESN'T allow chainables to be called on executables
  */
-const executable = curry((type, chainable, data) => ({
-  method: getMethodFromType(type),
-  url: chainable.url,
-  args: chainable.args,
-  data,
-  [EXECUTABLE]: true,
-}));
+const createExecutable = curry<
+  string,
+  Executable,
+  {[string]: mixed},
+  Executable,
+>(
+  (
+    method: string,
+    chainable: Executable,
+    data: ?{[string]: mixed},
+  ): Executable => ({
+    method,
+    url: chainable.url,
+    args: chainable.args,
+    data,
+    type: EXECUTABLE,
+  }),
+);
+
+export function isExecutable(executable: Executable): boolean {
+  return executable.type === EXECUTABLE;
+}
 
 /**
  * turn relation into executable
  */
-export const del = executable(DELETE, __, null);
-export const insert = executable(INSERT);
-export const select = executable(SELECT, __, null);
-export const update = executable(UPDATE);
+// $FlowFixMe
+export const del = createExecutable(getMethodFromType(DELETE), (__: any), null);
+export const insert = createExecutable(getMethodFromType(INSERT));
+export const select = createExecutable(
+  getMethodFromType(SELECT),
+  (__: any),
+  null,
+);
+export const update = createExecutable(getMethodFromType(UPDATE));
 
 /**
  * parse http request and return executable
@@ -37,16 +60,31 @@ export const update = executable(UPDATE);
  *   database.http(req)
  * ).then(...).catch(...)
  */
-export function http(req) {
-  const parsed = url.parse(req.url, true);
+const sourceUrlRegex = /^\/db\//;
 
-  return {
-    method: req.method,
-    url: parsed.pathname,
-    args: parsed.query || {},
-    data: req.body,
-    [EXECUTABLE]: true,
-  };
+// TODO
+type ParsedUrl = {
+  pathname?: string,
+  query?: {[string]: mixed},
+};
+
+export function http(req: HTTPRequest): Executable {
+  const parsed: ParsedUrl = url.parse(req.url, true);
+
+  if (parsed && parsed.pathname && sourceUrlRegex.test(parsed.pathname)) {
+    // TODO: analyze sourceUrl to find if its row/relation/field and query args
+    return createExecutable(
+      'GET',
+      {url: `/${parsed.pathname.replace(sourceUrlRegex, '')}`, args: {}},
+      null,
+    );
+  } else {
+    return createExecutable(
+      req.method,
+      {url: parsed.pathname, args: parsed.query || {}},
+      req.body,
+    );
+  }
 }
 
 /**
@@ -65,19 +103,3 @@ export function http(req) {
  * you normally use. source urls are meant to be compatible with current technologies, not accessed
  * thorugh datum
  */
-export function source(sourceUrl) {
-  const method = 'GET';
-  const url = `/${sourceUrl.replace(/\/db\//, '')}`;
-  const args = {}; // ?
-  const data = {};
-
-  // TODO: analyze sourceUrl to find if its row/relation/field and query args
-
-  return {
-    method,
-    url,
-    args,
-    data,
-    [EXECUTABLE]: true,
-  };
-}

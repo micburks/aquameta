@@ -14,8 +14,9 @@ export type Client = {
 export type Executable = {
   method: string,
   url: string,
-  args: {},
-  data: {},
+  args: {[string]: mixed | Array<mixed>},
+  data: ?{[string]: mixed},
+  type: {},
 };
 
 export type QueryResult =
@@ -56,3 +57,20 @@ export type WhereArgs = {
   value: any,
 };
 */
+
+export type Relation = {
+  schemaName: string,
+  relationName: string,
+  url: string,
+  args: {[string]: mixed},
+};
+
+export type Fn = {
+  schemaName: string,
+  fnName: string,
+  url: string,
+  args: {[string]: mixed},
+};
+
+// TODO
+export type HTTPRequest = {[any]: any};

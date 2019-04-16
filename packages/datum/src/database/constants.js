@@ -1,3 +1,5 @@
+// @flow
+
 import {always, cond, equals, T} from 'ramda';
 
 export const DELETE = 'DELETE';
@@ -13,7 +15,7 @@ export const HTTP = {
   DELETE: 'DELETE',
 };
 
-export const getMethodFromType = cond([
+export const getMethodFromType: string => string = cond([
   [equals(DELETE), always(HTTP.DELETE)],
   [equals(INSERT), always(HTTP.PATCH)],
   [equals(SELECT), always(HTTP.GET)],
