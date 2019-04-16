@@ -1,4 +1,4 @@
-import curry from 'just-curry-it';
+import {curry} from 'ramda';
 
 import type {Client, Executable, Query} from './types.js';
 

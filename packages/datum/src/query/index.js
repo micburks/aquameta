@@ -1,9 +1,8 @@
 import executeEndpoint from './endpoint.js';
 import executeConnection from './connection.js';
-import curry from 'just-curry-it';
-import compose from 'just-compose';
-import {cond, getKey, when, T} from '../functional-helpers.js';
-import {CLIENT, EXECUTABLE} from '../database/constants.js';
+import {compose, cond, curry, when, T} from 'ramda';
+import {getKey} from './functional-helpers.js';
+import {isValidClient} from '../client.js';
 
 import type {Client, Executable, Query} from '../types.js';
 
@@ -19,7 +18,7 @@ import type {Client, Executable, Query} from '../types.js';
  */
 export default curry(async function(client: Client, query: Executable): Query {
   // Runtime validations
-  if (!client[CLIENT]) {
+  if (!isValidClient(client)) {
     throw new TypeError('query: invalid client');
   }
   if (!query[EXECUTABLE]) {
@@ -45,13 +44,12 @@ const execute = cond(
       T,
       () => {
         throw new Error('must specify endpoint or connection for client');
-      }
-    ]
-  ].filter(Boolean)
+      },
+    ],
+  ].filter(Boolean),
 );
 
 const invoke = compose(
   when(getKey('evented'), makeEvented),
-  execute
+  execute,
 );
-
