@@ -1,4 +1,5 @@
 // @noflow
+/* eslint-disable */
 
 import {client, database as db, util, query} from 'aquameta-datum';
 
@@ -27,7 +28,7 @@ const latestProductFilter = util.compose(
 ); /* filter */
 
 const latestProductWidgets = latestProductFilter(widgetRel);
- 
+
 executeQuery(
   db.select(latestProductWidgets)
 )
@@ -108,5 +109,7 @@ app.use(async (ctx, next) => {
 /* functions */
 query(
   client.connection(),
-  db.fn('bundle.checkout', {commit_id: commitId})
+  db.select(
+    db.fn('bundle.checkout', {commit_id: commitId})
+  )
 );
