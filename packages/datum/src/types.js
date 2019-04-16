@@ -1,6 +1,7 @@
 // @flow
 
 export type Client = {
+  type: {},
   connection?: boolean,
   endpoint?: boolean,
   url: string,
@@ -23,4 +24,35 @@ export type QueryResult =
     }
   | QueryError;
 
-type QueryError = any;
+export type QueryError = any;
+
+export type Direction = 'asc' | 'desc' | 'random()';
+
+/*
+export type OrderArgs = {
+  column: string,
+  direction: Direction,
+};
+*/
+
+export type WhereOps =
+  | '='
+  | '<>'
+  | '>'
+  | '>='
+  | '<'
+  | '<='
+  | 'like'
+  | 'not like'
+  | 'similar to'
+  | 'not similar to'
+  | 'is'
+  | 'is not';
+
+/*
+export type WhereArgs = {
+  name: string,
+  op: WherOps,
+  value: any,
+};
+*/
