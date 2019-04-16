@@ -1,54 +1,78 @@
-import { cond, curry, identity, T } from 'ramda'
+// @flow
+
+import {cond, curry, T} from 'ramda';
+import type {Direction, Executable, WhereOps} from '../types';
 
 // (a) => bool
-const isFalsy = val => !val
+const isFalsy: (?mixed) => boolean = val => !val;
 
 // (a) => bool
-const isArray = arr => (arr instanceof Array)
+const isArray: (?mixed) => boolean = arr => arr instanceof Array;
 
 // (a|[a]) => [a]
-const asArray = cond([
-  [isFalsy, () => ([])],
-  [isArray, identity],
-  [T, val => ([val])]
-])
+const asArray: (mixed | Array<mixed>) => Array<mixed> = cond([
+  [isFalsy, () => []],
+  [isArray, (i: any): Array<mixed> => i],
+  [T, (val: mixed) => [val]],
+]);
 
 // ([a], [b]) => [a, b]
-const concat = (val1, val2) => [...val1, ...val2]
+function concat(val1: Array<mixed>, val2: Array<mixed>): Array<mixed> {
+  return [...val1, ...val2];
+}
 
 // (fn, str, str) => any
-const applyOrderArgs = curry((fn, direction, column) => fn({ column, direction }))
+const applyOrderArgs = curry<(any) => any, Direction, string, void>(
+  (fn: any => any, direction: Direction, column: string): void =>
+    fn({column, direction}),
+);
+
+// TODO: in these two functions, we could check that no extra arguments were passed in and throw a helpful message otherwise.
 
 // (fn, str, str, any) => any
-const applyWhereArgs = curry((fn, op, name, value) => fn({ name, op, value }))
+const applyWhereArgs = curry<(any) => any, WhereOps, string, any, void>(
+  (fn: any => any, op: WhereOps, name: string, value: any): void =>
+    fn({name, op, value}),
+);
 
 // (fn, str, any, chainable) => chainable
-const setProp = curry((functor, clause, val, chainable) => {
-  if (!(chainable && chainable.args)) {
-    throw new TypeError('chainable: invalid chainable')
-  }
-
-  return {
-    ...chainable,
-    args: {
-      ...chainable.args,
-      [clause]: functor(chainable.args[clause], val)
+const setProp = curry<(mixed, mixed) => mixed, string, any, Executable, any>(
+  (
+    functor: (mixed, mixed) => mixed,
+    clause: string,
+    val: any,
+    chainable: Executable,
+  ) => {
+    if (!(chainable && chainable.args)) {
+      throw new TypeError('chainable: invalid chainable');
     }
-  }
-})
+
+    return {
+      ...chainable,
+      args: {
+        ...chainable.args,
+        [clause]: functor(chainable.args[clause], val),
+      },
+    };
+  },
+);
 
 // (a, b) => b
-const valIdentity = (previous, val) => val
+function valIdentity(previous: any, val: any): any {
+  return val;
+}
 
 // (a|[a], b|[b]) => [a, b]
-const concatAsArrays = (val1, val2) => concat(asArray(val1), asArray(val2))
+function concatAsArrays(val1: mixed | Array<mixed>, val2: mixed): Array<mixed> {
+  return concat(asArray(val1), asArray(val2));
+}
 
 // (str, any, chainable) => chainable
-export const addArg = setProp(valIdentity)
-export const addArrayArg = setProp(concatAsArrays)
+export const addArg = setProp(valIdentity);
+export const addArrayArg = setProp(concatAsArrays);
 
 // (str, str, chainable) => chainable
-export const addOrder = applyOrderArgs(addArrayArg('order'))
+export const addOrder = applyOrderArgs(addArrayArg('order'));
 
 // (str, str, any, chainable) => chainable
-export const addWhere = applyWhereArgs(addArrayArg('where'))
+export const addWhere = applyWhereArgs(addArrayArg('where'));
