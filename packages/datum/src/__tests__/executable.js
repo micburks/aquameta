@@ -1,11 +1,13 @@
-import chai from 'chai'
-import { describe } from './utils.js'
-import { database } from '../index.js'
+// @flow
 
-const { assert } = chai
-const { it, xit } = describe('executable http')
+import chai from 'chai';
+import {describe} from './utils.js';
+import {database} from '../index.js';
 
-it('http is defined', async () => {
+const {assert} = chai;
+const test = describe('executable http');
+
+test.it('http is defined', async () => {
   // const server
-  assert.equal(database.http, {})
-})
+  assert.equal(database.http, {});
+});
