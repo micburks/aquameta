@@ -73,6 +73,11 @@ export const addArrayArg = setProp(concatAsArrays);
 
 // (str, str, chainable) => chainable
 export const addOrder = applyOrderArgs(addArrayArg('order'));
+/* I have to use these functions a little more before I decide to rewrite them. The interface might lock you into using it an a more sane way than without. But I guess flexibility might be better.
+export const addOrder = curry((direction: Direction, column: string, val: any, chainable: Excecutable) => {
+  return addArrayArg('order', {direction, column}, val, chainable);
+}
+*/
 
 // (str, str, any, chainable) => chainable
 export const addWhere = applyWhereArgs(addArrayArg('where'));
