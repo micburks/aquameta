@@ -1,7 +1,7 @@
 import executeEndpoint from './endpoint.js';
 import executeConnection from './connection.js';
 import {compose, cond, curry, when, T} from 'ramda';
-import {getKey} from './functional-helpers.js';
+import {getKey} from '../functional-helpers.js';
 import {isValidClient} from '../client.js';
 
 import type {Client, Executable, Query} from '../types.js';

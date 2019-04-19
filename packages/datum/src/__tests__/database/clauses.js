@@ -1,48 +1,48 @@
-import { compose } from 'ramda'
-import chai from 'chai'
-import { describe } from '../utils.js'
+import {compose} from 'ramda';
+import chai from 'chai';
+import {describe} from '../utils.js';
 import {
   relation,
-  order, orderByAsc, orderByDesc, orderRandom,
-  limit, offset,
-  evented, metaData,
-  exclude, include,
-  args
-} from '../../database/chainable.js'
+  order,
+  orderByAsc,
+  orderByDesc,
+  orderRandom,
+  limit,
+  offset,
+  evented,
+  metaData,
+  exclude,
+  include,
+  args,
+} from '../../database/chainable.js';
 
-const { assert } = chai
-const { it, xit } = describe('database/chainable')
-const rel = relation('widget.widget')
+const {assert} = chai;
+const {it, xit} = describe('database/chainable');
+const rel = relation('widget.widget');
 
-it('#order', 'adds proper object to args', function () {
-  const column = 'name'
-  const direction = 'asc'
+it('#order', 'adds proper object to args', function() {
+  const column = 'name';
+  const direction = 'asc';
 
-  const query = compose(
-    order(direction, column)
-  )(rel)
+  const query = compose(order(direction, column))(rel);
 
-  assert.typeOf(query.args.order, 'array')
-  assert.equal(query.args.order[0].column, column)
-  assert.equal(query.args.order[0].direction, direction)
-})
+  assert.typeOf(query.args.order, 'array');
+  assert.equal(query.args.order[0].column, column);
+  assert.equal(query.args.order[0].direction, direction);
+});
 
-it('#limit', 'adds value to args', function () {
-  const value = '5'
+it('#limit', 'adds value to args', function() {
+  const value = '5';
 
-  const query = compose(
-    limit(value)
-  )(rel)
+  const query = compose(limit(value))(rel);
 
-  assert.equal(query.args.limit, value)
-})
+  assert.equal(query.args.limit, value);
+});
 
-it('#limit', 'throws on invalid input', function () {
-  const value = null
+it('#limit', 'throws on invalid input', function() {
+  const value = null;
 
-  const query = compose(
-    limit(value)
-  )(rel)
+  const query = compose(limit(value))(rel);
 
-  assert.throws(() => query(rel), TypeError)
-})
+  assert.throws(() => query(rel), TypeError);
+});
