@@ -1,51 +1,48 @@
-import chai from 'chai'
-import { describe } from './utils.js'
-import { client, database, query } from '../index.js'
+import chai from 'chai';
+import {describe} from './utils.js';
+import {client, database, query} from '../index.js';
 
-const { assert } = chai
-const { it, xit } = describe('query')
+const {assert} = chai;
+const {it, xit} = describe('query');
 
-it('will throw with invalid client', async function () {
+it('will throw with invalid client', async function() {
   try {
-    await query({}, {})
+    await query({}, {});
   } catch (e) {
-    assert.instanceOf(e, TypeError)
-    assert.include(e.message, 'client')
+    assert.instanceOf(e, TypeError);
+    assert.include(e.message, 'client');
   }
-})
+});
 
-it('will throw with invalid query datum', async function () {
+it('will throw with invalid query datum', async function() {
   try {
-    await query(client({}), {})
+    await query(client({}), {});
   } catch (e) {
-    assert.instanceOf(e, TypeError)
-    assert.include(e.message, 'executable')
+    assert.instanceOf(e, TypeError);
+    assert.include(e.message, 'executable');
   }
-})
+});
 
-xit('will not throw with sane input', async function () {
-  const rel = database.relation('widget.widget')
-  const exec = database.select(rel)
-  await query(client({ connection: true }), exec)
+xit('will not throw with sane input', async function() {
+  const rel = database.relation('widget.widget');
+  const exec = database.select(rel);
+  await query(client({connection: true}), exec);
 
-  assert(true)
-})
+  assert(true);
+});
 
-it('will execute db connection', async function () {
-  const rel = database.relation('bundle.commit')
+it('will execute db connection', async function() {
+  const rel = database.relation('bundle.commit');
   const executeConnection = query(
     client({
-      connection: true
-    })
-  )
+      connection: true,
+    }),
+  );
 
-  const rows = await executeConnection(
-    database.select(rel)
-  )
-  const response = JSON.parse(rows.response).result
+  const rows = await executeConnection(database.select(rel));
+  const response = JSON.parse(rows.response).result;
 
-  assert.typeOf(response, 'array')
-})
+  assert.typeOf(response, 'array');
+});
 
-xit('will execute fetch', function () {
-})
+xit('will execute fetch', function() {});
