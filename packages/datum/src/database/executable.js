@@ -1,7 +1,7 @@
 // @flow
 
 import url from 'url';
-import {__, curry} from 'ramda';
+import {__, compose, curry} from 'ramda';
 import {
   DELETE,
   INSERT,
@@ -10,11 +10,10 @@ import {
   getMethodFromType,
 } from './constants.js';
 import type {Executable, HTTPRequest} from '../types.js';
+import {include, relation, source, where} from './chainable.js';
 
 const EXECUTABLE = new Object();
-/**
- * DOESN'T allow chainables to be called on executables
- */
+
 const createExecutable = curry<
   string,
   Executable,
@@ -51,15 +50,6 @@ export const select = createExecutable(
 );
 export const update = createExecutable(getMethodFromType(UPDATE));
 
-/**
- * parse http request and return executable
- *
- * e.g.
- * query(
- *   client.connection(),
- *   database.http(req)
- * ).then(...).catch(...)
- */
 const sourceUrlRegex = /^\/db\//;
 
 // TODO
@@ -68,26 +58,19 @@ type ParsedUrl = {
   query?: {[string]: mixed},
 };
 
-export function http(req: HTTPRequest): Executable {
-  const parsed: ParsedUrl = url.parse(req.url, true);
-
-  if (parsed.pathname && sourceUrlRegex.test(parsed.pathname)) {
-    // TODO: analyze sourceUrl to find if its row/relation/field and query args
-    return createExecutable(
-      'GET',
-      {url: `/${parsed.pathname.replace(sourceUrlRegex, '')}`, args: {}},
-      null,
-    );
-  } else {
-    return createExecutable(
-      req.method,
-      {url: parsed.pathname, args: parsed.query || {}},
-      req.body,
-    );
-  }
-}
-
 /**
+ * parse http request and return executable
+ *
+ * e.g.
+ * query(
+ *   client.connection(),
+ *   database.http(req)
+ * ).then(...).catch(...)
+ *
+ *
+ * source urls reference a field and therefore return a "file" with a mimetype
+ * it doesn't make sense to have a database.source() function
+ *
  * parse source url and return executable
  *
  * e.g.
@@ -96,10 +79,43 @@ export function http(req: HTTPRequest): Executable {
  *   database.source(req.url)
  * ).then(...).catch(...)
  *
+ * on server:
  * doesnt make sense to use this on the server, you still need other information from http request
  * in that case, http can emcompass both functionalities and just figure out how to parse the request
  *
+ * in browser:
  * from the client, you wouldn't want to use datum to get files. you would just use fetch or whatever
  * you normally use. source urls are meant to be compatible with current technologies, not accessed
  * thorugh datum
  */
+export function http(req: HTTPRequest): Executable {
+  const parsed: ParsedUrl = url.parse(req.url, true);
+  const {pathname} = parsed;
+
+  if (pathname && sourceUrlRegex.test(pathname)) {
+    // TODO: analyze sourceUrl to find if its row/relation/field and query args
+    const [, , schemaName, relationName, fileName] = pathname.split('/');
+    const [name, column] = fileName.split('.');
+    const rel = relation(`${schemaName}.${relationName}`);
+
+    return compose(
+      select,
+      source, // TODO?: need to identify this as a source request
+      where('name', name),
+      include(column),
+    )(rel);
+    /*
+    return createExecutable(
+      'GET',
+      {url: `/${parsed.pathname.replace(sourceUrlRegex, '')}`, args: {}},
+      null,
+    );
+    */
+  } else {
+    return createExecutable(
+      req.method,
+      {url: parsed.pathname, args: parsed.query || {}},
+      req.body || null,
+    );
+  }
+}

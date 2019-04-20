@@ -69,6 +69,8 @@ export default async function executeConnection(
     connection = await verifySession(client);
     await connection.connect();
 
+    // TODO: is this where we identify if this is a source request
+
     console.log(
       'trying connection',
       client.version,
