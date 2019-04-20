@@ -47,11 +47,17 @@ const setProp = curry<(mixed, mixed) => mixed, string, any, Executable, any>(
       throw new TypeError('chainable: invalid chainable');
     }
 
+    const argValue = functor(chainable.args[clause], val);
+
+    if (argValue == undefined || argValue == null) {
+      throw new TypeError('chainable: invalid argument value');
+    }
+
     return {
       ...chainable,
       args: {
         ...chainable.args,
-        [clause]: functor(chainable.args[clause], val),
+        [clause]: argValue,
       },
     };
   },

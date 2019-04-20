@@ -34,8 +34,8 @@ const createExecutable = curry<
   }),
 );
 
-export function isExecutable(executable: Executable): boolean {
-  return executable.type === EXECUTABLE;
+export function isInvalidExecutable(executable: Executable): boolean {
+  return !(executable.type === EXECUTABLE);
 }
 
 /**
@@ -71,7 +71,7 @@ type ParsedUrl = {
 export function http(req: HTTPRequest): Executable {
   const parsed: ParsedUrl = url.parse(req.url, true);
 
-  if (parsed && parsed.pathname && sourceUrlRegex.test(parsed.pathname)) {
+  if (parsed.pathname && sourceUrlRegex.test(parsed.pathname)) {
     // TODO: analyze sourceUrl to find if its row/relation/field and query args
     return createExecutable(
       'GET',
