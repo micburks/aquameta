@@ -63,6 +63,8 @@ export const whereGt = addWhere('>');
 export const whereGte = addWhere('>=');
 export const whereLt = addWhere('<');
 export const whereLte = addWhere('<=');
+export const whereIn = addWhere('in');
+export const whereNotIn = addWhere('not in');
 export const whereLike = addWhere('like');
 export const whereNotLike = addWhere('not like');
 export const whereSimilarTo = addWhere('similar to');
