@@ -49,10 +49,3 @@ function createClient(type: Object, config: ?ClientOptions): Client {
     type,
   };
 }
-
-/* test calls */
-/*
-endpoint({});
-endpoint();
-endpoint({connection: true});
-*/
