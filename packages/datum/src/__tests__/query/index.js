@@ -1,22 +1,20 @@
-import test from 'ava';
+import test from 'tape';
 import {client, database, query} from '../../index.js';
 
 test('#query - throws with invalid client', async t => {
-  await t.throwsAsync(
-    () => {
-      return query({}, {});
-    },
-    {instanceOf: TypeError, message: 'query: invalid client'},
-  );
+  await query({}, {}).catch(e => {
+    t.true(e instanceof TypeError);
+    t.true(/query: invalid client/.test(e.toString()));
+  });
+  t.end();
 });
 
-test('#query - throws with invalid query datum', async t => {
-  await t.throwsAsync(
-    () => {
-      return query(client.connection(), {});
-    },
-    {instanceOf: TypeError, message: 'query: invalid executable'},
-  );
+test('#query - throws with invalid datum', async t => {
+  await query(client.connection(), {}).catch(e => {
+    t.true(e instanceof TypeError);
+    t.true(/query: invalid executable/.test(e.toString()));
+  });
+  t.end();
 });
 
 test('#query - will not throw with sane input', async t => {
@@ -25,10 +23,10 @@ test('#query - will not throw with sane input', async t => {
   try {
     await query(client.connection(), exec);
   } catch (e) {
-    console.log(e);
+    t.fail();
   }
-
   t.pass();
+  t.end();
 });
 
 test('#query - will execute db connection', async t => {
@@ -39,6 +37,9 @@ test('#query - will execute db connection', async t => {
   const response = JSON.parse(rows.response).result;
 
   t.true(response instanceof Array);
+  t.end();
 });
 
-test.skip('#query - will execute fetch', t => {});
+test.skip('#query - will execute fetch', t => {
+  t.end();
+});

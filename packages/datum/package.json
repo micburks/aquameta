@@ -16,8 +16,8 @@
     "preversion": "npm test",
     "version": "npm run build",
     "postversion": "git push && git push --tags",
-    "test": "ava dist-node-cjs/__tests__",
-    "test-w": "ava -w dist-node-cjs/__tests__",
+    "test": "tape dist-node-cjs/__tests__/**/*.js | tap-spec",
+    "test-w": "nodemon -w dist-node-cjs -x 'yarn test'",
     "watch": "run-p build-w test-w"
   },
   "keywords": [
@@ -40,12 +40,14 @@
     "unfetch": "^4.1.0"
   },
   "devDependencies": {
-    "ava": "^1.4.1",
     "chai": "^4.1.2",
     "chalk": "^2.3.2",
     "create-universal-package": "^4.1.0",
     "nodemon": "^1.18.11",
     "npm-run-all": "^4.1.5",
+    "sinon": "^7.3.2",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.10.1",
     "veggie": "^2.4.1"
   },
   "files": [

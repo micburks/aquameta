@@ -1,4 +1,4 @@
-import test from 'ava';
+import test from 'tape';
 import {
   connection,
   endpoint,
@@ -16,6 +16,7 @@ test('#client - endpoint', t => {
   t.true(isEndpointClient(c));
   t.false(isConnectionClient(c));
   t.true(!isInvalidClient(c));
+  t.end();
 });
 
 test('#client - merges configs', t => {
@@ -25,6 +26,7 @@ test('#client - merges configs', t => {
   t.is(c.url, defaultUrl);
   t.is(c.version, defaultVersion);
   t.is(c.option, option);
+  t.end();
 });
 
 test('#client - connection', t => {
@@ -33,6 +35,7 @@ test('#client - connection', t => {
   t.true(isConnectionClient(c));
   t.false(isEndpointClient(c));
   t.true(!isInvalidClient(c));
+  t.end();
 });
 
 test('#client - isInvalidClient', t => {
@@ -40,4 +43,5 @@ test('#client - isInvalidClient', t => {
   t.true(isInvalidClient({type: new Object()}));
   t.true(isInvalidClient({connection: true}));
   t.true(isInvalidClient({endpoint: true}));
+  t.end();
 });

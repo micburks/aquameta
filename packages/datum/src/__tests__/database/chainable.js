@@ -1,5 +1,5 @@
 import {compose} from 'ramda';
-import test from 'ava';
+import test from 'tape';
 import {
   relation,
   order,
@@ -21,6 +21,7 @@ test('#order - adds proper object to args', t => {
   t.true(query.args.order instanceof Array);
   t.is(query.args.order[0].column, column);
   t.is(query.args.order[0].direction, direction);
+  t.end();
 });
 
 test('#order - asc/desc add value', t => {
@@ -40,6 +41,7 @@ test('#order - asc/desc add value', t => {
     {column: descColumn, direction: 'desc'},
     {column: ascColumn, direction: 'asc'},
   ]);
+  t.end();
 });
 
 test('#exclude - adds array values', t => {
@@ -52,6 +54,7 @@ test('#exclude - adds array values', t => {
 
   t.true(query.args.exclude instanceof Array);
   t.deepEqual(query.args.exclude, columns);
+  t.end();
 });
 
 test('#limit - adds value to args', t => {
@@ -60,10 +63,12 @@ test('#limit - adds value to args', t => {
   const query = limit(value)(rel);
 
   t.is(query.args.limit, value);
+  t.end();
 });
 
 test('#limit - throws on invalid input', t => {
   const value = null;
 
   t.throws(() => limit(value)(rel), TypeError);
+  t.end();
 });
