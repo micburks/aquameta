@@ -14,45 +14,56 @@ const anonConfig = {
 };
 
 type PgConnection = {
-  sessionId?: string,
   connect: () => Promise<void>,
   query: (string, Array<any>) => Promise<QueryResult>,
   end: () => Promise<void>,
 };
 
-async function verifySession(config: any): Promise<PgConnection> {
-  const client: PgConnection = new pg.Client(
-    Object.assign({}, anonConfig, config),
-  );
+async function getConnection(config: any): Promise<PgConnection> {
+  const mergedConfig = {
+    ...anonConfig,
+    ...config,
+  };
+  // Don't allow user to be overridden
+  mergedConfig.user = anonConfig.user;
+  const anonClient: PgConnection = new pg.Client(mergedConfig);
 
-  if (!client.sessionId) {
-    return client;
+  await anonClient.connect();
+
+  if (!mergedConfig.sessionId) {
+    return anonClient;
   }
 
-  await client.connect();
+  console.log('trying to login');
 
-  const result = await client.query(
-    'select (role_id).name as role_name from endpoint.session where id = $1::uuid',
-    [client.sessionId],
-  );
+  let result;
+  try {
+    result = await anonClient.query(
+      'select (role_id).name as role_name from endpoint.session where id = $1::uuid',
+      [mergedConfig.sessionId],
+    );
+  } catch (e) {
+    await anonClient.end();
+    throw e;
+  }
+
+  // If login fails - continue request as anonymous
+  if (!result || !result.rows || result.rows.length === 0) {
+    return anonClient;
+  }
+
+  // Release Client - TODO: release back to pool
+  await anonClient.end();
 
   // Logged in
-  console.log('connection: logged in', result.rows.length, result.rows);
-
-  if (result.rows.length === 0) {
-    throw new Error('connection: login failed');
-  }
-
-  // Release Client
-  await client.end();
-
-  // Copy anonymous config and modify user
-  const userConfig = Object.assign({}, anonConfig, {
-    user: result.rows[0].role_name,
+  const user = result.rows[0].role_name;
+  console.log(`connection: logged in as ${user}`);
+  const userClient = new pg.Client({
+    ...mergedConfig,
+    user,
   });
-  console.log('connection: configs -', userConfig, anonConfig);
-
-  return new pg.Client(userConfig);
+  await userClient.connect();
+  return userClient;
 }
 
 /**
@@ -66,8 +77,7 @@ export default async function executeConnection(
   let connection;
 
   try {
-    connection = await verifySession(client);
-    await connection.connect();
+    connection = await getConnection(client);
 
     // TODO: is this where we identify if this is a source request
 
@@ -91,16 +101,17 @@ export default async function executeConnection(
       ],
     );
 
+    // end connection if userClient, but release if anonClient?
     await connection.end();
 
     return result.rows[0];
   } catch (e) {
-    // Problem logging in
-    console.error(`connection: ${e.message}`);
+    // Problem with connecting to database
+    console.error(`connection: error trying to connect to database`);
+    console.error(e);
     if (connection) {
       await connection.end();
     }
-
     return null;
   }
 }
