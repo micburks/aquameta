@@ -1,6 +1,6 @@
 // @flow
 
-import test from 'ava';
+import test from 'tape';
 import {database} from '../../index.js';
 
 test('#http - parses request', t => {
@@ -16,6 +16,7 @@ test('#http - parses request', t => {
   t.is(executable.url, '/endpoint/relation/test/table');
   t.deepEqual(executable.args, {name: 'value'});
   t.deepEqual(executable.data, {body: true});
+  t.end();
 });
 
 test('#http - parses source url', t => {
@@ -33,4 +34,5 @@ test('#http - parses source url', t => {
     where: [{name: 'name', op: '=', value: 'Component'}],
   });
   t.is(executable.data, null);
+  t.end();
 });

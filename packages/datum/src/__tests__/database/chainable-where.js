@@ -1,5 +1,5 @@
 import {compose} from 'ramda';
-import test from 'ava';
+import test from 'tape';
 import {
   relation,
   where,
@@ -19,6 +19,7 @@ test('#where - #equals - adds proper where object to args', t => {
   t.true(query.args.where instanceof Array);
   t.is(typeof query.args.where[0], 'object');
   t.deepEqual(query.args.where[0], {name, op, value});
+  t.end();
 });
 
 test.skip('#where - #equals - can be called with all arguments', t => {
@@ -29,6 +30,7 @@ test.skip('#where - #equals - can be called with all arguments', t => {
   const query = where(name, value, rel);
 
   t.deepEqual(query.args.where[0], {name, op, value});
+  t.end();
 });
 
 test('#where - #equals - adds to existing where array', t => {
@@ -45,6 +47,7 @@ test('#where - #equals - adds to existing where array', t => {
     {name: 'name', op: '=', value: 'my_widget'},
     {name, op, value},
   ]);
+  t.end();
 });
 
 test('#where - #similarTo - adds proper where object to args', t => {
@@ -55,6 +58,7 @@ test('#where - #similarTo - adds proper where object to args', t => {
   const query = whereSimilarTo(name, value)(rel);
 
   t.deepEqual(query.args.where[0], {name, op, value});
+  t.end();
 });
 
 test('#where - #null - adds proper where object to args', t => {
@@ -65,4 +69,5 @@ test('#where - #null - adds proper where object to args', t => {
   const query = whereNull(name)(rel);
 
   t.deepEqual(query.args.where[0], {name, op, value});
+  t.end();
 });
