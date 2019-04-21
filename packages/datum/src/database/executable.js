@@ -50,8 +50,6 @@ export const select = createExecutable(
 );
 export const update = createExecutable(getMethodFromType(UPDATE));
 
-const sourceUrlRegex = /^\/db\//;
-
 // TODO
 type ParsedUrl = {
   pathname?: string,
@@ -88,14 +86,19 @@ type ParsedUrl = {
  * you normally use. source urls are meant to be compatible with current technologies, not accessed
  * thorugh datum
  */
+// /db/schema/rel/name.column
+const sourceUrlRegex = /^\/db\/.+\/.+\/.+\..+/;
 export function http(req: HTTPRequest): Executable {
   const parsed: ParsedUrl = url.parse(req.url, true);
   const {pathname} = parsed;
 
   if (pathname && sourceUrlRegex.test(pathname)) {
     // TODO: analyze sourceUrl to find if its row/relation/field and query args
-    const [, , schemaName, relationName, fileName] = pathname.split('/');
-    const [name, column] = fileName.split('.');
+    const [, , schemaName, relationName, ...rest] = pathname.split('/');
+    const fileName = rest.join('/');
+    const lastPeriod = fileName.lastIndexOf('.');
+    const name = fileName.slice(0, lastPeriod);
+    const column = fileName.slice(lastPeriod + 1);
     const rel = relation(`${schemaName}.${relationName}`);
 
     return compose(
