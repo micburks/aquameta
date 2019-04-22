@@ -10,6 +10,12 @@ import {
   getMethodFromType,
 } from './constants.js';
 import type {Executable, HTTPRequest} from '../types.js';
+import {compose} from 'ramda';
+import {addArg} from './args.js';
+import {fn} from './chainable.js';
+
+// TODO move this
+import {parseSourceUrl} from '../query/connection.js';
 
 const EXECUTABLE = new Object();
 
@@ -27,6 +33,7 @@ const createExecutable = curry<
     method,
     url: chainable.url,
     args: chainable.args, // SELECT, UPDATE, DELETE use args
+    version: chainable.version || null,
     data, // UPDATE and INSERT use data
     type: EXECUTABLE,
   }),
@@ -64,17 +71,42 @@ type ParsedUrl = {
  * source urls return a single column and have the format: /db/schema/rel/name.column
  */
 const sourceUrlRegex = /^\/db\/.+\/.+\/.+\..+/;
-export function http(req: HTTPRequest): Executable {
+const source = addArg('source', true);
+export function http(req: HTTPRequest): Executable | null {
   const parsed: ParsedUrl = url.parse(req.url, true);
   const {pathname} = parsed;
 
   if (pathname && sourceUrlRegex.test(pathname)) {
-    return createExecutable('GET', {url: pathname, args: {source: true}}, null);
-  } else {
+    // return createExecutable('GET', {url: pathname, args: {source: true}}, null);
+    const {schemaName, relationName, column, name} = parseSourceUrl(pathname);
+    const func = fn('endpoint.source', [
+      schemaName,
+      relationName,
+      column,
+      name,
+    ]);
+    /*
+    ({
+      schema_name: schemaName,
+      relation_name: relationName,
+      column_name: column,
+      name,
+    });
+    */
+    return compose(
+      select,
+      source,
+    )(func);
+  } else if (pathname) {
+    // $FlowFixMe
+    const [, version] = /\/?(.+)\//.exec(pathname);
+    const urlPath = pathname.replace(/\/?.+\//, '');
     return createExecutable(
       req.method,
-      {url: parsed.pathname, args: parsed.query || {}},
+      {url: urlPath, args: parsed.query || {}, version},
       req.body || null,
     );
+  } else {
+    return null;
   }
 }

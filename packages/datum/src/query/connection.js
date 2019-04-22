@@ -85,6 +85,7 @@ export default async function executeConnection(
     connection = await getConnection(client);
 
     let result;
+    /*
     if (query.args && query.args.source) {
       const {schemaName, relationName, column, name} = parseSourceUrl(
         query.url,
@@ -107,26 +108,27 @@ export default async function executeConnection(
         result.status = 'NOT FOUND';
       }
     } else {
-      console.log(
-        'trying connection',
-        client.version,
+      */
+    console.log(
+      'trying connection',
+      query.version || client.version,
+      query.method,
+      query.url,
+      JSON.stringify(query.args),
+      JSON.stringify(query.data),
+    );
+    result = await connection.query(
+      'select status, message, response, mimetype ' +
+        'from endpoint.request($1, $2, $3, $4::json, $5::json)',
+      [
+        query.version || client.version,
         query.method,
         query.url,
         JSON.stringify(query.args),
         JSON.stringify(query.data),
-      );
-      result = await connection.query(
-        'select status, message, response, mimetype ' +
-          'from endpoint.request($1, $2, $3, $4::json, $5::json)',
-        [
-          client.version,
-          query.method,
-          query.url,
-          JSON.stringify(query.args),
-          JSON.stringify(query.data),
-        ],
-      );
-    }
+      ],
+    );
+    //}
 
     // TODO: end connection if userClient, but release if anonClient?
     await connection.end();
@@ -172,7 +174,8 @@ type ParsedSourceUrl = {
   column: string,
   name: string,
 };
-function parseSourceUrl(pathname: string): ParsedSourceUrl {
+
+export function parseSourceUrl(pathname: string): ParsedSourceUrl {
   const [, , schemaName, relationName, ...rest] = pathname.split('/');
   const fileName = rest.join('/');
   const lastPeriod = fileName.lastIndexOf('.');
