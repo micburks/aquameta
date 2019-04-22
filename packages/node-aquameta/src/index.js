@@ -1,8 +1,11 @@
+// @flow
+
 import datumRouter from './datumRouter.js';
 import pageMiddleware from './pageMiddleware.js';
 import Koa from 'koa';
 import mount from 'koa-mount';
 import debug from 'debug';
+import type {ClientOptions, ConnectionOptions} from 'aquameta-datum';
 
 const app = new Koa();
 const log = debug('index');
@@ -34,21 +37,27 @@ const log = debug('index');
  *
  */
 
-const defaultConfig = {
-  client: true,
+type Options = {
+  [string]: any,
+  connection: ConnectionOptions,
+  client: ClientOptions,
+};
+const defaultConfig: Options = {
   pages: true,
   server: false,
-  url: 'endpoint',
-  version: 'v1',
-  cacheRequestMilliseconds: 5000,
-  events: false,
-  sessionCookie: 'SESSION_ID',
   roles: false,
+  node: false,
+  client: {
+    url: 'api',
+    version: 'v1',
+    cacheRequestMilliseconds: 5000,
+    events: false,
+    sessionCookie: 'SESSION_ID',
+  },
   connection: {
-    user: 'mickey',
+    user: 'anonymous',
     database: 'aquameta',
   },
-  node: false,
 };
 
 export default function(config) {
@@ -56,14 +65,14 @@ export default function(config) {
 
   if (config.client) {
     // Register Client-side API route
-    const datum = datumRouter(config);
+    const datum = datumRouter(config.client);
 
     app.use(datum.routes()).use(datum.allowedMethods());
   }
 
   if (config.pages) {
     // Register middleware that looks for matching database-mounted resources
-    app.use(pageMiddleware(config));
+    app.use(pageMiddleware(config.client));
   }
 
   if (config.node) {

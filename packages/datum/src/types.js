@@ -2,13 +2,31 @@
 
 export type Client = {
   type: {},
-  connection?: boolean,
-  endpoint?: boolean,
   url: string,
   version: string,
   sessionCookie: string,
   cacheRequestMilliseconds: number,
   sockets: boolean,
+  connection?: ConnectionOptions,
+};
+
+export type ClientOptions = {
+  url?: string,
+  version?: string,
+  sessionCookie?: string,
+  cacheRequestMilliseconds?: number,
+  sockets?: boolean,
+  connection?: ConnectionOptions,
+};
+
+export type ConnectionOptions = {
+  user?: string,
+  password?: string,
+  database?: string,
+  host?: string,
+  port?: number,
+  max?: number,
+  idleTimeoutMilliseconds?: number,
 };
 
 export type Executable = {
