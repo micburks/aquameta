@@ -354,17 +354,18 @@ app.use(async (ctx, next) => {
 
 Create an entity (i.e. database object).
 
-Note: Since `aquameta-datum` is heavily curried and nested, it is possible to call a function in a way that looks right in terms of order of arguments, but is actually incorrect in function signature. Although subtle, there is difference between these 2 calls:
+The entire datum API is curried. This lets you supply some arguments now and
+save the partially-applied function for later.
 
 ```js
-// Incorrect
+// Works
 db.orderBy('name', db.relation('meta.roles'))
 
-// Correct
+// Also works
 db.orderBy('name')(db.relation('meta.role'))
 ```
 
-A good rule of thumb is when you're passing an entity into a function, it should be the first argument, otherwise you should refactor how you're making the call.
+Entities will always be the last argument to filter functions.
 
 
 ##### database.relation
