@@ -10,7 +10,8 @@ import {
   getMethodFromType,
 } from './constants.js';
 import type {Executable, HTTPRequest} from '../types.js';
-import {include, relation, source, where} from './chainable.js';
+import {include, relation, where} from './chainable.js';
+import {addArg} from './args.js';
 
 const EXECUTABLE = new Object();
 
@@ -88,6 +89,7 @@ type ParsedUrl = {
  */
 // /db/schema/rel/name.column
 const sourceUrlRegex = /^\/db\/.+\/.+\/.+\..+/;
+const source = addArg('source', true);
 export function http(req: HTTPRequest): Executable {
   const parsed: ParsedUrl = url.parse(req.url, true);
   const {pathname} = parsed;

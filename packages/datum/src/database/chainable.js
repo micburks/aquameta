@@ -89,11 +89,3 @@ export const exclude = addArrayArg('exclude');
 export const excludeColumn = exclude;
 export const include = addArrayArg('include');
 export const includeColumn = include;
-
-export const source = addArg('source', true);
-
-// For functions... ? - nope
-// You would never separate a function call from it's args
-// - args are not generalizable between functoins
-// - different functions require invocation in different ways (val arrays vs kwargs objects)
-// export const args = {};
