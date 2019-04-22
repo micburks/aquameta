@@ -1,11 +1,15 @@
 // @flow
 
 import pg from 'pg';
-import type {Client, Executable, QueryResult} from '../types.js';
+import type {
+  Client,
+  ConnectionOptions,
+  Executable,
+  QueryResult,
+} from '../types.js';
 
-const anonConfig = {
+const anonConfig: ConnectionOptions = {
   user: 'anonymous',
-  password: null,
   database: 'aquameta',
   host: 'localhost',
   port: 5432,
@@ -19,10 +23,13 @@ type PgConnection = {
   end: () => Promise<void>,
 };
 
-async function getConnection(config: any): Promise<PgConnection> {
+async function getConnection(config?: {
+  [string]: any,
+  connection?: {[string]: any},
+}): Promise<PgConnection> {
   const mergedConfig = {
     ...anonConfig,
-    ...config,
+    ...((config && config.connection) || {}),
   };
   // Don't allow user to be overridden
   mergedConfig.user = anonConfig.user;
@@ -78,7 +85,7 @@ export default async function executeConnection(
     connection = await getConnection(client);
 
     let result;
-    if (query.args.source) {
+    if (query.args && query.args.source) {
       const {schemaName, relationName, column, name} = parseSourceUrl(
         query.url,
       );

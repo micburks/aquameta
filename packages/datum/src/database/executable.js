@@ -1,7 +1,7 @@
 // @flow
 
 import url from 'url';
-import {__, compose, curry} from 'ramda';
+import {__, curry} from 'ramda';
 import {
   DELETE,
   INSERT,
@@ -10,8 +10,6 @@ import {
   getMethodFromType,
 } from './constants.js';
 import type {Executable, HTTPRequest} from '../types.js';
-import {include, relation, where} from './chainable.js';
-import {addArg} from './args.js';
 
 const EXECUTABLE = new Object();
 
