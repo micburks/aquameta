@@ -4,11 +4,11 @@ import datumRouter from './datumRouter.js';
 import pageMiddleware from './pageMiddleware.js';
 import Koa from 'koa';
 import mount from 'koa-mount';
-import debug from 'debug';
+// import debug from 'debug';
 import type {ClientOptions, ConnectionOptions} from 'aquameta-datum';
 
 const app = new Koa();
-const log = debug('index');
+// const log = debug('index');
 
 /*
  * TODOs
@@ -60,7 +60,7 @@ const defaultConfig: Options = {
   },
 };
 
-export default function(config) {
+export default function(config: Options) {
   config = Object.assign({}, defaultConfig, config);
 
   if (config.client) {

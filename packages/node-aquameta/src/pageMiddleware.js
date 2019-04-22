@@ -1,31 +1,31 @@
-import debug from 'debug';
+// import debug from 'debug';
 import {client, database, query} from 'aquameta-datum';
+import {compose} from 'ramda';
 
-const log = debug('datumMiddleware');
-/**
-
-create view endpoint.sitemap as
-select r.path, m.mimetype, r.content
-from endpoint.resource r
-  join endpoint.mimetype m on m.id=r.mimetype_id;
-
-*/
+// const log = debug('datumMiddleware');
 const sitemap = database.relation('endpoint.sitemap');
+
 export default function(config) {
+  const dbClient = client.connection(config);
+  const executeQuery = compose(
+    query(dbClient),
+    database.select,
+  );
   return async (ctx, next) => {
-    if (ctx.req.method !== 'GET') return;
+    if (ctx.req.method !== 'GET') {
+      return next();
+    }
 
     try {
-      const result = await query(
-        client.connection(config),
-        database.select(database.where('path', ctx.req.url, sitemap)),
+      const result = await executeQuery(
+        database.where('path', ctx.req.url, sitemap),
       );
-
       const response = JSON.parse(result.response);
 
-      if (response.length === 0) {
+      if (!response || !response.result || response.result.length === 0) {
         console.log('no page');
         // debug('page not found')
+        ctx.status = 404;
         return next();
       }
 
@@ -38,7 +38,7 @@ export default function(config) {
       console.log('error', err);
       // debug(err)
       // debug('error in endpoint.request query', err)
-      next();
+      return next();
     }
   };
 }
