@@ -1,5 +1,4 @@
 // @flow
-// TODO this can also be run from node
 
 import {fetch} from './fetch.js';
 import type {Client, Executable, QueryResult, WhereOps} from '../types.js';
