@@ -7,13 +7,12 @@
   "jsnext:main": "dist/aquameta.es.js",
   "scripts": {
     "build": "rollup -c",
-    "build:watch": "nodemon --watch src --exec 'npm run build'",
+    "build-w": "nodemon --watch src --exec 'yarn build'",
     "preversion": "npm test",
     "version": "npm run build # Get current version",
     "postversion": "git push && git push --tags",
     "serve": "nodemon --watch dist bin/www",
-    "serve:watch": "parallelshell 'npm run build:watch' 'npm run serve'",
-    "pretest": "npm run build",
+    "watch": "run-p build-w serve",
     "test": "nyc mocha"
   },
   "bin": "bin/www",
@@ -41,7 +40,7 @@
   "devDependencies": {
     "debug": "^2.6.9",
     "nodemon": "^1.12.1",
-    "parallelshell": "^3.0.2",
+    "npm-run-all": "^4.1.5",
     "rollup": "^0.57.1",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.3.0"
