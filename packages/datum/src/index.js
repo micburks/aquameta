@@ -7,3 +7,5 @@ import * as database from './database/index.js';
 export type * from './types.js';
 
 export {client, database, query};
+
+export type * from './types.js';

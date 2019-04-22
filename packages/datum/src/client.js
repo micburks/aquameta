@@ -1,16 +1,6 @@
 // @flow
 
-import type {Client} from './types.js';
-
-type ClientOptions = {
-  connection?: boolean,
-  endpoint?: boolean,
-  url?: string,
-  version?: string,
-  sessionCookie?: string,
-  cacheRequestMilliseconds?: number,
-  sockets?: boolean,
-};
+import type {Client, ClientOptions} from './types.js';
 
 const defaultConfig: ClientOptions = {
   url: 'endpoint',
