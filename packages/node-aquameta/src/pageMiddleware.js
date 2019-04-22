@@ -1,7 +1,7 @@
-import debug from 'debug'
-import { client, database, query } from 'aquameta-datum'
+import debug from 'debug';
+import {client, database, query} from 'aquameta-datum';
 
-const log = debug('datumMiddleware')
+const log = debug('datumMiddleware');
 /**
 
 create view endpoint.sitemap as
@@ -11,36 +11,34 @@ from endpoint.resource r
 
 */
 const sitemap = database.relation('endpoint.sitemap');
-export default function (config) {
+export default function(config) {
   return async (ctx, next) => {
-    if (ctx.req.method !== 'GET') return
+    if (ctx.req.method !== 'GET') return;
 
     try {
       const result = await query(
         client.connection(config),
-        database.select(
-          database.where('path', ctx.req.url, sitemap)
-        )
-      )
+        database.select(database.where('path', ctx.req.url, sitemap)),
+      );
 
-      const response = JSON.parse(result.response)
+      const response = JSON.parse(result.response);
 
       if (response.length === 0) {
-        console.log('no page')
+        console.log('no page');
         // debug('page not found')
-        return next()
+        return next();
       }
 
-      const page = response.result[0].row
+      const page = response.result[0].row;
 
-      ctx.status = result.status
-      ctx.set('Content-Type', page.mimetype)
-      ctx.body = page.content
+      ctx.status = result.status;
+      ctx.set('Content-Type', page.mimetype);
+      ctx.body = page.content;
     } catch (err) {
-      console.log('error', err)
+      console.log('error', err);
       // debug(err)
       // debug('error in endpoint.request query', err)
-      next()
+      next();
     }
-  }
+  };
 }
