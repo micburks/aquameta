@@ -78,7 +78,7 @@ export const order = addOrder;
 export const orderBy = order;
 export const orderByAsc = addOrder('asc');
 export const orderByDesc = addOrder('desc');
-export const orderByRandom = addOrder('random()');
+// export const orderByRandom = addOrder('random()'); // TODO: not supported by endpoint.request
 
 export const limit = addArg('limit');
 export const offset = addArg('offset');
