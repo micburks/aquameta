@@ -1,11 +1,11 @@
-import datumRouter from './datumRouter.js'
-import pageMiddleware from './pageMiddleware.js'
-import Koa from 'koa'
-import mount from 'koa-mount'
-import debug from 'debug'
+import datumRouter from './datumRouter.js';
+import pageMiddleware from './pageMiddleware.js';
+import Koa from 'koa';
+import mount from 'koa-mount';
+import debug from 'debug';
 
-const app = new Koa()
-const log = debug('index')
+const app = new Koa();
+const log = debug('index');
 
 /*
  * TODOs
@@ -18,7 +18,7 @@ const log = debug('index')
  * regarding auth role call
  * data requests are one db hit per request, so we can always just look up the user
  * with regular request, we dont want to check auth role with every db request
- *   the point of server-side logic is to do multiple requests and harder computation 
+ *   the point of server-side logic is to do multiple requests and harder computation
  *     this would suck if every db hit had to do an additional user lookup
  * we dont even want to do a user lookup with every HTTP request
  * we only want to lookup up user if we are going to hit the db on this request
@@ -46,31 +46,29 @@ const defaultConfig = {
   roles: false,
   connection: {
     user: 'mickey',
-    database: 'aquameta'
+    database: 'aquameta',
   },
-  node: false
-}
+  node: false,
+};
 
-export default function (config) {
-  config = Object.assign({}, defaultConfig, config)
+export default function(config) {
+  config = Object.assign({}, defaultConfig, config);
 
   if (config.client) {
     // Register Client-side API route
-    const datum = datumRouter(config)
+    const datum = datumRouter(config);
 
-    app
-      .use(datum.routes())
-      .use(datum.allowedMethods())
+    app.use(datum.routes()).use(datum.allowedMethods());
   }
 
   if (config.pages) {
     // Register middleware that looks for matching database-mounted resources
-    app.use(pageMiddleware(config))
+    app.use(pageMiddleware(config));
   }
 
   if (config.node) {
-    return app.callback()
+    return app.callback();
   } else {
-    return mount(app)
+    return mount(app);
   }
 }
