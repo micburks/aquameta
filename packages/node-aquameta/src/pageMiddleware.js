@@ -10,17 +10,16 @@ from endpoint.resource r
   join endpoint.mimetype m on m.id=r.mimetype_id;
 
 */
+const sitemap = database.relation('endpoint.sitemap');
 export default function (config) {
   return async (ctx, next) => {
     if (ctx.req.method !== 'GET') return
 
     try {
       const result = await query(
-        client(config),
+        client.connection(config),
         database.select(
-          database.where('path', ctx.req.url)(
-            database.relation('endpoint.sitemap')
-          )
+          database.where('path', ctx.req.url, sitemap)
         )
       )
 

@@ -18,7 +18,7 @@ export default function (config) {
 
     try {
       const result = await query(
-        client({ connection: true }),
+        client.connection(),
         database.http(ctx.request)
       )
 

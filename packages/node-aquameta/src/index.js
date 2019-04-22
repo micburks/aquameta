@@ -1,5 +1,5 @@
-import datumRouter from './datumRouter.mjs'
-import pageMiddleware from './pageMiddleware.mjs'
+import datumRouter from './datumRouter.js'
+import pageMiddleware from './pageMiddleware.js'
 import Koa from 'koa'
 import mount from 'koa-mount'
 import debug from 'debug'
