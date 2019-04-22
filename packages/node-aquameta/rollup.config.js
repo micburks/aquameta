@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs'
 import resolve from 'rollup-plugin-node-resolve'
+import flow from 'rollup-plugin-flow'
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
@@ -22,9 +23,10 @@ export default {
   input: 'src/index.js',
   external,
   plugins: [
+    flow(),
     resolve({
       only: ['aquameta-datum', 'isomorphic-fetch', 'ramda']
-    })
+    }),
   ],
   output: [{
     banner,

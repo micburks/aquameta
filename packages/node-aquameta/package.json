@@ -43,6 +43,7 @@
     "nodemon": "^1.12.1",
     "parallelshell": "^3.0.2",
     "rollup": "^0.57.1",
+    "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-resolve": "^3.3.0"
   },
   "files": [
