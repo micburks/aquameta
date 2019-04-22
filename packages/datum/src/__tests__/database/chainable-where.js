@@ -22,7 +22,7 @@ test('#where - #equals - adds proper where object to args', t => {
   t.end();
 });
 
-test.skip('#where - #equals - can be called with all arguments', t => {
+test('#where - #equals - can be called with all arguments', t => {
   const name = 'name';
   const op = '=';
   const value = 'my_widget';

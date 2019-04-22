@@ -21,21 +21,41 @@ function concat(val1: Array<mixed>, val2: Array<mixed>): Array<mixed> {
   return [...val1, ...val2];
 }
 
-// (fn, str, str) => any
-const applyOrderArgs = curry<(any) => any, Direction, string, void>(
-  (fn: any => any, direction: Direction, column: string): void =>
-    fn({column, direction}),
+// (fn, str, str, exec) => exec
+const applyOrderArgs = curry<
+  (any, Executable) => Executable,
+  Direction,
+  string,
+  Executable,
+  Executable,
+>(
+  (
+    fn: (any, Executable) => Executable,
+    direction: Direction,
+    column: string,
+    chainable: Executable,
+  ): Executable => fn({column, direction}, chainable),
 );
 
-// TODO: in these two functions, we could check that no extra arguments were passed in and throw a helpful message otherwise.
-
-// (fn, str, str, any) => any
-const applyWhereArgs = curry<(any) => any, WhereOps, string, any, void>(
-  (fn: any => any, op: WhereOps, name: string, value: any): void =>
-    fn({name, op, value}),
+// (fn, str, str, exec) => exec
+const applyWhereArgs = curry<
+  (any, Executable) => Executable,
+  WhereOps,
+  string,
+  any,
+  Executable,
+  Executable,
+>(
+  (
+    fn: (any, Executable) => Executable,
+    op: WhereOps,
+    name: string,
+    value: any,
+    chainable: Executable,
+  ): Executable => fn({name, op, value}, chainable),
 );
 
-// (fn, str, any, chainable) => chainable
+// (fn, str, any, exec) => exec
 const setProp = curry<(mixed, mixed) => mixed, string, any, Executable, any>(
   (
     functor: (mixed, mixed) => mixed,
@@ -49,7 +69,7 @@ const setProp = curry<(mixed, mixed) => mixed, string, any, Executable, any>(
 
     const argValue = functor(chainable.args[clause], val);
 
-    if (argValue == undefined || argValue == null) {
+    if (typeof argValue === 'undefined' || argValue == null) {
       throw new TypeError('chainable: invalid argument value');
     }
 
@@ -79,11 +99,6 @@ export const addArrayArg = setProp(concatAsArrays);
 
 // (str, str, chainable) => chainable
 export const addOrder = applyOrderArgs(addArrayArg('order'));
-/* I have to use these functions a little more before I decide to rewrite them. The interface might lock you into using it an a more sane way than without. But I guess flexibility might be better.
-export const addOrder = curry((direction: Direction, column: string, val: any, chainable: Excecutable) => {
-  return addArrayArg('order', {direction, column}, val, chainable);
-}
-*/
 
 // (str, str, any, chainable) => chainable
 export const addWhere = applyWhereArgs(addArrayArg('where'));
