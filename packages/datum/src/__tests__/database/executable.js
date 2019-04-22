@@ -25,13 +25,12 @@ test('#http - parses source url', t => {
   };
 
   const executable = database.http(req);
+  console.log(executable);
 
   t.is(executable.method, 'GET');
-  t.is(executable.url, 'relation/widget/widget');
+  t.is(executable.url, req.url);
   t.deepEqual(executable.args, {
     source: true,
-    include: ['js'],
-    where: [{name: 'name', op: '=', value: 'Component'}],
   });
   t.is(executable.data, null);
   t.end();
