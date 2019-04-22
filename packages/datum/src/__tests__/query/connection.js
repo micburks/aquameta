@@ -7,7 +7,7 @@ test('#connection', async t => {
   const fakeRow = {name: 'fake-name'};
   let loggedIn = false;
 
-  const fakeQuery = (queryString, args) => {
+  const fakeQuery = queryString => {
     if (/^select .* role_name from endpoint.session/.test(queryString)) {
       loggedIn = true;
       return {rows: [{role_name: 'logged-in-user'}]};
@@ -35,7 +35,7 @@ test('#connection', async t => {
     return clientAPI;
   });
 
-  const client = {host: 'override-host', sessionId: '123'};
+  const client = {sessionId: '123', connection: {host: 'override-host'}};
   const result = await connection(client, {});
   t.is(result, fakeRow, 'returns data');
   t.is(
@@ -51,7 +51,7 @@ test('#connection', async t => {
 test('#connection - without sessionId', async t => {
   const fakeRow = {name: 'fake-name'};
 
-  const fakeQuery = (queryString, args) => {
+  const fakeQuery = queryString => {
     if (/^select .* role_name from endpoint.session/.test(queryString)) {
       t.fail('tried to login');
     } else {

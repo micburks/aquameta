@@ -5,7 +5,6 @@ import {
   order,
   orderByAsc,
   orderByDesc,
-  orderByRandom,
   limit,
   exclude,
 } from '../../database/chainable.js';
@@ -27,17 +26,14 @@ test('#order - adds proper object to args', t => {
 test('#order - asc/desc add value', t => {
   const ascColumn = 'name';
   const descColumn = 'updated_at';
-  const randomColumn = 'some_column';
 
   const query = compose(
     orderByAsc(ascColumn),
     orderByDesc(descColumn),
-    orderByRandom(randomColumn),
   )(rel);
 
   t.true(query.args.order instanceof Array);
   t.deepEqual(query.args.order, [
-    {column: randomColumn, direction: 'random()'},
     {column: descColumn, direction: 'desc'},
     {column: ascColumn, direction: 'asc'},
   ]);
