@@ -72,7 +72,6 @@ export function http(req: HTTPRequest): Executable {
   const {pathname} = parsed;
 
   if (pathname && sourceUrlRegex.test(pathname)) {
-    // TODO: analyze sourceUrl to find if its row/relation/field and query args
     const [, , schemaName, relationName, ...rest] = pathname.split('/');
     const fileName = rest.join('/');
     const lastPeriod = fileName.lastIndexOf('.');
