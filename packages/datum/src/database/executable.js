@@ -66,25 +66,12 @@ type ParsedUrl = {
  * source urls return a single column and have the format: /db/schema/rel/name.column
  */
 const sourceUrlRegex = /^\/db\/.+\/.+\/.+\..+/;
-const source = addArg('source', true);
 export function http(req: HTTPRequest): Executable {
   const parsed: ParsedUrl = url.parse(req.url, true);
   const {pathname} = parsed;
 
   if (pathname && sourceUrlRegex.test(pathname)) {
-    const [, , schemaName, relationName, ...rest] = pathname.split('/');
-    const fileName = rest.join('/');
-    const lastPeriod = fileName.lastIndexOf('.');
-    const name = fileName.slice(0, lastPeriod);
-    const column = fileName.slice(lastPeriod + 1);
-    const rel = relation(`${schemaName}.${relationName}`);
-
-    return compose(
-      select,
-      source,
-      where('name', name),
-      include(column),
-    )(rel);
+    return createExecutable('GET', {url: pathname, args: {source: true}}, null);
   } else {
     return createExecutable(
       req.method,

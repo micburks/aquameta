@@ -34,8 +34,6 @@ async function getConnection(config: any): Promise<PgConnection> {
     return anonClient;
   }
 
-  console.log('trying to login');
-
   let result;
   try {
     result = await anonClient.query(
@@ -79,29 +77,51 @@ export default async function executeConnection(
   try {
     connection = await getConnection(client);
 
-    // TODO: is this where we identify if this is a source request
-
-    console.log(
-      'trying connection',
-      client.version,
-      query.method,
-      query.url,
-      JSON.stringify(query.args),
-      JSON.stringify(query.data),
-    );
-    const result = await connection.query(
-      'select status, message, response, mimetype ' +
-        'from endpoint.request($1, $2, $3, $4::json, $5::json)',
-      [
+    let result;
+    if (query.args.source) {
+      const {schemaName, relationName, column, name} = parseSourceUrl(
+        query.url,
+      );
+      const queryResult = await connection.query(
+        `
+        select content, mimetype
+        from (select $1 as content, '$1' as extension from $3.$4 where name='$2') as c
+        join endpoint.mimetype_extension me on c.extension=me.extension
+        join endpoint.mimetype m on me.mimetype_id=m.id;
+      `,
+        [column, name, schemaName, relationName],
+      );
+      result = {...queryResult};
+      if (result && result.rows && result.rows.length !== 0) {
+        result.status = 200;
+        result.message = 'OK';
+      } else {
+        result.status = 404;
+        result.status = 'NOT FOUND';
+      }
+    } else {
+      console.log(
+        'trying connection',
         client.version,
         query.method,
         query.url,
         JSON.stringify(query.args),
         JSON.stringify(query.data),
-      ],
-    );
+      );
+      result = await connection.query(
+        'select status, message, response, mimetype ' +
+          'from endpoint.request($1, $2, $3, $4::json, $5::json)',
+        [
+          client.version,
+          query.method,
+          query.url,
+          JSON.stringify(query.args),
+          JSON.stringify(query.data),
+        ],
+      );
+    }
 
-    // end connection if userClient, but release if anonClient?
+    // TODO: end connection if userClient, but release if anonClient?
     await connection.end();
 
     return result.rows[0];
@@ -138,3 +158,19 @@ export default async function executeConnection(
  * and this way, pg will keep track of the pools and not create a new one when
  * the same config has been passed in twice
  */
+
+type ParsedSourceUrl = {
+  schemaName: string,
+  relationName: string,
+  column: string,
+  name: string,
+};
+function parseSourceUrl(pathname: string): ParsedSourceUrl {
+  const [, , schemaName, relationName, ...rest] = pathname.split('/');
+  const fileName = rest.join('/');
+  const lastPeriod = fileName.lastIndexOf('.');
+  const name = fileName.slice(0, lastPeriod);
+  const column = fileName.slice(lastPeriod + 1);
+
+  return {schemaName, relationName, column, name};
+}
