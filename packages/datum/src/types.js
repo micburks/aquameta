@@ -34,6 +34,7 @@ export type Executable = {
   url: string,
   args: {[string]: mixed | Array<mixed>},
   data: ?{[string]: mixed},
+  version: ?string,
   type: {},
 };
 
