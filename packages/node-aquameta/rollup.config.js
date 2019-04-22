@@ -10,14 +10,16 @@ const external = [
   'koa-mount',
   'koa-router',
   'koa-session',
-  'pg'
+  'node-fetch',
+  'pg',
+  'url'
 ]
 
 const banner = readFileSync('./banner.js', 'utf-8')
   .replace('${version}', pkg.version)
 
 export default {
-  input: 'src/index.mjs',
+  input: 'src/index.js',
   external,
   plugins: [
     resolve({
