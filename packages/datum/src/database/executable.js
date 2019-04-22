@@ -28,8 +28,8 @@ const createExecutable = curry<
   ): Executable => ({
     method,
     url: chainable.url,
-    args: chainable.args,
-    data,
+    args: chainable.args, // SELECT, UPDATE, DELETE use args
+    data, // UPDATE and INSERT use data
     type: EXECUTABLE,
   }),
 );
@@ -38,9 +38,6 @@ export function isInvalidExecutable(executable: Executable): boolean {
   return !(executable.type === EXECUTABLE);
 }
 
-/**
- * turn relation into executable
- */
 // $FlowFixMe
 export const del = createExecutable(getMethodFromType(DELETE), (__: any), null);
 export const insert = createExecutable(getMethodFromType(INSERT));
@@ -51,14 +48,13 @@ export const select = createExecutable(
 );
 export const update = createExecutable(getMethodFromType(UPDATE));
 
-// TODO
 type ParsedUrl = {
   pathname?: string,
   query?: {[string]: mixed},
 };
 
 /**
- * parse http request and return executable
+ * Parse http request and return executable
  *
  * e.g.
  * query(
@@ -66,28 +62,9 @@ type ParsedUrl = {
  *   database.http(req)
  * ).then(...).catch(...)
  *
- *
- * source urls reference a field and therefore return a "file" with a mimetype
- * it doesn't make sense to have a database.source() function
- *
- * parse source url and return executable
- *
- * e.g.
- * query(
- *   client.connection(),
- *   database.source(req.url)
- * ).then(...).catch(...)
- *
- * on server:
- * doesnt make sense to use this on the server, you still need other information from http request
- * in that case, http can emcompass both functionalities and just figure out how to parse the request
- *
- * in browser:
- * from the client, you wouldn't want to use datum to get files. you would just use fetch or whatever
- * you normally use. source urls are meant to be compatible with current technologies, not accessed
- * thorugh datum
+ * http requests are either datum calls or source urls
+ * source urls return a single column and have the format: /db/schema/rel/name.column
  */
-// /db/schema/rel/name.column
 const sourceUrlRegex = /^\/db\/.+\/.+\/.+\..+/;
 const source = addArg('source', true);
 export function http(req: HTTPRequest): Executable {
@@ -105,17 +82,10 @@ export function http(req: HTTPRequest): Executable {
 
     return compose(
       select,
-      source, // TODO?: need to identify this as a source request
+      source,
       where('name', name),
       include(column),
     )(rel);
-    /*
-    return createExecutable(
-      'GET',
-      {url: `/${parsed.pathname.replace(sourceUrlRegex, '')}`, args: {}},
-      null,
-    );
-    */
   } else {
     return createExecutable(
       req.method,
