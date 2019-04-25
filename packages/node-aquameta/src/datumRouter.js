@@ -24,8 +24,8 @@ export default function(config) {
     console.log(ctx.request.url);
 
     const url = sourceRegex.test(ctx.request.url)
-      ? ctx.request.url.replace(pathRegex, '')
-      : ctx.request.url;
+      ? ctx.request.url
+      : ctx.request.url.replace(pathRegex, '');
     //debug('datum request', req.url, req.method, req.query, req.body)
 
     try {
