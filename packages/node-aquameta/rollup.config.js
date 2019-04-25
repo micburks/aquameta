@@ -1,8 +1,8 @@
-import { readFileSync } from 'fs'
-import resolve from 'rollup-plugin-node-resolve'
-import flow from 'rollup-plugin-flow'
+import {readFileSync} from 'fs';
+import resolve from 'rollup-plugin-node-resolve';
+import flow from 'rollup-plugin-flow';
 
-const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
+const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 const external = [
   'debug',
@@ -13,11 +13,13 @@ const external = [
   'koa-session',
   'node-fetch',
   'pg',
-  'url'
-]
+  'url',
+];
 
-const banner = readFileSync('./banner.js', 'utf-8')
-  .replace('${version}', pkg.version)
+const banner = readFileSync('./banner.js', 'utf-8').replace(
+  '${version}',
+  pkg.version,
+);
 
 export default {
   input: 'src/index.js',
@@ -25,17 +27,20 @@ export default {
   plugins: [
     flow(),
     resolve({
-      only: ['aquameta-datum', 'isomorphic-fetch', 'ramda']
+      only: ['aquameta-datum', 'isomorphic-fetch', 'ramda'],
     }),
   ],
-  output: [{
-    banner,
-    name: 'aquameta',
-    file: pkg.main,
-    format: 'cjs'
-  }, {
-    banner,
-    file: pkg.module,
-    format: 'es'
-  }]
-}
+  output: [
+    {
+      banner,
+      name: 'aquameta',
+      file: pkg.main,
+      format: 'cjs',
+    },
+    {
+      banner,
+      file: pkg.module,
+      format: 'es',
+    },
+  ],
+};

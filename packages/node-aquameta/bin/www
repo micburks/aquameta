@@ -1,13 +1,12 @@
 #!/usr/bin/env node
+/* globals require process */
 
-const Koa = require('koa')
-const aquameta = require('../dist/aquameta.js')
+const Koa = require('koa');
+const aquameta = require('../dist/aquameta.js');
 
-const app = new Koa()
-const port = parseInt(process.env.PORT, 10) || 8080
+const app = new Koa();
+const port = parseInt(process.env.PORT, 10) || 8080;
 
-app
-  .use(aquameta({}))
-  .listen(port, () => {
-    console.log(`listening on port ${port}`)
-  })
+app.use(aquameta({})).listen(port, () => {
+  console.log(`listening on port ${port}`);
+});
