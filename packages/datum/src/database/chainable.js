@@ -47,8 +47,8 @@ export function fn(name: string, args: Array<string> | {[string]: mixed}): Fn {
   return {
     schemaName,
     fnName,
-    url: `fn/${schemaName}/${fnName}`,
-    args: {args: fnArgs},
+    url: `function/${schemaName}/${fnName}`,
+    args: {args: [fnArgs]}, // This is an array in endpoint functions
   };
 }
 
