@@ -23,7 +23,9 @@ export default function(config) {
     //debug('datum', path, req.url)
     console.log(ctx.request.url);
 
-    const url = sourceRegex.test(ctx.request.url)
+    const isSource = sourceRegex.test(ctx.request.url);
+
+    const url = isSource
       ? ctx.request.url
       : ctx.request.url.replace(pathRegex, '');
     //debug('datum request', req.url, req.method, req.query, req.body)
@@ -32,9 +34,19 @@ export default function(config) {
       const result = await executeHTTPQuery({...ctx.request, url});
 
       // debug(result)
-      ctx.status = result.status;
-      ctx.set('Content-Type', result.mimetype);
-      ctx.body = result.response;
+      if (isSource) {
+        const response = JSON.parse(result.response);
+        if (response && response.result && response.result[0]) {
+          const source = response.result[0].row;
+          ctx.status = source.status;
+          ctx.set('Content-Type', source.mimetype);
+          ctx.body = source.response;
+        }
+      } else {
+        ctx.status = result.status;
+        ctx.set('Content-Type', result.mimetype);
+        ctx.body = result.response;
+      }
     } catch (error) {
       // debug(error);
       ctx.throw(error);
