@@ -12,7 +12,8 @@ export default function(config) {
     database.select,
   );
   return async (ctx, next) => {
-    if (ctx.req.method !== 'GET') {
+    if (ctx.req.method !== 'GET' || ctx.body) {
+      // Skip if body already set
       return next();
     }
 
