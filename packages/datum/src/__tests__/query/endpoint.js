@@ -7,7 +7,7 @@ test('#endpoint', async t => {
   const fakeFetch = (url, options) => {
     t.is(url, '/db/v3/relation/endpoint/session');
     t.is(options.method, 'POST');
-    t.is(options.body, undefined, 'body is not added with no data');
+    t.is(options.body, void 0, 'body is not added with no data');
     t.true('credentials' in options, 'some form of credentials are used');
     return {
       json: sinon.fake(),

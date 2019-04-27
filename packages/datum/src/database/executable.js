@@ -92,11 +92,15 @@ export function http(req: HTTPRequest): Executable | null {
     )(func);
   } else if (pathname) {
     // $FlowFixMe
+    /*
+    // TODO: does something need to happen here with versions?
     const [, version] = /\/?(.+)\//.exec(pathname);
+    console.log(version);
     const urlPath = pathname.replace(/\/?.+\//, '');
+    */
     return createExecutable(
       req.method,
-      {url: urlPath, args: parsed.query || {}, version},
+      {url: pathname, args: parsed.query || {}},
       req.body || null,
     );
   } else {
