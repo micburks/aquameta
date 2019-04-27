@@ -8,6 +8,7 @@ const defaultConfig: ClientOptions = {
   sessionCookie: 'SESSION_ID',
   cacheRequestMilliseconds: 5000,
   sockets: false,
+  rawResponse: false,
 };
 
 const ENDPOINT = new Object();

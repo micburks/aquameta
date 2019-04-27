@@ -8,6 +8,7 @@ export type Client = {
   cacheRequestMilliseconds: number,
   sockets: boolean,
   connection?: ConnectionOptions,
+  rawResponse: boolean,
 };
 
 export type ClientOptions = {
@@ -17,6 +18,7 @@ export type ClientOptions = {
   cacheRequestMilliseconds?: number,
   sockets?: boolean,
   connection?: ConnectionOptions,
+  rawResponse?: boolean,
 };
 
 export type ConnectionOptions = {

@@ -41,7 +41,13 @@ export default async function executeEndpoint(
     );
 
     // Let client deal with status codes
-    return response.json();
+    if (client.rawResponse) {
+      return response;
+    } else {
+      return response.json().then(r => {
+        return r.result.map(({row}) => row);
+      });
+    }
   } catch (error) {
     // Log error in collapsed group
     console.groupCollapsed(query.method, error.statusCode, error.title);
