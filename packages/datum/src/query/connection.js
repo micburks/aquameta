@@ -133,7 +133,14 @@ export default async function executeConnection(
     // TODO: end connection if userClient, but release if anonClient?
     await connection.end();
 
-    return result.rows[0];
+    const res = new Result(result.rows[0]);
+    if (client.rawResponse) {
+      return res;
+    } else {
+      return res.json().then(r => {
+        return r.result.map(({row}) => row);
+      });
+    }
   } catch (e) {
     // Problem with connecting to database
     console.error(`connection: error trying to connect to database`);
@@ -142,6 +149,28 @@ export default async function executeConnection(
       await connection.end();
     }
     return null;
+  }
+}
+
+type ResultArgs = {
+  status: string,
+  message: string,
+  response: string,
+  mimetype: string,
+};
+class Result {
+  status: string;
+  statusText: string;
+  response: string;
+  mimetype: string;
+  constructor({status, message, response, mimetype}: ResultArgs) {
+    this.status = status;
+    this.statusText = message;
+    this.response = response;
+    this.mimetype = mimetype;
+  }
+  async json(): Promise<{[string]: any}> {
+    return JSON.parse(this.response);
   }
 }
 
