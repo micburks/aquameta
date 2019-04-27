@@ -1,7 +1,7 @@
 // @flow
 
 import {__} from 'ramda';
-import {addArg, addArrayArg, addOrder, addWhere} from './args.js';
+import {addArg, addNestedArrayArg, addOrder, addWhere} from './args.js';
 import type {Fn, Relation} from '../types.js';
 
 export function relation(name: string): Relation {
@@ -85,7 +85,7 @@ export const offset = addArg('offset');
 export const evented = addArg('evented');
 export const metaData = addArg('metaData');
 
-export const exclude = addArrayArg('exclude');
+export const exclude = addNestedArrayArg('exclude');
 export const excludeColumn = exclude;
-export const include = addArrayArg('include');
+export const include = addNestedArrayArg('include');
 export const includeColumn = include;

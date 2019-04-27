@@ -18,7 +18,7 @@ const asArray: (mixed | Array<mixed>) => Array<mixed> = cond([
 
 // ([a], [b]) => [a, b]
 function concat(val1: Array<mixed>, val2: Array<mixed>): Array<mixed> {
-  return [...val1, ...val2];
+  return [].concat(val1, val2);
 }
 
 // (fn, str, str, exec) => exec
@@ -93,9 +93,19 @@ function concatAsArrays(val1: mixed | Array<mixed>, val2: mixed): Array<mixed> {
   return concat(asArray(val1), asArray(val2));
 }
 
+// (a|[a], b|[b]) => [[a, b]]
+function concatAsNestedArrays(
+  val1: mixed | Array<mixed>,
+  val2: mixed,
+): Array<mixed> {
+  // TODO: This is super hacky. endpoint.rows_select expects a nested array [['val']]
+  return [concat(asArray(val1 ? val1[0] : []), asArray(val2))];
+}
+
 // (str, any, chainable) => chainable
 export const addArg = setProp(valIdentity);
 export const addArrayArg = setProp(concatAsArrays);
+export const addNestedArrayArg = setProp(concatAsNestedArrays);
 
 // (str, str, chainable) => chainable
 export const addOrder = applyOrderArgs(addArrayArg('order'));
