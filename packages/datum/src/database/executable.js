@@ -85,14 +85,7 @@ export function http(req: HTTPRequest): Executable | null {
       column,
       name,
     ]);
-    /*
-    ({
-      schema_name: schemaName,
-      relation_name: relationName,
-      column_name: column,
-      name,
-    });
-    */
+    // $FlowFixMe
     return compose(
       select,
       source,
