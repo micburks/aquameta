@@ -49,7 +49,7 @@ test('#exclude - adds array values', t => {
   )(rel);
 
   t.true(query.args.exclude instanceof Array);
-  t.deepEqual(query.args.exclude, columns);
+  t.deepEqual(query.args.exclude, [columns]);
   t.end();
 });
 

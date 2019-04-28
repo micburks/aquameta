@@ -61,11 +61,12 @@ async function getConnection(config?: {
   await anonClient.end();
 
   // Logged in
-  const user = result.rows[0].role_name;
-  console.log(`connection: logged in as ${user}`);
+  const userResult = new Result(result.rows[0]);
+  const user = await userResult.json();
+  console.log(`connection: logged in as ${user.role_name}`);
   const userClient = new pg.Client({
     ...mergedConfig,
-    user,
+    user: user.role_name,
   });
   await userClient.connect();
   return userClient;
@@ -159,6 +160,7 @@ type ResultArgs = {
   response: string,
   mimetype: string,
 };
+// Mimic response from fetch
 class Result {
   status: string;
   statusText: string;
