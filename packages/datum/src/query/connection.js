@@ -84,8 +84,7 @@ export default async function executeConnection(
 
   try {
     connection = await getConnection(client);
-
-    let result;
+    // let result;
     /*
     if (query.args && query.args.source) {
       const {schemaName, relationName, column, name} = parseSourceUrl(
@@ -119,7 +118,7 @@ export default async function executeConnection(
       JSON.stringify(query.data),
     );
     // $FlowFixMe
-    result = await connection.query(
+    const result = await connection.query(
       'select status, message, response, mimetype ' +
         'from endpoint.request($1, $2, $3, $4::json, $5::json)',
       [
