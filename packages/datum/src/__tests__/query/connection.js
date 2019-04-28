@@ -10,9 +10,19 @@ test('#connection', async t => {
   const fakeQuery = queryString => {
     if (/^select .* role_name from endpoint.session/.test(queryString)) {
       loggedIn = true;
-      return {rows: [{role_name: 'logged-in-user'}]};
+      return {
+        rows: [
+          {
+            response: JSON.stringify({
+              result: [{row: {role_name: 'logged-in-user'}}],
+            }),
+          },
+        ],
+      };
     } else {
-      return {rows: [fakeRow]};
+      return {
+        rows: [{response: JSON.stringify({result: [{row: fakeRow}]})}],
+      };
     }
   };
   const clientAPI = {
@@ -35,9 +45,12 @@ test('#connection', async t => {
     return clientAPI;
   });
 
-  const client = {sessionId: '123', connection: {host: 'override-host'}};
-  const result = await connection(client, {});
-  t.is(result, fakeRow, 'returns data');
+  const client = {
+    sessionId: '123',
+    connection: {host: 'override-host'},
+  };
+  const user = await connection(client, {});
+  t.deepEquals(user[0], fakeRow, 'returns data');
   t.is(
     clientAPI.connect.callCount,
     clientAPI.end.callCount,
@@ -55,7 +68,15 @@ test('#connection - without sessionId', async t => {
     if (/^select .* role_name from endpoint.session/.test(queryString)) {
       t.fail('tried to login');
     } else {
-      return {rows: [fakeRow]};
+      return {
+        rows: [
+          {
+            response: JSON.stringify({
+              result: [{row: fakeRow}],
+            }),
+          },
+        ],
+      };
     }
   };
   const clientAPI = {
@@ -70,7 +91,7 @@ test('#connection - without sessionId', async t => {
   });
 
   const result = await connection({}, {});
-  t.is(result, fakeRow, 'returns data');
+  t.deepEqual(result[0], fakeRow, 'returns data');
   t.is(
     clientAPI.connect.callCount,
     clientAPI.end.callCount,
@@ -86,9 +107,25 @@ test('#connection - uses anonymous if login fails', async t => {
 
   const fakeQuery = queryString => {
     if (/^select .* role_name from endpoint.session/.test(queryString)) {
-      return {rows: null};
+      return {
+        rows: [
+          {
+            response: JSON.stringify({
+              result: [],
+            }),
+          },
+        ],
+      };
     } else {
-      return {rows: [fakeRow]};
+      return {
+        rows: [
+          {
+            response: JSON.stringify({
+              result: [{row: fakeRow}],
+            }),
+          },
+        ],
+      };
     }
   };
   const clientAPI = {
@@ -102,9 +139,9 @@ test('#connection - uses anonymous if login fails', async t => {
     return clientAPI;
   });
 
-  const client = {sessionId: '123'};
+  const client = {rawSession: true, sessionId: '123'};
   const result = await connection(client, {});
-  t.is(result, fakeRow, 'still returns data');
+  t.deepEqual(result[0], fakeRow, 'still returns data');
   t.is(
     clientAPI.connect.callCount,
     clientAPI.end.callCount,
@@ -115,7 +152,7 @@ test('#connection - uses anonymous if login fails', async t => {
   t.end();
 });
 
-test.skip('#connection - deals with error in running queries', async t => {
+test('#connection - deals with error in running queries', async t => {
   const fakeQuery = () => {
     throw new Error('db connection failed');
   };
@@ -161,7 +198,15 @@ test('#connection - passes all query params', async t => {
         JSON.stringify(query.args),
         JSON.stringify(query.data),
       ]);
-      return {rows: [{}]};
+      return {
+        rows: [
+          {
+            response: JSON.stringify({
+              result: [],
+            }),
+          },
+        ],
+      };
     }
   };
   const clientAPI = {

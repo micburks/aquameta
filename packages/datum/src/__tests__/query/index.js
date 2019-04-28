@@ -34,9 +34,8 @@ test('#query - will execute db connection', async t => {
   const executeConnection = query(client.connection());
 
   const rows = await executeConnection(database.select(rel));
-  const response = JSON.parse(rows.response).result;
 
-  t.true(response instanceof Array);
+  t.true(rows instanceof Array);
   t.end();
 });
 

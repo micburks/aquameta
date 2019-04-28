@@ -10,7 +10,11 @@ test('#endpoint', async t => {
     t.is(options.body, void 0, 'body is not added with no data');
     t.true('credentials' in options, 'some form of credentials are used');
     return {
-      json: sinon.fake(),
+      json: sinon.fake.returns(
+        Promise.resolve({
+          result: [{row: {}}],
+        }),
+      ),
     };
   };
   sinon.stub(fetchExport, 'fetch').callsFake(fakeFetch);
@@ -35,7 +39,11 @@ test('#endpoint - with data', async t => {
     t.is(typeof options.body, 'string', 'body is a string');
     t.is(options.body, '{"key":"value"}', 'body is stringified');
     return {
-      json: sinon.fake(),
+      json: sinon.fake.returns(
+        Promise.resolve({
+          result: [{row: {}}],
+        }),
+      ),
     };
   };
   sinon.stub(fetchExport, 'fetch').callsFake(fakeFetch);
@@ -78,7 +86,11 @@ test('#endpoint - with args', async t => {
       'adds query string',
     );
     return {
-      json: sinon.fake(),
+      json: sinon.fake.returns(
+        Promise.resolve({
+          result: [{row: {}}],
+        }),
+      ),
     };
   };
   sinon.stub(fetchExport, 'fetch').callsFake(fakeFetch);
