@@ -99,6 +99,7 @@ function concatAsNestedArrays(
   val2: mixed,
 ): Array<mixed> {
   // TODO: This is super hacky. endpoint.rows_select expects a nested array [['val']]
+  // $FlowFixMe
   return [concat(asArray(val1 ? val1[0] : []), asArray(val2))];
 }
 
