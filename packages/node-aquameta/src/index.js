@@ -53,6 +53,7 @@ const defaultConfig: Options = {
     cacheRequestMilliseconds: 5000,
     events: false,
     sessionCookie: 'SESSION_ID',
+    rawResponse: true,
   },
   connection: {
     user: 'anonymous',

@@ -35,9 +35,9 @@ export default function(config) {
 
       // debug(result)
       if (isSource) {
-        const response = JSON.parse(result.response);
-        if (response && response.result && response.result[0]) {
-          const source = response.result[0].row;
+        const response = (await result.json()).result;
+        if (response.length > 0) {
+          const source = response[0].row;
           ctx.status = source.status;
           ctx.set('Content-Type', source.mimetype);
           ctx.body = source.response;
