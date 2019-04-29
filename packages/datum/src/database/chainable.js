@@ -18,6 +18,7 @@ export function relation(name: string): Relation {
   return {
     schemaName,
     relationName,
+    qualified: `${schemaName}.${relationName}`,
     url: `relation/${schemaName}/${relationName}`,
     args: {},
   };
@@ -47,6 +48,7 @@ export function fn(name: string, args: Array<string> | {[string]: mixed}): Fn {
   return {
     schemaName,
     fnName,
+    qualified: `${schemaName}.${fnName}`,
     url: `function/${schemaName}/${fnName}`,
     args: {args: [fnArgs]}, // This is an array in endpoint functions
   };
