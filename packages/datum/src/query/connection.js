@@ -139,7 +139,11 @@ export default async function executeConnection(
       return res;
     } else {
       return res.json().then(r => {
-        return r.result.map(({row}) => row);
+        if (r.result) {
+          return r.result.map(({row}) => row);
+        } else {
+          return [];
+        }
       });
     }
   } catch (e) {
