@@ -82,6 +82,7 @@ export type WhereArgs = {
 export type Relation = {
   schemaName: string,
   relationName: string,
+  qualified: string,
   url: string,
   args: {[string]: mixed},
 };
@@ -89,6 +90,7 @@ export type Relation = {
 export type Fn = {
   schemaName: string,
   fnName: string,
+  qualified: string,
   url: string,
   args: {[string]: mixed},
 };
