@@ -1,6 +1,6 @@
 {
   "name": "aquameta-widget",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Widget rendering framework built on top of Aquameta",
   "main": "dist/build.js",
   "module": "src/index.js",
