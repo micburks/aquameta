@@ -22,7 +22,7 @@ import { client, query } from 'aquameta-datum'
 // `query` is a curried function that takes the `client` and the operation to perform
 // For now, we'll just give it the context of the `client` so we can perform a query later
 const exeucteQuery = query(
-  client({ endpoint: true }) // `endpoint` here refers to fetching from a remote data source
+  client.endpoint() // `endpoint` here refers to fetching from a remote data source
 )
 
 // ...and then later...
@@ -46,7 +46,7 @@ import { client, database, query } from 'aquameta-datum'
 
 // As before...
 const executeQuery = query(
-  client({ endpoint: true })
+  client.endpoint()
 )
 
 // Create the database operation to perform
@@ -76,7 +76,7 @@ import { client, database, util, query } from 'aquameta-datum'
 
 // As before...
 const executeQuery = query(
-  client({ endpoint: true })
+  client.endpoint()
 )
 
 // Pull in a functional utility called `compose`
