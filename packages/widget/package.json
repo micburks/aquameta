@@ -1,6 +1,6 @@
 {
   "name": "aquameta-widget",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Widget rendering framework built on top of Aquameta",
   "main": "dist/build.js",
   "module": "src/index.js",
@@ -34,8 +34,8 @@
     "scope-css": "^1.1.0"
   },
   "devDependencies": {
-    "aquameta": "^0.1.1",
-    "aquameta-sync": "^0.1.1",
+    "aquameta": "^0.1.2",
+    "aquameta-sync": "^0.1.2",
     "babel-core": "^6.26.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",

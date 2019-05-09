@@ -1,6 +1,6 @@
 {
   "name": "aquameta",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Node implementation of the Aquameta server",
   "main": "dist/aquameta.js",
   "module": "dist/aquameta.es.js",
