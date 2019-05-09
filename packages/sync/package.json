@@ -7,7 +7,6 @@
     "import": "bin/import"
   },
   "scripts": {
-    "pretest": "cat setup.sql | psql aquameta",
     "test": "nyc mocha"
   },
   "keywords": [
