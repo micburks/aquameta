@@ -71,28 +71,10 @@ append-transform@^0.4.0:
   dependencies:
     default-require-extensions "^1.0.0"
 
-aquameta-datum@0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/aquameta-datum/-/aquameta-datum-0.0.10.tgz#592b6cea2c6b2c70ab1f2082fda8eb834f7c26a6"
-  integrity sha512-PHQsU8uVs9Rd8GqTWjICIhqq4hw7/Z7MZMXBPoGWiAWkpbqkf36RP6g4REvazYqy5ZrrFz1QqMq36WivDL/S4g==
-  dependencies:
-    pg "^7.4.1"
-    ramda "^0.25.0"
-    whatwg-fetch "^2.0.4"
-
-aquameta-datum@0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/aquameta-datum/-/aquameta-datum-0.0.7.tgz#d4f216fcb0fdf3e38e75a298b5e5714859272b89"
-  integrity sha512-MIw3Mi7FMAY8EmEn24VhcBbcLJCa4WJY4aH0WhfIBtapLzokPDdnBULYz2fJuL+SKuZlWCAgrulH3pzKEk5oKA==
-  dependencies:
-    isomorphic-fetch "^2.2.1"
-    pg "^7.4.1"
-    ramda "^0.25.0"
-
-aquameta-datum@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/aquameta-datum/-/aquameta-datum-0.1.0.tgz#8535a340c0dc50857191a6fb8f578d89c27cb053"
-  integrity sha512-tPyRaRZ2FW8H14QHbpLVNth8Ls43iEL9No7shHTTQgFV11FB2tBg/ZrVVGoZRPvDrdo/hGaMAt6j76PSCu2HQQ==
+aquameta-datum@^0.1.0, aquameta-datum@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/aquameta-datum/-/aquameta-datum-0.1.1.tgz#48f17f8f287ac53c519fecc72aefaa607790a8df"
+  integrity sha512-U9aJI2+XCqBqMgQ4O9Sd6At6l4l2Vhh6rmJw+i10S91T25E6W7ur2sHpW5Orckars9tGi8vHc6QL/Q23CYAJEg==
   dependencies:
     just-compose "^1.1.0"
     just-curry-it "^3.1.0"
@@ -101,21 +83,21 @@ aquameta-datum@^0.1.0:
     ramda "^0.26.1"
     unfetch "^4.1.0"
 
-aquameta-sync@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/aquameta-sync/-/aquameta-sync-0.1.0.tgz#e374fa1cd6f9217fffcdf62e5dca57e372a33b9a"
-  integrity sha512-gVXa/4Hx7UlAoBbPmZdAZLwKSehoOk21ieLESbZVce0pb7aXtW0D+Kl9oG2TiZkTqAiUPFqgkyhALQxDwCaLjw==
+aquameta-sync@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/aquameta-sync/-/aquameta-sync-0.1.2.tgz#0424c5c626c6a22c6cf89f249ceff8a6a31fa038"
+  integrity sha512-r0bXMygzMKx4tgXj/sMRnFK/j4mTM52XHapoV3OuqHEV0PjnU7QcvBtbjZsMRSARZbQp+uX2kn5vjN466aOUvQ==
   dependencies:
-    aquameta-datum "0.0.10"
+    aquameta-datum "^0.1.1"
     meow "^5.0.0"
     ramda "^0.25.0"
 
-aquameta@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/aquameta/-/aquameta-0.1.0.tgz#5beb4dda7d053a87d9be7be7af426b330aca13c0"
-  integrity sha512-1I76fokeOXC7jpl5Pv5KPKwXahQAGbuhJhyVX+tEXhm/RXQgXOCBFnl6ADo7LY37yJcbg+OaYCU5b+2hChWwig==
+aquameta@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/aquameta/-/aquameta-0.1.2.tgz#593bc5094586242da562bd6db64b583f4ffce64d"
+  integrity sha512-4LXavYnX0hvdEFu5Oicw5MWgEC7WGebqZ+XzaoLVn0j9fcw9X7QFLRTvIqzM6unRDam4wSNqVT4VYeRHokfC0g==
   dependencies:
-    aquameta-datum "0.0.7"
+    aquameta-datum "^0.1.0"
     koa "^2.5.0"
     koa-bodyparser "^4.2.0"
     koa-mount "^3.0.0"
@@ -4130,11 +4112,6 @@ whatwg-fetch@>=0.10.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.0.0.tgz#fc804e458cc460009b1a2b966bc8817d2578aefb"
   integrity sha512-9GSJUgz1D4MfyKU7KRqwOjXCXTqWdFNvEr7eUBYchQiVc744mqK/MzXPNR2WsPkmkOa4ywfg8C2n8h+13Bey1Q==
-
-whatwg-fetch@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
-  integrity sha512-dcQ1GWpOD/eEQ97k66aiEVpNnapVj90/+R+SXTPYGHpYBBypfKJEQjLrvMZ7YXbKm21gXd4NcuxUTjiv1YtLng==
 
 which-module@^2.0.0:
   version "2.0.0"

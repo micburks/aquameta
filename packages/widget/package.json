@@ -9,7 +9,7 @@
     "build": "rollup -c --experimentalDynamicImport",
     "dev": "npm run build -- -w",
     "start": "node demo/server.js",
-    "sync": "aq-import data",
+    "sync": "import data",
     "test": "echo \"tests!\""
   },
   "keywords": [
