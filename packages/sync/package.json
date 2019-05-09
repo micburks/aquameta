@@ -4,7 +4,7 @@
   "description": "Import from and export to filesystem from Aquameta database",
   "main": "lib/index.js",
   "bin": {
-    "aq-import": "bin/import"
+    "import": "bin/import"
   },
   "scripts": {
     "test": "echo \"test!\""
