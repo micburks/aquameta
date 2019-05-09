@@ -1,71 +1,64 @@
-const fs = require('fs')
-const { join } = require('path')
-const { compose } = require('ramda')
-const { promisify } = require('util')
-const { client, database: db, query } = require('aquameta-datum')
+/* globals module require */
 
-const readdir = promisify(fs.readdir)
-const readFile = promisify(fs.readFile)
+const fs = require('fs');
+const {join} = require('path');
+const {compose} = require('ramda');
+const {promisify} = require('util');
+const {client, database: db, query} = require('aquameta-datum');
 
-module.exports = readTables
+const readdir = promisify(fs.readdir);
+const readFile = promisify(fs.readFile);
 
-const executeQuery = query(
-  client.connection()
-)
+module.exports = readTables;
 
-async function readTables (path) {
-  const tables = (await readdir(path))
-    .map(async table => {
-      const tablePath = join(path, table)
-      const rel = db.relation(table)
-      const insertRow = compose(
-        executeQuery,
-        db.insert(rel)
-      )
+const executeQuery = query(client.connection());
 
-      const rows = await Promise.all(
-        await readRows(tablePath, insertRow)
-      )
+async function readTables(path) {
+  const tables = (await readdir(path)).map(async table => {
+    const tablePath = join(path, table);
+    const rel = db.relation(table);
+    const insertRow = compose(
+      executeQuery,
+      db.insert(rel),
+    );
 
-      return { table, rows }
-    })
+    const rows = await Promise.all(await readRows(tablePath, insertRow));
 
-  return tables
+    return {table, rows};
+  });
+
+  return tables;
 }
 
-async function readRows (path, insert) {
-  const rows = (await readdir(path))
-    .map(async rowId => {
-      const rowPath = join(path, rowId)
-      const columns = await readColumns(rowPath)
+async function readRows(path, insert) {
+  const rows = (await readdir(path)).map(async rowId => {
+    const rowPath = join(path, rowId);
+    const columns = await readColumns(rowPath);
 
-      const row = {};
-      if (!rowId.endsWith('.no-id')) {
-        // Special case, allow db to generate id
-        row.id = rowId;
-      }
+    const row = {};
+    if (!rowId.endsWith('.no-id')) {
+      // Special case, allow db to generate id
+      row.id = rowId;
+    }
 
-      return insert(
-        Object.assign(row, ...columns)
-      )
-    })
+    return insert(Object.assign(row, ...columns));
+  });
 
-  return rows
+  return rows;
 }
 
-async function readColumns (path) {
-  const columns = (await readdir(path))
-    .map(async name => {
-      const fullPath = join(path, name)
-      let content = await readFile(fullPath, 'utf-8')
+async function readColumns(path) {
+  const columns = (await readdir(path)).map(async name => {
+    const fullPath = join(path, name);
+    let content = await readFile(fullPath, 'utf-8');
 
-      // Remove new line at end of file
-      if (content.charAt(content.length - 1) === '\n') {
-        content = content.slice(0, -1)
-      }
+    // Remove new line at end of file
+    if (content.charAt(content.length - 1) === '\n') {
+      content = content.slice(0, -1);
+    }
 
-      return { [name]: content }
-    })
+    return {[name]: content};
+  });
 
-  return Promise.all(columns)
+  return Promise.all(columns);
 }
