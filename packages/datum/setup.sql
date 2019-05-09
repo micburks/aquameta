@@ -1,3 +1,5 @@
+begin;
+
 create or replace function endpoint.source(
   schema_name text,
   relation_name text,
@@ -22,3 +24,5 @@ AS $function$
         'join endpoint.mimetype m on me.mimetype_id=m.id';
     end;
 $function$;
+
+commit;
