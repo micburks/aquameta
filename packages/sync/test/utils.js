@@ -37,18 +37,22 @@ async function createTestTable () {
       schema_name: 'test',
       name: 'user'
     }),
-    db.insert(metaColumnRel, {
+    db.insert(metaColumnRel, [{
       schema_name: 'test',
       relation_name: 'user',
       name: 'name',
       type_name: 'text'
-    }),
-    db.insert(metaColumnRel, {
+    }, {
       schema_name: 'test',
       relation_name: 'user',
       name: 'age',
       type_name: 'text'
-    })
+    }, {
+      schema_name: 'test',
+      relation_name: 'user',
+      name: 'id',
+      type_name: 'text'
+    }])
   )
 }
 
