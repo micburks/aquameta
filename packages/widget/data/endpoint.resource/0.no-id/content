@@ -3,11 +3,16 @@
     <title>widget test</title>
   </head>
   <body>
+    <div id="root"></div>
     <script type="module">
-      import {render} from '/db/widget/core/index.js';
+      import html from '/db/widget/core/index.js';
+      import ReactDOM from '/db/widget/dep/react-dom.js';
       import Root from '/db/widget/component/root.js';
-      
-      render(html`<Root/>`, document.body);
+
+      ReactDOM.render(
+        html`<${Root}/>`,
+        document.getElementById('root'),
+      );
     </script>
   </body>
 </html>
