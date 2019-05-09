@@ -116,10 +116,10 @@ append-transform@^0.4.0:
   dependencies:
     default-require-extensions "^1.0.0"
 
-aquameta-datum@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/aquameta-datum/-/aquameta-datum-0.1.0.tgz#8535a340c0dc50857191a6fb8f578d89c27cb053"
-  integrity sha512-tPyRaRZ2FW8H14QHbpLVNth8Ls43iEL9No7shHTTQgFV11FB2tBg/ZrVVGoZRPvDrdo/hGaMAt6j76PSCu2HQQ==
+aquameta-datum@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/aquameta-datum/-/aquameta-datum-0.1.1.tgz#48f17f8f287ac53c519fecc72aefaa607790a8df"
+  integrity sha512-U9aJI2+XCqBqMgQ4O9Sd6At6l4l2Vhh6rmJw+i10S91T25E6W7ur2sHpW5Orckars9tGi8vHc6QL/Q23CYAJEg==
   dependencies:
     just-compose "^1.1.0"
     just-curry-it "^3.1.0"
