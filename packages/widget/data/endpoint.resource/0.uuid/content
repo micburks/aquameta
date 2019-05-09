@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>widget test</title>
+  </head>
+  <body>
+    <script type="module">
+      import {render} from '/db/widget/core/index.js';
+      import Root from '/db/widget/component/root.js';
+      
+      render(html`<Root/>`, document.body);
+    </script>
+  </body>
+</html>
