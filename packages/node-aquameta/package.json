@@ -29,7 +29,7 @@
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {
-    "aquameta-datum": "0.0.7",
+    "aquameta-datum": "^0.1.0",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-mount": "^3.0.0",
