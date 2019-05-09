@@ -1,33 +1,35 @@
-const { resolve } = require('path')
-const readTables = require('./readTables.js')
+/* globals module require */
+
+const {resolve} = require('path');
+const readTables = require('./readTables.js');
 
 module.exports = {
   importDir,
-  exportTable
-}
+  exportTable,
+};
 
-async function importDir (path) {
+async function importDir(path) {
   if (typeof path !== 'string') {
-    throw new Error('path argument must be of type `string`')
+    throw new Error('path argument must be of type `string`');
   }
 
-  path = resolve(path)
+  path = resolve(path);
 
-  return Promise.all(
-    await readTables(path)
-  )
+  return Promise.all(await readTables(path));
 }
 
-function exportTable (table) {
+function exportTable(table) {
   if (typeof table !== 'string') {
-    throw new Error('table argument must be of type `string`')
+    throw new Error('table argument must be of type `string`');
   }
 
-  const [ schema, relation ] = table.split('.')
+  const [, relation] = table.split('.');
 
   if (!relation) {
-    throw new Error('table argument must be schema-qualified, i.e. `schema.relation`')
+    throw new Error(
+      'table argument must be schema-qualified, i.e. `schema.relation`',
+    );
   }
 
-  return Promise.resolve()
+  return Promise.resolve();
 }

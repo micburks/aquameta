@@ -1,1 +1,3 @@
-global.expect = require('chai').expect
+/* globals global require */
+
+global.expect = require('chai').expect;
