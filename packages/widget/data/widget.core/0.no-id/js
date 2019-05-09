@@ -1,1 +1,6 @@
-export {html, Component, render} from 'https://unpkg.com/htm/react/standalone.mjs';
+import htm from '/db/widget/dep/htm.js';
+import React from '/db/widget/dep/react.js';
+
+const html = htm.bind(React.createElement);
+
+export default html;

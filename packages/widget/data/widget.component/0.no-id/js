@@ -1,4 +1,4 @@
-import {html} from '/db/widget/core/index.js';
+import html from '/db/widget/core/index.js';
 
 export default function Root() {
   return (
