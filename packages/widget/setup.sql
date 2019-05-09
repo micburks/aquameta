@@ -15,6 +15,11 @@ create table if not exists widget.core (
   docs text
 );
 
-insert into widget.core (name, js) values ('index', 'export {html,Component,render} from "https://unpkg.com/htm/react/standalone.mjs";');
+create table if not exists widget.dep (
+  id uuid not null default public.uuid_generate_v4() primary key,
+  name text not null,
+  js text default '// export default function() {}',
+  docs text
+);
 
 commit;
