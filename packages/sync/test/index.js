@@ -31,7 +31,7 @@ describe('import', () => {
   it('inserts all fields', () => {
     const row = testRows[0]
 
-    expect(row).to.have.all.keys(['name', 'age'])
+    expect(row).to.have.all.keys(['name', 'age', 'id'])
     expect(row.name).to.equal(`mickey${row.age}`)
   })
 })

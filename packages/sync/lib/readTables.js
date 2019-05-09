@@ -39,8 +39,14 @@ async function readRows (path, insert) {
       const rowPath = join(path, rowId)
       const columns = await readColumns(rowPath)
 
+      const row = {};
+      if (!rowId.endsWith('.no-id')) {
+        // Special case, allow db to generate id
+        row.id = rowId;
+      }
+
       return insert(
-        Object.assign({}, ...columns)
+        Object.assign(row, ...columns)
       )
     })
 
