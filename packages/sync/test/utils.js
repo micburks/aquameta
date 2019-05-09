@@ -8,12 +8,7 @@ module.exports = {
 }
 
 const executeQuery = (...args) => {
-  return query(client.connection())(...args)
-    .then(res => {
-      return Object.assign({}, res, {
-        response: JSON.parse(res.response)
-      })
-    })
+  return query(client.connection())(...args);
 }
 const metaSchemaRel = db.relation('meta.schema')
 const metaTableRel = db.relation('meta.table')

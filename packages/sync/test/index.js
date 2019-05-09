@@ -25,12 +25,11 @@ describe('import', () => {
   })
 
   it('inserts all rows', () => {
-    const { result } = testRows.response
-    expect(result).to.have.lengthOf(5)
+    expect(testRows).to.have.lengthOf(5)
   })
 
   it('inserts all fields', () => {
-    const { row } = testRows.response.result[0]
+    const row = testRows[0]
 
     expect(row).to.have.all.keys(['name', 'age'])
     expect(row.name).to.equal(`mickey${row.age}`)
