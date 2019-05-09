@@ -10,7 +10,7 @@ const readFile = promisify(fs.readFile)
 module.exports = readTables
 
 const executeQuery = query(
-  client({ connection: true })
+  client.connection()
 )
 
 async function readTables (path) {
