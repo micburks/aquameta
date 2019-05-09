@@ -52,6 +52,9 @@
     "veggie": "^2.4.1"
   },
   "files": [
-    "dist"
+    "dist-node-cjs",
+    "dist-node-esm",
+    "dist-browser-cjs",
+    "dist-browser-esm"
   ]
 }
