@@ -8,7 +8,7 @@ module.exports = {
 }
 
 const executeQuery = (...args) => {
-  return query(client({ connection: true }))(...args)
+  return query(client.connection())(...args)
     .then(res => {
       return Object.assign({}, res, {
         response: JSON.parse(res.response)
