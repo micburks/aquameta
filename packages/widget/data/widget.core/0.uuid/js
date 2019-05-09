@@ -1,0 +1,1 @@
+export {html, Component, render} from 'https://unpkg.com/htm/react/standalone.mjs';
