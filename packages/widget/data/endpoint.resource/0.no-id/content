@@ -5,6 +5,7 @@
   <body>
     <div id="root"></div>
     <script type="module">
+      import '/db/widget/core/env.js';
       import html from '/db/widget/core/index.js';
       import ReactDOM from '/db/widget/dep/react-dom.js';
       import Root from '/db/widget/component/root.js';

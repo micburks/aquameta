@@ -1,0 +1,14 @@
+// @noflow
+
+// Could potentially lookup env from endpoint.resource table? or some config somewhere
+// But would need to SSR and insert this at that point?
+
+if (__BROWSER__) {
+  if (!process || !process.env || !process.env.NODE_ENV) { // eslint-disable-line
+    process = { // eslint-disable-line
+      env: {
+        NODE_ENV: 'production',
+      },
+    };
+  }
+}
