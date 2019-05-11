@@ -10,11 +10,11 @@
     "./dist-node-esm/index.js": "./dist-browser-esm/index.js"
   },
   "scripts": {
-    "build": "cup build",
+    "build": "cup clean && cup build",
     "build-w": "cup build -w",
     "start": "./demo/server.js",
-    "preversion": "npm test",
-    "version": "npm run build",
+    "preversion": "yarn test",
+    "version": "yarn build",
     "postversion": "git push && git push --tags",
     "test": "tape dist-node-cjs/__tests__/**/*.js | tap-spec",
     "test-w": "nodemon -w dist-node-cjs -x 'yarn test'",
