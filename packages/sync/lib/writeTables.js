@@ -28,7 +28,7 @@ async function writeTable(table, dir) {
     // clean table dir execpt for config.js file
     await del([join(tablePath, '*'), `!${join(tablePath, 'config.js')}`]);
     const rowPath = join(tablePath, row.id);
-    await mkdir(rowPath);
+    await mkdir(rowPath, {recursive: true});
     const fieldPromises = [];
     Object.entries(row).map(([column, value]) => {
       if (column !== 'id') {
