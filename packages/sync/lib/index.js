@@ -9,13 +9,7 @@ module.exports = {
 };
 
 async function importDir(path) {
-  if (typeof path !== 'string') {
-    throw new Error('path argument must be of type `string`');
-  }
-
-  path = resolve(path);
-
-  return Promise.all(await readTables(path));
+  return Promise.all(await readTables(resolve(path)));
 }
 
 function exportTable(table) {
