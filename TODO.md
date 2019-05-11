@@ -2,6 +2,9 @@
 
 #### TODO
 
+- [ ] make note in datum readme that each API call happens in its own
+  transaction, so if you want an actual transaction you should be writing that
+  in a stored procedure
 - [ ] Get rid of console.logs for connection
 - [ ] Add demos or tests for each package
 - [ ] Add postinstall script that does `cat setup.sql | psql aquameta`
