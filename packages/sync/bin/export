@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+const path = require('path'); // eslint-disable-line
+const meow = require('meow'); // eslint-disable-line
+const {exportTables} = require('..'); // eslint-disable-line
+
+const cli = meow(
+  `
+    Usage
+      $ export -t <table> -d <directory>
+
+    Options
+      --table, -t  [Required] Schema-qualified table name or names separated by commas
+      -dir, -d  Path to a directory to write to. Defaults to ./data
+ 
+    Examples
+      $ export -t endpoint.resource,widget.core -d path/to/data
+      Exported endpoint.resource to path/to/data/endpoint.resource
+      Exported widget.core to path/to/data/widget.core
+`,
+  {
+    flags: {
+      dir: {
+        type: 'string',
+        alias: 'd',
+        default: path.resolve('data'),
+      },
+      table: {
+        type: 'string',
+        alias: 't',
+      },
+    },
+  },
+);
+
+const {table, dir} = cli.flags;
+
+if (!table) {
+  cli.showHelp();
+}
+
+exportTables(table, dir).then(tables => {
+  tables.forEach(({table, dir}) => { // eslint-disable-line
+    console.log(`Exported ${table} to ${dir.replace(process.cwd(), '.')}`); // eslint-disable-line
+  });
+});
