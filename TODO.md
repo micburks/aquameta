@@ -2,6 +2,9 @@
 
 #### TODO
 
+- [ ] rewrite endpoint.request
+  - update doesnt work the way we have it - requires row id intead of just
+    filtered table
 - [ ] make note in datum readme that each API call happens in its own
   transaction, so if you want an actual transaction you should be writing that
   in a stored procedure
