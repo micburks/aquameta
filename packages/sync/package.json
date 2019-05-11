@@ -4,7 +4,8 @@
   "description": "Import from and export to filesystem from Aquameta database",
   "main": "lib/index.js",
   "bin": {
-    "import": "bin/import"
+    "import": "bin/import",
+    "export": "bin/export"
   },
   "scripts": {
     "test": "nyc mocha"

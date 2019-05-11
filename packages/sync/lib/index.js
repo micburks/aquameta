@@ -2,28 +2,20 @@
 
 const {resolve} = require('path');
 const readTables = require('./readTables.js');
+const writeTable = require('./writeTables.js');
 
 module.exports = {
   importDir,
-  exportTable,
+  exportTables,
 };
 
 async function importDir(path) {
   return Promise.all(await readTables(resolve(path)));
 }
 
-function exportTable(table) {
-  if (typeof table !== 'string') {
-    throw new Error('table argument must be of type `string`');
-  }
+async function exportTables(tables, dir) {
+  tables = tables.split(',');
+  dir = resolve(dir);
 
-  const [, relation] = table.split('.');
-
-  if (!relation) {
-    throw new Error(
-      'table argument must be schema-qualified, i.e. `schema.relation`',
-    );
-  }
-
-  return Promise.resolve();
+  return Promise.all(tables.map(table => writeTable(table, resolve(dir))));
 }
