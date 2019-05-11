@@ -2,6 +2,8 @@
 
 #### TODO
 
+- [ ] Add demos or tests for each package
+- [ ] Add postinstall script that does `cat setup.sql | psql aquameta`
 - [ ] combine all todos (not sure where they are)
 - [ ] test everything
 - [ ] write widget
