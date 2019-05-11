@@ -117,7 +117,6 @@ export default async function executeConnection(
       JSON.stringify(query.args),
       JSON.stringify(query.data),
     );
-    // $FlowFixMe
     const result = await connection.query(
       'select status, message, response, mimetype ' +
         'from endpoint.request($1, $2, $3, $4::json, $5::json)',
