@@ -1,29 +1,37 @@
 #!/usr/bin/env node
 
-const meow = require('meow')
-const { importDir } = require('..')
+const path = require('path'); // eslint-disable-line
+const meow = require('meow'); // eslint-disable-line
+const {importDir} = require('..'); // eslint-disable-line
 
-const cli = meow(`
+const cli = meow(
+  `
     Usage
-      $ aq-import <directory>
+      $ import -d <directory>
 
-      Where <directory> is the path to a directory containing your tables
+    Options
+      -dir, -d  Path to a directory containing your tables. Defaults to ./data
+
+    Directories should be structured according to: https://github.com/micburks/aquameta/tree/master/packages/sync
  
     Examples
-      $ aq-import path/to/data
+      $ import -d path/to/data
       Imported endpoint.session
       Imported endpoint.user
-`)
+`,
+  {
+    flags: {
+      dir: {
+        type: 'string',
+        alias: 'd',
+        defualt: path.resolve('data'),
+      },
+    },
+  },
+);
 
-const [ path ] = cli.input
-
-if (typeof path !== 'string') {
-  cli.showHelp()
-}
- 
-importDir(path)
-  .then(tables => {
-    tables.forEach(({ table }) => {
-      console.log(`Imported ${table}`)
-    })
-  })
+importDir(cli.flags.dir).then(tables => {
+  tables.forEach(({table}) => {
+    console.log(`Imported ${table}`);
+  });
+});
