@@ -2,6 +2,10 @@
 
 #### TODO
 
+- [ ] sync - use config for writing files, too
+  - could write id as a file and name the directory some combination of id and
+    name for better readability. maybe this could be configured
+  - could write a default config to config.js on every export
 - [ ] rewrite endpoint.request
   - update doesnt work the way we have it - requires row id intead of just
     filtered table
