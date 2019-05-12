@@ -1,6 +1,6 @@
 {
   "name": "aquameta-sync",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Import from and export to filesystem from Aquameta database",
   "main": "lib/index.js",
   "bin": {
