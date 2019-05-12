@@ -2,6 +2,7 @@
 
 #### TODO
 
+- [ ] use `select where in` in readTables upsert method
 - [ ] sync - use config for writing files, too
   - could write id as a file and name the directory some combination of id and
     name for better readability. maybe this could be configured
