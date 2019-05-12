@@ -29,14 +29,16 @@ async function upsert(rel, rows, config) {
   const insertableRows = [];
   rows.forEach(row => {
     const pkValue = row[pk];
+    if (!config.insertId) {
+      delete row.id;
+    }
     if (pkValues.has(pkValue)) {
-      delete row[pk];
+      // delete row[pk];
+      // update is broken so can't delete this field since it
+      // may have a non-null constraint
       const filteredRel = db.where(pk, pkValue, rel);
       updatePromises.push(go(db.update(filteredRel, row)));
     } else {
-      if (!config.insertId) {
-        delete row.id;
-      }
       insertableRows.push(row);
     }
   });
