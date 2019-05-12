@@ -13,52 +13,94 @@ module.exports = readTables;
 
 const executeQuery = query(client.connection());
 
+const defaultConfig = {
+  truncate: false,
+  insertId: false,
+  upsert: true, // false will only try to insert
+  updateKey: 'id',
+};
+
+async function upsert(rel, rows, config) {
+  const pk = config.updateKey;
+  const go = query(client.connection());
+  const dbRows = await go(db.select(db.include(pk, rel)));
+  const pkValues = new Set(dbRows.map(({[pk]: val}) => val));
+  const updatePromises = [];
+  const insertableRows = [];
+  rows.forEach(row => {
+    const pkValue = row[pk];
+    if (pkValues.has(pkValue)) {
+      delete row[pk];
+      const filteredRel = db.where(pk, pkValue, rel);
+      updatePromises.push(go(db.update(filteredRel, row)));
+    } else {
+      if (!config.insertId) {
+        delete row.id;
+      }
+      insertableRows.push(row);
+    }
+  });
+  if (insertableRows.length) {
+    updatePromises.push(go(db.insert(rel, insertableRows)));
+  }
+  return Promise.all(updatePromises);
+}
+
 async function readTables(path) {
   const tables = (await readdir(path)).map(async table => {
     const tablePath = join(path, table);
+    const configPath = join(tablePath, 'config.js');
+    let config = {...defaultConfig};
+    if (fs.existsSync(configPath)) {
+      config = {...config, ...require(configPath)};
+    }
     const rel = db.relation(table);
-    const insertRow = compose(
-      executeQuery,
-      db.insert(rel),
-    );
-
-    const rows = await Promise.all(await readRows(tablePath, insertRow));
-
+    if (config.truncate) {
+      await executeQuery(db.del(rel));
+    }
+    const rows = await Promise.all(await readRows(tablePath));
+    if (config.upsert) {
+      await upsert(rel, rows, config);
+    } else {
+      await executeQuery(
+        db.insert(
+          rel,
+          rows.map(row => {
+            if (!config.insertId) {
+              delete row.id;
+            }
+            return row;
+          }),
+        ),
+      );
+    }
     return {table, rows};
   });
-
   return tables;
 }
 
-async function readRows(path, insert) {
-  const rows = (await readdir(path)).map(async rowId => {
-    const rowPath = join(path, rowId);
-    const columns = await readColumns(rowPath);
-
-    const row = {};
-    if (!rowId.endsWith('.no-id')) {
-      // Special case, allow db to generate id
-      row.id = rowId;
-    }
-
-    return insert(Object.assign(row, ...columns));
-  });
-
-  return rows;
+async function readRows(path) {
+  const rows = (await readdir(path))
+    .filter(p => p !== 'config.js')
+    .map(async rowId => {
+      const rowPath = join(path, rowId);
+      const columns = await readColumns(rowPath);
+      return {id: rowId, ...columns};
+    });
+  return Promise.all(rows);
 }
 
 async function readColumns(path) {
+  const row = {};
   const columns = (await readdir(path)).map(async name => {
     const fullPath = join(path, name);
     let content = await readFile(fullPath, 'utf-8');
-
-    // Remove new line at end of file
     if (content.charAt(content.length - 1) === '\n') {
+      // Remove new line at end of file
       content = content.slice(0, -1);
     }
-
-    return {[name]: content};
+    row[name] = content;
   });
-
-  return Promise.all(columns);
+  await Promise.all(columns);
+  return row;
 }
