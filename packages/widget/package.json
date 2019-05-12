@@ -8,7 +8,8 @@
   "scripts": {
     "build": "rollup -c --experimentalDynamicImport",
     "dev": "npm run build -- -w",
-    "start": "node demo/server.js",
+    "start": "aquameta",
+    "old-demo": "node demo/server.js",
     "sync": "import -d data",
     "test": "echo \"tests!\""
   },
