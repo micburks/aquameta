@@ -1,0 +1,19 @@
+import html from '/db/widget/core/html.js';
+import styled from '/db/widget/dep/styled-components.js';
+import marked from '/db/widget/dep/marked.js';
+
+const SlideWrapper = styled.div`
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  border-radius: 2px;
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 150%;
+  height: 100%;
+  padding: 50px 30px;
+`;
+
+export default function Slide(props) {
+  const __html = marked(props.slide.markdown);
+  return html`
+    <${SlideWrapper} dangerouslySetInnerHTML=${{__html}}/>
+  `;
+}

@@ -1,0 +1,17 @@
+import html from '/db/widget/core/html.js';
+import styled from '/db/widget/dep/styled-components.js';
+
+const Wrapper = styled.div`
+  height: 100%;
+  padding: 20px 0;
+  margin: auto;
+  width: 800px;
+`;
+
+export default function SlideContainer(props) {
+  return html`
+    <${Wrapper}>
+      ${props.children}
+    <//>
+  `;
+}
