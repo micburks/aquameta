@@ -1,7 +1,39 @@
-import html from '/db/widget/core/index.js';
+import html from '/db/widget/core/html.js';
+import React from '/db/widget/dep/react.js';
+import {client, database, query} from '/db/widget/core/datum.js';
+
+const datum = query(
+  client.endpoint(),
+  database.select(
+    database.relation('pres.slide')
+  )
+);
+
+function useDatum (datum) {
+  const [state, setState] = React.useState([]);
+  React.useEffect(() => {
+    datum.then(rows => {
+      setState(rows);
+    });
+  }, [datum])
+  return state;
+}
+
+function Slide(props) {
+  return html`
+    <div>${props.slide.id}</div>
+  `;
+}
 
 export default function Root() {
-  return (
-    html`<h1>OMG</h1>`
-  );
+  const slides = useDatum(datum);
+
+  return html`
+    <div>
+      <h1>OMG</h1>
+      ${slides && slides.map(slide => html`
+        <${Slide} slide=${slide}/>
+      `)}
+    </div>
+  `;
 }

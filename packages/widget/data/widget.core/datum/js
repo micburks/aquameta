@@ -1,0 +1,8 @@
+import '/db/widget/dep/datum.js';
+
+// TODO: try again to get webpack to configure datum exports properly
+
+const {client, database, simple, query} = window.datum;
+
+export {client, database, simple, query};
+
