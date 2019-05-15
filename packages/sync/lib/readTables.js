@@ -94,15 +94,17 @@ async function readRows(path) {
 
 async function readColumns(path) {
   const row = {};
-  const columns = (await readdir(path)).map(async name => {
-    const fullPath = join(path, name);
-    let content = await readFile(fullPath, 'utf-8');
-    if (content.charAt(content.length - 1) === '\n') {
-      // Remove new line at end of file
-      content = content.slice(0, -1);
-    }
-    row[name] = content;
-  });
+  const columns = (await readdir(path))
+    .filter(p => !p.startsWith('.'))
+    .map(async name => {
+      const fullPath = join(path, name);
+      let content = await readFile(fullPath, 'utf-8');
+      if (content.charAt(content.length - 1) === '\n') {
+        // Remove new line at end of file
+        content = content.slice(0, -1);
+      }
+      row[name] = content;
+    });
   await Promise.all(columns);
   return row;
 }
