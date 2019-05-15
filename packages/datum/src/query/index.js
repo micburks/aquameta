@@ -42,8 +42,8 @@ const makeEvented = i => i;
 
 const execute = cond(
   [
-    [isConnectionClient, executeConnection],
-    __NODE__ && [isEndpointClient, executeEndpoint],
+    __NODE__ && [isConnectionClient, executeConnection],
+    [isEndpointClient, executeEndpoint],
     [
       T,
       () => {
