@@ -301,10 +301,10 @@ aproba@^1.0.3, aproba@^1.1.1:
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
   integrity sha512-Y9J6ZjXtoYh8RnXVCMOU/ttDmk1aBjunq9vO0ta5x85WDQiQfUF9sIPBITdbiiIVcBo03Hi3jMxigBtsddlXRw==
 
-aquameta-datum@^0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/aquameta-datum/-/aquameta-datum-0.1.10.tgz#129f0d9a32d7f072f9d601239c6b1fd7bc8f2b64"
-  integrity sha512-9jwRTQxGSBqXqEFnO9Fca83MFrHLVoFe6iMBHy+ygKgCis2pWPNEt6NTK1KSuYCE5bFKw+AWGOvYAKhcdc14dA==
+aquameta-datum@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/aquameta-datum/-/aquameta-datum-0.1.11.tgz#e7597792eabb93acfa5a60b3fc377165c53561b5"
+  integrity sha512-NuAemNIPZeJf6CqtujIAXRYZRPOH39YmM2aapcf48L6mCFsPuLLhDhYsApQBT0S+w4zFX1ZxSWahtBF11gT1JQ==
   dependencies:
     just-compose "^1.1.0"
     just-curry-it "^3.1.0"
@@ -313,22 +313,22 @@ aquameta-datum@^0.1.10:
     ramda "^0.26.1"
     unfetch "^4.1.0"
 
-aquameta-sync@^0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/aquameta-sync/-/aquameta-sync-0.1.10.tgz#bfc15c5a792a83d934645003515494761c90b759"
-  integrity sha512-rPBGgsOYRy7QZlDQMt4HNn0mk3tbgIkskqPqiLHPfhFawJGG5uOoI7zQ4pCZPIALZLDEVon9jgzDwE1+N6mE8Q==
+aquameta-sync@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/aquameta-sync/-/aquameta-sync-0.1.11.tgz#96e1cd4e87872a24d0b7eed43e4131621e1f01bd"
+  integrity sha512-fqbwlWy/M7MtHjTklaDRoIJh9fy5BhsXx08NY8jiCPtsNiKnFE9s+Myu5cl6z5aGnKu+xJXGRtPkb+qFp4HNlA==
   dependencies:
-    aquameta-datum "^0.1.10"
+    aquameta-datum "^0.1.11"
     del "^4.1.1"
     meow "^5.0.0"
     ramda "^0.25.0"
 
-aquameta@^0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/aquameta/-/aquameta-0.1.10.tgz#4aa98a5dffc8977204f87648f3b067e245ed73ba"
-  integrity sha512-EStRhcFCd9MOkJ36eXLW+cxAewqqk1kLyifJqzjooiGrZsEwylrJ2dqawQPMnycOoZHgEjEClpKt6jumVIUxzw==
+aquameta@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/aquameta/-/aquameta-0.1.11.tgz#14c044a1c367298820274577b7ecdcd5ec5d8488"
+  integrity sha512-J+wPfDIM0BFKAiiFRVwem0aXHA4+svyCUNADIXNIzxphoVcsxhKSG0BceIgLr/h60BJVmQIv3htPaFA0Xaphew==
   dependencies:
-    aquameta-datum "^0.1.10"
+    aquameta-datum "^0.1.11"
     koa "^2.5.0"
     koa-bodyparser "^4.2.0"
     koa-mount "^3.0.0"
