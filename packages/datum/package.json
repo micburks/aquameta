@@ -1,6 +1,6 @@
 {
   "name": "aquameta-datum",
-  "version": "0.1.8",
+  "version": "0.1.10",
   "description": "Service layer for the Aquameta database API",
   "sideEffects": false,
   "main": "./dist-node-cjs/index.js",
