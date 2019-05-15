@@ -1,6 +1,6 @@
 {
   "name": "aquameta-sync",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Import from and export to filesystem from Aquameta database",
   "main": "lib/index.js",
   "bin": {
@@ -19,7 +19,7 @@
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {
-    "aquameta-datum": "^0.1.10",
+    "aquameta-datum": "^0.1.11",
     "del": "^4.1.1",
     "meow": "^5.0.0",
     "ramda": "^0.25.0"
