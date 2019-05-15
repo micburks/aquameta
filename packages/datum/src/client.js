@@ -3,7 +3,7 @@
 import type {Client, ClientOptions} from './types.js';
 
 const defaultConfig: ClientOptions = {
-  url: 'endpoint',
+  url: 'api',
   version: 'v1',
   sessionCookie: 'SESSION_ID',
   cacheRequestMilliseconds: 5000,
