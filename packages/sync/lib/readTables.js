@@ -87,6 +87,7 @@ async function readTables(path) {
 async function readRows(path) {
   const rows = (await readdir(path))
     .filter(p => p !== 'config.js')
+    .filter(p => !p.startsWith('.'))
     .map(async rowId => {
       const rowPath = join(path, rowId);
       const columns = await readColumns(rowPath);
