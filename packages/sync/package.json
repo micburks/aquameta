@@ -8,6 +8,7 @@
     "export": "bin/export"
   },
   "scripts": {
+    "prepublish": "yarn test",
     "test": "nyc mocha"
   },
   "keywords": [
