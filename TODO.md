@@ -2,6 +2,11 @@
 
 #### TODO
 
+- [ ] fix orderByAsc and other order functions
+- [ ] figure out events/sockets
+- [ ] figure out data cache
+- [ ] figure out caching (cache headers for resources)
+- [ ] would /db/widget.core/html.js be better than /db/widget/core/html.js?
 - [X] make datum and server use the same url by default
 - [ ] audit config usage
 - [ ] support aquameta.config.js
