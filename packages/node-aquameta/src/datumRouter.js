@@ -31,7 +31,11 @@ export default function(config) {
     //debug('datum request', req.url, req.method, req.query, req.body)
 
     try {
-      const result = await executeHTTPQuery({...ctx.request, url});
+      const result = await executeHTTPQuery({
+        url,
+        body: ctx.request.body,
+        method: ctx.request.method,
+      });
 
       // debug(result)
       if (isSource) {

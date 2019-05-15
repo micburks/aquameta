@@ -3,6 +3,7 @@
 import datumRouter from './datumRouter.js';
 import pageMiddleware from './pageMiddleware.js';
 import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
 import mount from 'koa-mount';
 // import debug from 'debug';
 import type {ClientOptions, ConnectionOptions} from 'aquameta-datum';
@@ -68,6 +69,7 @@ export default function(config: Options) {
     // Register Client-side API route
     const datum = datumRouter(config.client);
 
+    app.use(bodyParser());
     app.use(datum.routes()).use(datum.allowedMethods());
   }
 
