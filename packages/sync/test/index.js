@@ -15,13 +15,14 @@ describe('import', () => {
 
   it('returns an array of tables', () => {
     const [table] = returnedTables;
+    const tables = returnedTables.map(({table}) => table);
 
     expect(table).to.have.all.keys(['table', 'rows']);
-    expect(table.table).to.equal('test.user');
+    expect(tables).to.have.all.members(['test.user', 'test.no-data']);
   });
 
   it('inserts returns inserted rows', () => {
-    const {rows} = returnedTables[0];
+    const {rows} = returnedTables.find(({table}) => table === 'test.user');
     expect(rows).to.have.lengthOf(5);
   });
 

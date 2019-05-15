@@ -61,6 +61,9 @@ async function readTables(path) {
       await executeQuery(db.del(rel));
     }
     const rows = await Promise.all(await readRows(tablePath));
+    if (!rows || !rows.length) {
+      return {table, rows:[]};
+    }
     if (config.upsert) {
       await upsert(rel, rows, config);
     } else {
