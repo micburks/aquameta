@@ -1,6 +1,10 @@
 <html>
   <head>
     <title>widget test</title>
+    <link rel="stylesheet" type="text/css" href="/db/widget/core/reset.css"/>
+    <style>
+      * { box-sizing: border-box; }
+    </style>
   </head>
   <body>
     <div id="root"></div>

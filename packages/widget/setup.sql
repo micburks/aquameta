@@ -11,6 +11,7 @@ create table if not exists widget.component (
 create table if not exists widget.core (
   id uuid not null default public.uuid_generate_v4() primary key,
   name text not null,
+  css text default '/* #root {\n} */',
   js text default '// export default function() {}',
   docs text
 );

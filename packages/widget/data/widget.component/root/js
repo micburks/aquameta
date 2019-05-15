@@ -1,10 +1,14 @@
 import html from '/db/widget/core/html.js';
 import React from '/db/widget/dep/react.js';
 import {client, database, query} from '/db/widget/core/datum.js';
+import styled from '/db/widget/dep/styled-components.js';
+import SlideContainer from '/db/widget/component/slide-container.js';
+import Slide from '/db/widget/component/slide.js';
 
 const datum = query(
   client.endpoint(),
   database.select(
+    // database.orderByAsc('number', database.relation('pres.slide'))
     database.relation('pres.slide')
   )
 );
@@ -19,21 +23,14 @@ function useDatum (datum) {
   return state;
 }
 
-function Slide(props) {
-  return html`
-    <div>${props.slide.id}</div>
-  `;
-}
-
 export default function Root() {
   const slides = useDatum(datum);
 
   return html`
-    <div>
-      <h1>OMG</h1>
+    <${SlideContainer}>
       ${slides && slides.map(slide => html`
-        <${Slide} slide=${slide}/>
+        <${Slide} key={slide.id} slide=${slide}/>
       `)}
-    </div>
+    <//>
   `;
 }
