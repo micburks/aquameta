@@ -51,5 +51,6 @@
     "rollup-plugin-node-globals": "^1.2.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "veggie": "^2.4.1"
-  }
+  },
+  "gitHead": "029cfb95244fc439b1fa1f28ab3c200852cdf53f"
 }
