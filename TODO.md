@@ -2,6 +2,9 @@
 
 #### TODO
 
+- [X] make datum and server use the same url by default
+- [ ] audit config usage
+- [ ] support aquameta.config.js
 - [ ] use `select where in` in readTables upsert method
 - [ ] sync - use config for writing files, too
   - could write id as a file and name the directory some combination of id and
@@ -21,12 +24,12 @@
 - [ ] write widget
 - [ ] make an app that uses this - will find a lot of things to fix and a lot
   of things to document this way
-- [ ] finish sync
+- [X] finish sync
 - [ ] provide a top-level sql file for each package
 - [ ] make a install file for aquameta that removes a lot of dependencies (easy
   install path for mac)
 - [ ] finish simple API for datum
-- [ ] keep react-like vs vue-like widget APIs, but start by using React without jsx
+- [X] keep react-like vs vue-like widget APIs, but start by using React without jsx
 - [ ] document all the ideas/concepts in wiki or something
 - [ ] flow/lint/test before allowing publishing
 - [ ] CI?
@@ -34,7 +37,7 @@
 - [ ] deprecate/archive old repos
 - [ ] general migration library?
 - [ ] add debug logging
-- [ ] add config.json to each table dir for sync
+- [X] add config.json to each table dir for sync
 - [ ] connection pooling
 - [ ] chunk large insert/updates
 - [ ] why is datumRouter calling (await request.json()).request? for source url
