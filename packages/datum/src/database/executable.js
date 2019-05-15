@@ -78,18 +78,20 @@ export function http(req: HTTPRequest): Executable | null {
 
   if (pathname && sourceUrlRegex.test(pathname)) {
     // return createExecutable('GET', {url: pathname, args: {source: true}}, null);
-    const {schemaName, relationName, column, name} = parseSourceUrl(pathname);
-    const func = fn('endpoint.source', [
-      schemaName,
-      relationName,
-      column,
-      name,
-    ]);
-    // $FlowFixMe
-    return compose(
-      select,
-      source,
-    )(func);
+    if (__NODE__) {
+      const {schemaName, relationName, column, name} = parseSourceUrl(pathname);
+      const func = fn('endpoint.source', [
+        schemaName,
+        relationName,
+        column,
+        name,
+      ]);
+      // $FlowFixMe
+      return compose(
+        select,
+        source,
+      )(func);
+    }
   } else if (pathname) {
     // $FlowFixMe
     /*
