@@ -5,7 +5,7 @@
   <body>
     <div id="root"></div>
     <script type="module">
-      import html from '/db/widget/core/index.js';
+      import html from '/db/widget/core/html.js';
       import ReactDOM from '/db/widget/dep/react-dom.js';
       import Root from '/db/widget/component/root.js';
 
