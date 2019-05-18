@@ -8,10 +8,30 @@ const Wrapper = styled.div`
   width: 800px;
 `;
 
-export default function SlideContainer(props) {
+const dark = 'rgba(0, 0, 0, 0.8)';
+const light = 'rgba(0, 0, 0, 0.5)';
+const disabledColorFn = ({disabled}) => disabled ? light : dark;
+
+const Button = styled.button`
+  background-color: white;
+  border: 2px solid ${disabledColorFn};
+  border-radius: 2px;
+  color: ${disabledColorFn};
+  padding: 2px;
+`;
+
+export default function SlideContainer(props){
   return html`
     <${Wrapper}>
+      <${Button}
+        disabled=${props.previousDisabled}
+        onClick=${props.previous}
+      >Previous<//>
       ${props.children}
+      <${Button}
+        disabled=${props.nextDisabled}
+        onClick=${props.next}
+      >Next<//>
     <//>
   `;
 }
