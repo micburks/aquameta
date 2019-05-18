@@ -31,4 +31,10 @@ create table if not exists pres.slide (
   markdown text
 );
 
+create table if not exists pres.component (
+  id uuid not null default public.uuid_generate_v4() primary key,
+  name text not null,
+  js text default '// export default function() {}'
+);
+
 commit;
