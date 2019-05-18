@@ -25,12 +25,25 @@ function useDatum (datum) {
 
 export default function Root() {
   const slides = useDatum(datum);
+  const [slideIndex, setSlideIndex] = React.useState(0);
+  const slide = slides[slideIndex];
 
-  return html`
-    <${SlideContainer}>
-      ${slides && slides.map(slide => html`
-        <${Slide} key={slide.id} slide=${slide}/>
-      `)}
-    <//>
-  `;
+  function moveSlide(toIndex) {
+    if (toIndex >= 0 && toIndex < slides.length) {
+      setSlideIndex(toIndex);
+    }
+  }
+
+  return slide
+    ? html`
+      <${SlideContainer}
+        previous=${() => moveSlide(slideIndex-1)}
+        previousDisabled=${slideIndex === 0}
+        next=${() => moveSlide(slideIndex+1)}
+        nextDisabled=${slideIndex === (slides.length - 1)}
+      >
+        <${Slide} slide=${slide}/>
+      <//>
+    `
+    : 'Presentation loading';
 }
