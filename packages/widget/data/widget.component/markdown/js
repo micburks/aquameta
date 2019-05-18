@@ -1,0 +1,7 @@
+import html from '/db/widget/core/html.js';
+import marked from '/db/widget/dep/marked.js';
+
+export default function Markdown({markdown}) {
+  const __html = marked(markdown);
+  return html`<span dangerouslySetInnerHTML=${{__html}}/>`;
+}
