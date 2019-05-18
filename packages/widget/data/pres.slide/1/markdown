@@ -1,0 +1,9 @@
+
+# Slide 2!
+
+```js
+import datum from '/db/widget/core/datum.js';
+```
+
+SHORTCODE'/db/pres/component/insert-example.js'END
+
