@@ -1,6 +1,7 @@
 import html from '/db/widget/core/html.js';
+import React from '/db/widget/dep/react.js';
 import styled from '/db/widget/dep/styled-components.js';
-import marked from '/db/widget/dep/marked.js';
+import Markdown from '/db/widget/component/markdown.js';
 
 const SlideWrapper = styled.div`
   border: 2px solid rgba(0, 0, 0, 0.8);
@@ -11,9 +12,48 @@ const SlideWrapper = styled.div`
   padding: 50px 30px;
 `;
 
-export default function Slide(props) {
-  const __html = marked(props.slide.markdown);
+function LazyLoader({importPath}) {
+  const LazyComp = React.useMemo(() => {
+    return React.lazy(() => import(importPath));
+  }, [importPath]);
   return html`
-    <${SlideWrapper} dangerouslySetInnerHTML=${{__html}}/>
+    <${React.Suspense} fallback=${html`<${Loading} />`}>
+      <${LazyComp}/>
+    <//>
+  `;
+}
+
+function Loading() {
+  return html`<span>Loading...<//>`
+}
+
+const shortcodeRegex = /SHORTCODE'(.*?)'END/g;
+export default function Slide(props) {
+  let content = props.slide.markdown;
+  const children = [];
+  while (true) {
+    const match = shortcodeRegex.exec(content);
+    if (!match) {
+      break;
+    }
+    const markdown = content.slice(0, match.index);
+    const [shortcode, importPath] = match;
+    content = content.slice(match.index + shortcode.length);
+    const l = children.length;
+    children.push(
+      html`<${Markdown} key=${l+'md'} markdown=${markdown} />`,
+      html`<${LazyLoader} key=${l+'comp'} importPath=${importPath} />`,
+    );
+  }
+  if (content) {
+    const l = children.length;
+    children.push(
+      html`<${Markdown} key=${l+'md'} markdown=${content} />`
+    );
+  }
+  return html`
+    <${SlideWrapper}>
+      ${children}
+    <//>
   `;
 }
