@@ -1,37 +1,58 @@
 import html from '/db/widget/core/html.js';
 import styled from '/db/widget/dep/styled-components.js';
+import Centered from '/db/widget/component/centered.js';
+
+const dark = 'rgba(0, 0, 0, 0.9)';
+const light = 'rgba(0, 0, 0, 0.7)';
+const verylight = 'rgba(0, 0, 0, 0.3)';
+const disabledColorFn = ({disabled}) => disabled ? verylight : light;
+const disabledHoverColorFn = ({disabled}) => disabled ? '' : dark;
+
+const Container = styled.div`
+  display: flex;
+  width: 100%;
+`;
 
 const Wrapper = styled.div`
+  display: inline-block;
   height: 100%;
   padding: 20px 0;
   margin: auto;
   width: 800px;
 `;
 
-const dark = 'rgba(0, 0, 0, 0.8)';
-const light = 'rgba(0, 0, 0, 0.5)';
-const disabledColorFn = ({disabled}) => disabled ? light : dark;
+const Section = styled.section`
+  display: inline-block;
+  flex: 1;
+`;
 
-const Button = styled.button`
-  background-color: white;
-  border: 2px solid ${disabledColorFn};
-  border-radius: 2px;
+const Button = styled.div`
   color: ${disabledColorFn};
-  padding: 2px;
+  ${Section}:hover & {
+    color: ${disabledHoverColorFn};
+  }
 `;
 
 export default function SlideContainer(props){
   return html`
-    <${Wrapper}>
-      <${Button}
-        disabled=${props.previousDisabled}
-        onClick=${props.previous}
-      >Previous<//>
-      ${props.children}
-      <${Button}
-        disabled=${props.nextDisabled}
-        onClick=${props.next}
-      >Next<//>
+    <${Container} className=${props.className || ''}>
+      <${Section} onClick=${props.previous}>
+        ${!(props.previousDisabled) && html`
+          <${Centered} disabled=${props.previousDisabled}>
+            <${Button}>Previous<//>
+          <//>
+        `}
+      <//>
+      <${Wrapper}>
+        ${props.children}
+      <//>
+      <${Section} onClick=${props.next}>
+        ${!(props.nextDisabled) && html`
+          <${Centered} disabled=${props.nextDisabled}>
+            <${Button}>Next<//>
+          <//>
+        `}
+      <//>
     <//>
   `;
 }
