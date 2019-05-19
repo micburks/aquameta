@@ -7,9 +7,8 @@ const SlideWrapper = styled.div`
   border: 2px solid rgba(0, 0, 0, 0.8);
   border-radius: 2px;
   color: rgba(0, 0, 0, 0.8);
-  font-size: 150%;
   height: 100%;
-  padding: 50px 30px;
+  padding: 20px 30px;
 `;
 
 function LazyLoader({importPath}) {
