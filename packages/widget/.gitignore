@@ -2,3 +2,4 @@ node_modules
 dist
 .nyc_output
 data/widget.dep/datum
+*.swp
