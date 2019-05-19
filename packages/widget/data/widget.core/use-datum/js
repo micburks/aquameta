@@ -1,0 +1,11 @@
+import React from '/db/widget/dep/react.js';
+
+export default function useDatum (datum) {
+  const [state, setState] = React.useState([]);
+  React.useEffect(() => {
+    datum.then(rows => {
+      setState(rows);
+    });
+  }, [datum])
+  return state;
+}
