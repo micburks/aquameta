@@ -4,11 +4,16 @@ import styled from '/db/widget/dep/styled-components.js';
 import Markdown from '/db/widget/component/markdown.js';
 
 const SlideWrapper = styled.div`
-  border: 2px solid rgba(0, 0, 0, 0.8);
+  background-color: ${({theme}) => theme.colors.opaque.light};
+  border: 2px solid ${({theme}) => theme.colors.dark};
   border-radius: 2px;
-  color: rgba(0, 0, 0, 0.8);
-  height: 100%;
+  color: ${({theme}) => theme.colors.dark};
+  display: inline-block;
+  height: auto;
+  min-height: ${({minHeight}) => minHeight};
+  overflow: auto;
   padding: 20px 30px;
+  width: 100%;
 `;
 
 function LazyLoader({importPath}) {
@@ -51,7 +56,7 @@ export default function Slide(props) {
     );
   }
   return html`
-    <${SlideWrapper}>
+    <${SlideWrapper} minHeight=${props.minHeight}>
       ${children}
     <//>
   `;
