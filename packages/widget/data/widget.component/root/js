@@ -2,14 +2,26 @@ import html from '/db/widget/core/html.js';
 import React from '/db/widget/dep/react.js';
 import {client, database, query} from '/db/widget/core/datum.js';
 import {Helmet, HelmetProvider} from '/db/widget/dep/react-helmet-async.js';
-import styled from '/db/widget/dep/styled-components.js';
+import styled, {ThemeProvider} from '/db/widget/dep/styled-components.js';
 import SlideContainer from '/db/widget/component/slide-container.js';
 import Slide from '/db/widget/component/slide.js';
 import useDatum from '/db/widget/core/use-datum.js';
 import Centered from '/db/widget/component/centered.js';
+import StatusBanner from '/db/widget/component/status-banner.js';
+
+const theme = {
+  colors: {
+    dark: 'rgba(0, 0, 0, 0.9)',
+    light: 'rgba(0, 0, 0, 0.7)',
+    verylight: 'rgba(0, 0, 0, 0.3)',
+    opaque: {
+      light: '#f8f8f8',
+    },
+  },
+};
 
 const LoadingMessage = styled.span`
-  color: rgba(0, 0, 0, 0.7);
+  color: ${({theme}) => theme.colors.dark};
 `;
 
 const datum = query(
@@ -31,26 +43,37 @@ export default function Root() {
     }
   }
 
-  return slide
-    ? html`
+  return html`
+    <${ThemeProvider} theme=${theme}>
       <${HelmetProvider}>
-        <${Helmet}>
-          <link rel="stylesheet" type="text/css" href="https://dev.jspm.io/npm:github-markdown-css@3.0.1/github-markdown.css" />
-        <//>
-        <${SlideContainer}
-          className="markdown-body"
-          previous=${() => moveSlide(slideIndex-1)}
-          previousDisabled=${slideIndex === 0}
-          next=${() => moveSlide(slideIndex+1)}
-          nextDisabled=${slideIndex === (slides.length - 1)}
-        >
-          <${Slide} slide=${slide}/>
-        <//>
+        ${slide
+          ? html`
+            <${React.Fragment}>
+              <${Helmet}>
+                <link
+                  rel="stylesheet"
+                  type="text/css"
+                  href="https://dev.jspm.io/npm:github-markdown-css@3.0.1/github-markdown.css"
+                />
+              <//>
+              <${StatusBanner} index=${slideIndex} rows=${slides}/>
+              <${SlideContainer}
+                className="markdown-body"
+                previous=${() => moveSlide(slideIndex-1)}
+                previousDisabled=${slideIndex === 0}
+                next=${() => moveSlide(slideIndex+1)}
+                nextDisabled=${slideIndex === (slides.length - 1)}
+                slide=${slide}
+              />
+            <//>
+          `
+          : html`
+            <${Centered}>
+              <${LoadingMessage}>Presentation loading<//>
+            <//>
+          `
+        }
       <//>
-    `
-    : html`
-      <${Centered}>
-        <${LoadingMessage}>Presentation loading<//>
-      <//>
-    `;
+    <//>
+  `;
 }
