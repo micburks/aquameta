@@ -1,0 +1,8 @@
+import styled from '/db/widget/dep/styled-components.js';
+
+const Constrained = styled.div`
+  margin: auto;
+  width: 800px;
+`;
+
+export default Constrained;
