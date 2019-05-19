@@ -26,10 +26,6 @@ const ControlSection = styled.section`
   height: ${minHeight};
 `;
 
-const SlideWrapper = styled.div`
-`;
-  // padding: 20px 0;
-
 const Button = styled.div`
   color: ${disabledColorFn};
   ${ControlSection}:hover & {
@@ -49,9 +45,7 @@ export default function SlideContainer(props){
         `}
       <//>
       <${Constrained}>
-        <${SlideWrapper}>
-          <${Slide} minHeight=${minHeight} slide=${props.slide}/>
-        <//>
+        <${Slide} minHeight=${minHeight} slide=${props.slide}/>
       <//>
       <${ControlSection} onClick=${props.next}>
         ${!(props.nextDisabled) && html`

@@ -15,6 +15,7 @@ export default function Markdown({markdown}) {
         <link rel="stylesheet" type="text/css" href="/db/widget/dep/dracula-highlight-js.css" />
         <style>
           .markdown-body pre {
+            /* dracula colors */
             background-color: #282a36;
             color: #f8f8f2;
           }
