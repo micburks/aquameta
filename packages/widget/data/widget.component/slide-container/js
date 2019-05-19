@@ -1,55 +1,62 @@
 import html from '/db/widget/core/html.js';
 import styled from '/db/widget/dep/styled-components.js';
 import Centered from '/db/widget/component/centered.js';
+import Slide from '/db/widget/component/slide.js';
+import Constrained from '/db/widget/component/constrained.js';
 
-const dark = 'rgba(0, 0, 0, 0.9)';
-const light = 'rgba(0, 0, 0, 0.7)';
-const verylight = 'rgba(0, 0, 0, 0.3)';
-const disabledColorFn = ({disabled}) => disabled ? verylight : light;
-const disabledHoverColorFn = ({disabled}) => disabled ? '' : dark;
+const minHeight = '600px';
+
+const disabledColorFn = ({disabled, theme}) => disabled
+  ? theme.colors.verylight
+  : theme.colors.light;
+
+const disabledHoverColorFn = ({disabled, theme}) => disabled
+  ? ''
+  : theme.colors.dark;
 
 const Container = styled.div`
   display: flex;
+  padding: 20px 0;
   width: 100%;
 `;
 
-const Wrapper = styled.div`
-  display: inline-block;
-  height: 100%;
-  padding: 20px 0;
-  margin: auto;
-  width: 800px;
-`;
-
-const Section = styled.section`
+const ControlSection = styled.section`
   display: inline-block;
   flex: 1;
+  height: ${minHeight};
 `;
+
+const SlideWrapper = styled.div`
+`;
+  // padding: 20px 0;
 
 const Button = styled.div`
   color: ${disabledColorFn};
-  ${Section}:hover & {
+  ${ControlSection}:hover & {
     color: ${disabledHoverColorFn};
+    text-decoration: underline;
   }
 `;
 
 export default function SlideContainer(props){
   return html`
     <${Container} className=${props.className || ''}>
-      <${Section} onClick=${props.previous}>
+      <${ControlSection} onClick=${props.previous}>
         ${!(props.previousDisabled) && html`
           <${Centered} disabled=${props.previousDisabled}>
-            <${Button}>Previous<//>
+            <${Button}>${'<'} Previous<//>
           <//>
         `}
       <//>
-      <${Wrapper}>
-        ${props.children}
+      <${Constrained}>
+        <${SlideWrapper}>
+          <${Slide} minHeight=${minHeight} slide=${props.slide}/>
+        <//>
       <//>
-      <${Section} onClick=${props.next}>
+      <${ControlSection} onClick=${props.next}>
         ${!(props.nextDisabled) && html`
           <${Centered} disabled=${props.nextDisabled}>
-            <${Button}>Next<//>
+            <${Button}>Next ${'>'}<//>
           <//>
         `}
       <//>
