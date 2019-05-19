@@ -1,0 +1,6 @@
+import hljs from 'https://dev.jspm.io/highlight.js/lib/highlight';
+import javascript from 'https://dev.jspm.io/highlight.js/lib/languages/javascript';
+
+hljs.registerLanguage('javascript', javascript);
+
+export default hljs;
