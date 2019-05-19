@@ -2,6 +2,11 @@
 
 #### TODO
 
+
+- [ ] host pres
+- [ ] how to hot update modules? - need component wrapper that updates them
+- [ ] do hack to get update to work /relation => /row
+- [ ] add watch option to sync import - only insert/update rows that changed
 - [ ] fix orderByAsc and other order functions
 - [ ] figure out events/sockets
 - [ ] figure out data cache
@@ -15,7 +20,8 @@
   - could write id as a file and name the directory some combination of id and
     name for better readability. maybe this could be configured
   - could write a default config to config.js on every export
-- [ ] rewrite endpoint.request
+- [ ] rewrite endpoint.request - fork endpoint.request to endpoint.request_v1,
+  then make endpoint.request_v2 and update endpoint.request to proxy to them
   - update doesnt work the way we have it - requires row id intead of just
     filtered table
 - [ ] make note in datum readme that each API call happens in its own
