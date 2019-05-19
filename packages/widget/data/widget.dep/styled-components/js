@@ -1,3 +1,33 @@
 import styled from 'https://dev.jspm.io/styled-components';
 
+const {
+  ServerStyleSheet,
+  StyleSheetConsumer,
+  StyleSheetContext,
+  StyleSheetManager,
+  ThemeConsumer,
+  ThemeContext,
+  ThemeProvider,
+  createGlobalStyle,
+  css,
+  isStyledComponent,
+  keyframes,
+  withTheme,
+} = styled;
+
+export {
+  ServerStyleSheet,
+  StyleSheetConsumer,
+  StyleSheetContext,
+  StyleSheetManager,
+  ThemeConsumer,
+  ThemeContext,
+  ThemeProvider,
+  createGlobalStyle,
+  css,
+  isStyledComponent,
+  keyframes,
+  withTheme,
+};
+
 export default styled.default;
