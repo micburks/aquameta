@@ -1,7 +1,25 @@
 import html from '/db/widget/core/html.js';
+import React from '/db/widget/dep/react.js';
+import {Helmet} from '/db/widget/dep/react-helmet-async.js';
+import hljs from '/db/widget/dep/highlight-js.js';
 import marked from '/db/widget/dep/marked.js';
 
 export default function Markdown({markdown}) {
-  const __html = marked(markdown);
-  return html`<span dangerouslySetInnerHTML=${{__html}}/>`;
+  const __html = marked(markdown, {
+    highlight: code => hljs.highlightAuto(code).value
+  });
+  return html`
+    <${React.Fragment}>
+      <span dangerouslySetInnerHTML=${{__html}}/>
+      <${Helmet}>
+        <link rel="stylesheet" type="text/css" href="/db/widget/dep/dracula-highlight-js.css" />
+        <style>
+          .markdown-body pre {
+            background-color: #282a36;
+            color: #f8f8f2;
+          }
+        </style>
+      <//>
+    <//>
+  `;
 }
