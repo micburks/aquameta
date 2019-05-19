@@ -1,9 +1,16 @@
 import html from '/db/widget/core/html.js';
 import React from '/db/widget/dep/react.js';
 import {client, database, query} from '/db/widget/core/datum.js';
+import {Helmet, HelmetProvider} from '/db/widget/dep/react-helmet-async.js';
 import styled from '/db/widget/dep/styled-components.js';
 import SlideContainer from '/db/widget/component/slide-container.js';
 import Slide from '/db/widget/component/slide.js';
+import useDatum from '/db/widget/core/use-datum.js';
+import Centered from '/db/widget/component/centered.js';
+
+const LoadingMessage = styled.span`
+  color: rgba(0, 0, 0, 0.7);
+`;
 
 const datum = query(
   client.endpoint(),
@@ -12,16 +19,6 @@ const datum = query(
     database.relation('pres.slide')
   )
 );
-
-function useDatum (datum) {
-  const [state, setState] = React.useState([]);
-  React.useEffect(() => {
-    datum.then(rows => {
-      setState(rows);
-    });
-  }, [datum])
-  return state;
-}
 
 export default function Root() {
   const slides = useDatum(datum);
@@ -36,14 +33,24 @@ export default function Root() {
 
   return slide
     ? html`
-      <${SlideContainer}
-        previous=${() => moveSlide(slideIndex-1)}
-        previousDisabled=${slideIndex === 0}
-        next=${() => moveSlide(slideIndex+1)}
-        nextDisabled=${slideIndex === (slides.length - 1)}
-      >
-        <${Slide} slide=${slide}/>
+      <${HelmetProvider}>
+        <${Helmet}>
+          <link rel="stylesheet" type="text/css" href="https://dev.jspm.io/npm:github-markdown-css@3.0.1/github-markdown.css" />
+        <//>
+        <${SlideContainer}
+          className="markdown-body"
+          previous=${() => moveSlide(slideIndex-1)}
+          previousDisabled=${slideIndex === 0}
+          next=${() => moveSlide(slideIndex+1)}
+          nextDisabled=${slideIndex === (slides.length - 1)}
+        >
+          <${Slide} slide=${slide}/>
+        <//>
       <//>
     `
-    : 'Presentation loading';
+    : html`
+      <${Centered}>
+        <${LoadingMessage}>Presentation loading<//>
+      <//>
+    `;
 }
