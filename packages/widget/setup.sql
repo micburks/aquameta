@@ -27,6 +27,7 @@ create schema if not exists pres;
 
 create table if not exists pres.slide (
   id uuid not null default public.uuid_generate_v4() primary key,
+  name text not null,
   number integer not null,
   markdown text
 );
