@@ -1,0 +1,24 @@
+import html from '/db/widget/core/html.js';
+import styled from '/db/widget/dep/styled-components.js';
+
+const Parent = styled.div`
+  display: table;
+  height: 100%;
+  text-align: center;
+  width: 100%;
+`;
+
+const Child = styled.div`
+  display: table-cell;
+  vertical-align: middle;
+`;
+
+export default function Centered(props) {
+  return html`
+    <${Parent}>
+      <${Child}>
+        ${props.children}
+      <//>
+    <//>
+  `;
+}
