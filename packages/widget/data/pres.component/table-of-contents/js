@@ -1,7 +1,9 @@
 import html from '/db/widget/core/html.js';
 import React from '/db/widget/dep/react.js';
+import styled from '/db/widget/dep/styled-components.js';
 import {client, database, query} from '/db/widget/core/datum.js';
 import useDatum from '/db/widget/core/use-datum.js';
+import SlideContext from '/db/widget/common/slide-context.js';
 
 const datum = query(
   client.endpoint(),
@@ -10,16 +12,29 @@ const datum = query(
   ),
 );
 
+const ListElement = styled.li`
+  list-style-type: disc;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
+
 export default function TableOfContents() {
   const rows = useDatum(datum);
+  const {moveSlideById} = React.useContext(SlideContext);
 
-  // TODO: could these be actual links?
   return html`
     <${React.Fragment}>
       <h1>Table of contents</h1>
       <ul>
         ${rows && rows.map(row => html`
-          <li key=${row.id}>${row.name}</li>
+          <${ListElement}
+            key=${row.id}
+            onClick=${() => moveSlideById && moveSlideById(row.id)}
+          >
+            ${row.name}
+          <//>
         `)}
       </ul>
     <//>
