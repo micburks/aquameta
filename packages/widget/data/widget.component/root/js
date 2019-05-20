@@ -47,7 +47,7 @@ export default function Root() {
   function moveSlideById(id) {
     const index = slides
       .findIndex(slide => slide.id === id);
-    if (index) {
+    if (index >= 0) {
       moveSlide(index);
     }
   }
