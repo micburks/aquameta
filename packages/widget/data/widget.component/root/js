@@ -11,6 +11,8 @@ import StatusBanner from '/db/widget/component/status-banner.js';
 import SlideContext from '/db/widget/common/slide-context.js';
 
 const theme = {
+  height: '600px',
+  heightWithoutPadding: '560px',
   colors: {
     dark: 'rgba(0, 0, 0, 0.9)',
     light: 'rgba(0, 0, 0, 0.7)',

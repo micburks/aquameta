@@ -11,7 +11,7 @@ const SlideWrapper = styled.div`
   color: ${({theme}) => theme.colors.dark};
   display: inline-block;
   height: auto;
-  min-height: ${({minHeight}) => minHeight};
+  height: ${({theme}) => theme.height};
   overflow: auto;
   padding: 20px 30px;
   width: 100%;
@@ -67,7 +67,7 @@ export default function Slide(props) {
     );
   }
   return html`
-    <${SlideWrapper} minHeight=${props.minHeight}>
+    <${SlideWrapper}>
       ${children}
     <//>
   `;
