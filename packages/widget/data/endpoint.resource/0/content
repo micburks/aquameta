@@ -1,10 +1,10 @@
 <html>
   <head>
     <title>widget test</title>
-    <link rel="stylesheet" type="text/css" href="/db/widget/core/reset.css"/>
     <style>
       * { box-sizing: border-box; }
       html { font-family: Helvetica, 'sans-serif'; }
+      body { margin: 0; }
     </style>
   </head>
   <body>
