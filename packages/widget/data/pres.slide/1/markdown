@@ -1,9 +1,4 @@
 
-# Slide 2!
+# Table of contents
 
-```js
-import datum from '/db/widget/core/datum.js';
-```
-
-SHORTCODE'/db/pres/component/insert-example.js'END
-
+SHORTCODE'/db/pres/component/table-of-contents.js'END

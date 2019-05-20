@@ -1,0 +1,21 @@
+
+# Transport layer issues
+
+Issues preventing the adoption and scaling of datum/widget:
+
+- non-standard module loader (amd modules)
+  - datum/widget built before harmony modules
+- non-functional API
+  - queries are not composable
+  - limited reuse of queries
+- datum
+  - only meant for XHR data requests
+  - unable to run in Node.js
+- widget framework
+  - made opinionated and dated decisions
+  - tied to specific technologies
+  - imperative rather than declarative, preventing optimizations
+  - was not agnostic to rendering target (client vs ssr)
+  - tied to a single table, limiting extensibility
+  - unable to use existing modules/packages from js ecosystem
+- http message encoding/decoding logic split/duplicated between python/javascript

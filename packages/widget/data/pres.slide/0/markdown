@@ -1,13 +1,1 @@
-
-# aquameta-datum
-
-```js
-import {datum} from '/db/widget/core/datum.js';
-
-datum.createTable('public.test', {
-  id: 'integer',
-  name: 'text',
-});
-```
-
-SHORTCODE'/db/pres/component/table-of-contents.js'END
+SHORTCODE'/db/pres/component/splash.js'END

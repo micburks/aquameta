@@ -1,0 +1,11 @@
+
+# Transport layer definition
+
+Transport layer includes most things outside the database
+
+- fetching data
+- database connection
+- data format
+- web server
+- code storage
+- code consumption

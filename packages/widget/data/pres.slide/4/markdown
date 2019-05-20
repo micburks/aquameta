@@ -1,0 +1,21 @@
+
+# Transport layer goals
+
+The experimental transport layer [monorepo](https://github.com/micburks/aquameta) attempts to rethink this layer.
+
+- modularize the `datum` API
+  - use functional components (curry, compose, etc.)
+  - separate queries from how/where they run
+  - reuse components of a query
+- isomorphic javascript
+  - any logic, especially encoding/decoding request, in a single place/codebase
+  - runs in node or the browser
+  - run queries on database connections or over http
+- avoid creating a new framework with `widget`
+  - provide primitives necessary to build abstract UI
+  - support using external code/packages from js ecosystem
+- follow and allow evolving web standards
+  - separate from opinionated frameworks/technologies
+  - support es module import/export syntax and standardized module loading
+  - avoid bundlers/transpilers, instead rely on browser features/web standards
+- generic way of referencing tables that contain code
