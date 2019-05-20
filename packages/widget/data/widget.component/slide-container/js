@@ -4,8 +4,6 @@ import Centered from '/db/widget/component/centered.js';
 import Slide from '/db/widget/component/slide.js';
 import Constrained from '/db/widget/component/constrained.js';
 
-const minHeight = '600px';
-
 const disabledColorFn = ({disabled, theme}) => disabled
   ? theme.colors.verylight
   : theme.colors.light;
@@ -23,7 +21,7 @@ const Container = styled.div`
 const ControlSection = styled.section`
   display: inline-block;
   flex: 1;
-  height: ${minHeight};
+  height: ${({theme}) => theme.height};
 `;
 
 const Button = styled.div`
@@ -39,17 +37,17 @@ export default function SlideContainer(props){
     <${Container} className=${props.className || ''}>
       <${ControlSection} onClick=${props.previous}>
         ${!(props.previousDisabled) && html`
-          <${Centered} disabled=${props.previousDisabled}>
+          <${Centered} height=${'560px'}>
             <${Button}>${'<'} Previous<//>
           <//>
         `}
       <//>
       <${Constrained}>
-        <${Slide} minHeight=${minHeight} slide=${props.slide}/>
+        <${Slide} slide=${props.slide}/>
       <//>
       <${ControlSection} onClick=${props.next}>
         ${!(props.nextDisabled) && html`
-          <${Centered} disabled=${props.nextDisabled}>
+          <${Centered} height=${'560px'}>
             <${Button}>Next ${'>'}<//>
           <//>
         `}
