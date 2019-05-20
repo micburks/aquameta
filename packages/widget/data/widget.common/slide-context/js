@@ -1,0 +1,5 @@
+import React from '/db/widget/dep/react.js';
+
+const SlideContext = React.createContext({});
+
+export default SlideContext;
