@@ -2,6 +2,7 @@ import html from '/db/widget/core/html.js';
 import React from '/db/widget/dep/react.js';
 import styled from '/db/widget/dep/styled-components.js';
 import Markdown from '/db/widget/component/markdown.js';
+import Centered from '/db/widget/component/centered.js';
 
 const SlideWrapper = styled.div`
   background-color: ${({theme}) => theme.colors.opaque.light};
@@ -18,7 +19,17 @@ const SlideWrapper = styled.div`
 
 function LazyLoader({importPath}) {
   const LazyComp = React.useMemo(() => {
-    return React.lazy(() => import(importPath));
+    return React.lazy(async () => {
+      let component;
+      try {
+        component = await import(importPath);
+      } catch (e) {
+        component = {
+          default: () => html`<${Centered}>Component not found<//>`
+        };
+      }
+      return component;
+    });
   }, [importPath]);
   return html`
     <${React.Suspense} fallback=${html`<${Loading} />`}>
@@ -28,7 +39,7 @@ function LazyLoader({importPath}) {
 }
 
 function Loading() {
-  return html`<span>Loading...<//>`
+  return html`<${Centered}>Loading...<//>`
 }
 
 const shortcodeRegex = /SHORTCODE'(.*?)'END/g;
