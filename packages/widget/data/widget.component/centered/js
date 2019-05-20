@@ -3,7 +3,7 @@ import styled from '/db/widget/dep/styled-components.js';
 
 const Parent = styled.div`
   display: table;
-  height: 100%;
+  height: ${({height}) => height || ''};
   text-align: center;
   width: 100%;
 `;
@@ -15,7 +15,7 @@ const Child = styled.div`
 
 export default function Centered(props) {
   return html`
-    <${Parent}>
+    <${Parent} height=${props.height}>
       <${Child}>
         ${props.children}
       <//>
