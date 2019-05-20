@@ -24,6 +24,14 @@ create table if not exists widget.dep (
   docs text
 );
 
+create table if not exists widget.common (
+  id uuid not null default public.uuid_generate_v4() primary key,
+  name text not null,
+  js text default '// export default function() {}',
+  css text default '/* #root {\n} */',
+  docs text
+);
+
 create schema if not exists pres;
 
 create table if not exists pres.slide (
