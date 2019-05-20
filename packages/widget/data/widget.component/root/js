@@ -8,6 +8,7 @@ import Slide from '/db/widget/component/slide.js';
 import useDatum from '/db/widget/core/use-datum.js';
 import Centered from '/db/widget/component/centered.js';
 import StatusBanner from '/db/widget/component/status-banner.js';
+import SlideContext from '/db/widget/common/slide-context.js';
 
 const theme = {
   colors: {
@@ -43,36 +44,51 @@ export default function Root() {
     }
   }
 
+  function moveSlideById(id) {
+    const index = slides
+      .findIndex(slide => slide.id === id);
+    if (index) {
+      moveSlide(index);
+    }
+  }
+
+  const slideContext = {
+    moveSlide,
+    moveSlideById,
+  };
+
   return html`
     <${ThemeProvider} theme=${theme}>
       <${HelmetProvider}>
-        ${slide
-          ? html`
-            <${React.Fragment}>
-              <${Helmet}>
-                <link
-                  rel="stylesheet"
-                  type="text/css"
-                  href="https://dev.jspm.io/npm:github-markdown-css@3.0.1/github-markdown.css"
+        <${SlideContext.Provider} value=${slideContext}>
+          ${slide
+            ? html`
+              <${React.Fragment}>
+                <${Helmet}>
+                  <link
+                    rel="stylesheet"
+                    type="text/css"
+                    href="/db/widget/dep/github-markdown.css"
+                  />
+                <//>
+                <${StatusBanner} index=${slideIndex} rows=${slides}/>
+                <${SlideContainer}
+                  className="markdown-body"
+                  previous=${() => moveSlide(slideIndex-1)}
+                  previousDisabled=${slideIndex === 0}
+                  next=${() => moveSlide(slideIndex+1)}
+                  nextDisabled=${slideIndex === (slides.length - 1)}
+                  slide=${slide}
                 />
               <//>
-              <${StatusBanner} index=${slideIndex} rows=${slides}/>
-              <${SlideContainer}
-                className="markdown-body"
-                previous=${() => moveSlide(slideIndex-1)}
-                previousDisabled=${slideIndex === 0}
-                next=${() => moveSlide(slideIndex+1)}
-                nextDisabled=${slideIndex === (slides.length - 1)}
-                slide=${slide}
-              />
-            <//>
-          `
-          : html`
-            <${Centered}>
-              <${LoadingMessage}>Presentation loading<//>
-            <//>
-          `
-        }
+            `
+            : html`
+              <${Centered}>
+                <${LoadingMessage}>Presentation loading<//>
+              <//>
+            `
+          }
+        <//>
       <//>
     <//>
   `;
