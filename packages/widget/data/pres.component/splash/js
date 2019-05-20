@@ -1,0 +1,15 @@
+import html from '/db/widget/core/html.js';
+import styled from '/db/widget/dep/styled-components.js';
+
+const Wrapper = styled.div`
+  margin-top: 200px;
+  text-align: center;
+`;
+
+export default function Splash() {
+  return html`
+    <${Wrapper}>
+      <h1>Aquameta transport layer<//>
+    <//>
+  `;
+}
