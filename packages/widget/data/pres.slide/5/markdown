@@ -1,0 +1,8 @@
+
+# aquameta-datum
+
+`datum` is an isomorphic data access library
+- how database connection works, what query to run
+- how to encode/decode query over http
+- how to parse query
+- how to compose a query

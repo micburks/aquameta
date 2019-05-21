@@ -1,0 +1,17 @@
+
+# aquameta-widget
+
+`widget`
+- no longer exists
+- ...in the form it previously did
+- source urls allow importing/running arbitrary code from the database
+
+But we want
+
+- `jspm.io` for using js ecosystem modules directly
+`import React from 'https://dev.jspm.io/react';`
+- there are existing frameworks that eschew build steps
+
+
+SHORTCODE'/db/pres/component/insert-example.js'END
+
