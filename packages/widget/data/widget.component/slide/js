@@ -13,7 +13,7 @@ const SlideWrapper = styled.div`
   height: auto;
   height: ${({theme}) => theme.height};
   overflow: auto;
-  padding: 20px 30px;
+  padding: 0 30px;
   width: 100%;
 `;
 
