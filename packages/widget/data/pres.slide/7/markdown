@@ -1,0 +1,35 @@
+
+# source url
+
+you're familiar with data requests
+`/endpoint/v1/relation/widget/widget?where=[{...}]`
+
+Human readable 
+If the world is data, and every datum has a url, and all data is relational,
+a uri does not need to be human-readable.
+
+But we're also storing code in the database. When we write code, we need to
+reference other pieces of code and this needs to be done in a human-readable
+format.
+
+source urls are human-readable
+`/db/<schema>/<relation>/<name>.<column>`
+
+They serve a different purpose than data requests. The table being referenced
+must adhere to a certain format, but this allows us to refence certain fields
+in that table and the content of the field will be delivered with the
+appropriate `Content-Type`. This way we can have link tags, script tags, image
+tags, and font references all work appropriately. Most importantly, this allows
+us to do this:
+
+`import {datum} from '/db/widget/core/datum.js';`
+use javascript import/export syntax to reference a field containing
+javascript in the database.
+
+soft constraints:
+- table has a name column where values are unique
+- column name should be a mimetype (will be used as the `Content-Type` header)
+
+`/db/widget/core/datum.js`
+or may turn into
+`/db/widget.core/datum.js`

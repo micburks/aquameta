@@ -13,9 +13,10 @@ Issues preventing the adoption and scaling of datum/widget:
   - unable to run in Node.js
 - widget framework
   - made opinionated and dated decisions
-  - tied to specific technologies
-  - imperative rather than declarative, preventing optimizations
-  - was not agnostic to rendering target (client vs ssr)
+    - tied to specific technologies
+    - imperative rather than declarative, preventing optimizations
+  - specific to browser rendering target (ssr not possible)
+  - built around `eval`ing arbitrary code
   - tied to a single table, limiting extensibility
   - unable to use existing modules/packages from js ecosystem
 - http message encoding/decoding logic split/duplicated between python/javascript

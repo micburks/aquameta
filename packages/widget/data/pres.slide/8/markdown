@@ -1,0 +1,11 @@
+
+# aquameta-sync
+
+`sync` allows bootstrapping code/data from filesystem to database
+- does sql dump into a human-readable directory structure
+- imports data from this structure into a table
+- will watch your files and sync those fields into the database
+- we can use existing and familiar tools to edit files and have them imported
+  into the database while getting around the shortcoming of the `psql` cli
+  interface
+- sync makes it easier to develop...
