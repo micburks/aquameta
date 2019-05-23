@@ -1,0 +1,15 @@
+{
+  "name": "experiment",
+  "type": "module",
+  "engines": {
+    "node": ">12"
+  },
+  "scripts": {
+    "clean": "rm -rf ./.aquameta_cache/*",
+    "start": "node --experimental-modules --loader ./loader.js ./widget-test.js"
+  },
+  "loaders": [
+    "./pnp-jspm-loader.js",
+    "./pnp-db-loader.js"
+  ]
+}
