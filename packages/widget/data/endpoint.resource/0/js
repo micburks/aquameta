@@ -1,0 +1,13 @@
+import html from '/db/widget/core/html.js';
+import ReactDOMServer from '/db/widget/dep/react-dom-server.js';
+import Root from '/db/widget/component/root.js';
+
+export default function() {
+  console.log('running ssr');
+
+  const rendered = ReactDOMServer.renderToString(
+    html`<${Root}/>`,
+  );
+
+  return `<div id="root">${rendered}</div>`;
+}
