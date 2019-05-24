@@ -1,0 +1,12 @@
+#!/usr/bin/env node --experimental-modules --loader ./loader.js
+/* globals require process */
+
+import Koa from 'koa';
+import aquameta from '../dist/aquameta.es.js';
+
+const app = new Koa();
+const port = parseInt(process.env.PORT, 10) || 8080;
+
+app.use(aquameta({ssr: true})).listen(port, () => {
+  console.log(`listening on port ${port}`);
+});

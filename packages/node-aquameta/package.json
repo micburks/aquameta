@@ -2,24 +2,29 @@
   "name": "aquameta",
   "version": "0.1.12",
   "description": "Node implementation of the Aquameta server",
+  "type": "module",
   "main": "dist/aquameta.js",
   "module": "dist/aquameta.es.js",
   "jsnext:main": "dist/aquameta.es.js",
+  "bin": {
+    "aquameta": "bin/www",
+    "aquameta-ssr": "bin/www-ssr"
+  },
   "scripts": {
     "build": "rollup -c",
     "build-w": "nodemon --watch src --exec 'yarn build'",
+    "clean": "rm -rf ./.loader_cache/*",
     "preversion": "npm test",
     "version": "npm run build # Get current version",
-    "postversion": "git push && git push --tags",
     "serve": "nodemon --watch dist bin/www",
     "watch": "run-p build-w serve",
     "test": "echo \"tests!\""
   },
-  "bin": "bin/www",
   "keywords": [
-    "datum",
     "aquameta",
-    "postgres"
+    "postgres",
+    "node",
+    "server"
   ],
   "repository": {
     "type": "git",
@@ -47,5 +52,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "engines": {
+    "node": "^12.0.0"
+  }
 }
