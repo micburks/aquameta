@@ -24,6 +24,7 @@ const banner = readFileSync('./banner.js', 'utf-8').replace(
 export default {
   input: 'src/index.js',
   external,
+  experimentalDynamicImport: true,
   plugins: [
     flow(),
     resolve({
