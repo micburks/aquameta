@@ -1,5 +1,7 @@
 begin;
 
+alter table endpoint.resource add column if not exists js text;
+
 -- page middleware
 create view endpoint.sitemap as
 select r.path, m.mimetype, r.content
