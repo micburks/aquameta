@@ -1,0 +1,2 @@
+export const __BROWSER__ = typeof window !== 'undefined';
+export const __NODE__ = !__BROWSER__;
