@@ -8,8 +8,8 @@ import {promisify} from 'util';
 const {client, database: db, query} = datum;
 const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
-const dir = path.dirname(new URL(import.meta.url).pathname);
-const cacheDir = path.join(dir, '.aquameta_cache');
+const dir = new URL(`file://${process.cwd()}`).pathname;
+const cacheDir = path.join(dir, '.loader_cache');
 const baseURL = new URL('file://');
 baseURL.pathname = `${process.cwd()}/`;
 
@@ -49,7 +49,6 @@ export async function resolve(
       );
       await writeToCache(urlCachePath, module.response);
     }
-    console.log('url', url);
     return {url, format: 'module'};
   } else {
     return false;

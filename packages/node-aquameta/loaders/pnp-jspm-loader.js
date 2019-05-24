@@ -5,20 +5,20 @@ import https from 'https';
 
 const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
-const dir = path.dirname(new URL(import.meta.url).pathname);
-const cacheDir = path.join(dir, '.aquameta_cache');
+const dir = new URL(`file://${process.cwd()}`).pathname;
+const cacheDir = path.join(dir, '.loader_cache');
 const baseURL = new URL('file://');
 baseURL.pathname = `${process.cwd()}/`;
 const fullUrlRegex = /^https\:\/\/.*/;
 const relativeRegex = /^\/npm\:/;
 
 function encode(str) {
-  return str.replace(/[/?]/g, char => {
+  return str && str.replace(/[/?]/g, char => {
     return `[${char.charCodeAt(0)}]`;
   });
 }
 function decode(str) {
-  return str.replace(/\[(\d+)\]/g, (_, code) => {
+  return str && str.replace(/\[(\d+)\]/g, (_, code) => {
     return String.fromCharCode(code);
   });
 }
@@ -26,7 +26,7 @@ function decode(str) {
 function getRequestFromCachePath(path) {
   const [, relative] = path.split(cacheDir);
   const decoded = decode(relative);
-  return decoded.replace('/dev.jspm.io', '');
+  return decoded && decoded.replace('/dev.jspm.io', '');
 }
 
 function getUrlCachePath(url) {
@@ -69,14 +69,12 @@ export async function resolve(
   let url = new URL(specifier, parentModuleURL).href;
   const isRelativePath = /^\./.test(specifier);
   if (isRelativePath) {
-    const relativeParentPath = getRequestFromCachePath(parentModuleURL);
-    console.log(isRelativePath, specifier, relativeParentPath)
+    const relativeParentPath = getRequestFromCachePath(parentModuleURL) || '';
     if (
       fullUrlRegex.test(relativeParentPath) ||
       relativeRegex.test(relativeParentPath)
     ) {
       specifier = path.join(path.dirname(relativeParentPath), specifier);
-      console.log(specifier, relativeParentPath)
     }
   }
   const isFullUrl = fullUrlRegex.test(specifier);
@@ -90,7 +88,6 @@ export async function resolve(
       const result = await httpsGet(absoluteUrl);
       await writeToCache(urlCachePath, result);
     }
-    console.log('url', url);
     return {url, format: 'module'};
   } else {
     return false;
