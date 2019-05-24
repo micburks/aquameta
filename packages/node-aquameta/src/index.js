@@ -44,6 +44,7 @@ type Options = {
   client: ClientOptions,
 };
 const defaultConfig: Options = {
+  ssr: false,
   pages: true,
   server: false,
   roles: false,
@@ -67,7 +68,7 @@ export default function(config: Options) {
 
   if (config.client) {
     // Register Client-side API route
-    const datum = datumRouter(config.client);
+    const datum = datumRouter(config);
 
     app.use(bodyParser());
     app.use(datum.routes()).use(datum.allowedMethods());
@@ -75,7 +76,7 @@ export default function(config: Options) {
 
   if (config.pages) {
     // Register middleware that looks for matching database-mounted resources
-    app.use(pageMiddleware(config.client));
+    app.use(pageMiddleware(config));
   }
 
   if (config.node) {

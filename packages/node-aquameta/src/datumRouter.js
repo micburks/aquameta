@@ -8,10 +8,10 @@ import {compose} from 'ramda';
 // const log = debug('datum');
 
 export default function(config) {
-  const dbClient = client.connection(config);
+  const dbClient = client.connection(config.client);
   const router = new Router();
-  const path = `/${config.url}/${config.version}/*`;
-  const pathRegex = new RegExp(`/${config.url}/`);
+  const path = `/${config.client.url}/${config.client.version}/*`;
+  const pathRegex = new RegExp(`/${config.client.url}/`);
   const sourceRegex = /\/db\/.+\/.+\/.+\..+/;
   const sourcePath = '/db/:schemaName/:relationName/:name.:column';
   const executeHTTPQuery = compose(
