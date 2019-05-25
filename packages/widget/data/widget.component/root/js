@@ -1,6 +1,6 @@
 import html from '/db/widget/core/html.js';
 import React from '/db/widget/dep/react.js';
-import {client, database, query} from '/db/widget/core/datum.js';
+import {database, query} from '/db/widget/core/datum.js';
 import {Helmet, HelmetProvider} from '/db/widget/dep/react-helmet-async.js';
 import styled, {ThemeProvider} from '/db/widget/dep/styled-components.js';
 import SlideContainer from '/db/widget/component/slide-container.js';
@@ -28,7 +28,6 @@ const LoadingMessage = styled.span`
 `;
 
 const datum = query(
-  client.endpoint(),
   database.select(
     // database.orderByAsc('number', database.relation('pres.slide'))
     database.relation('pres.slide')

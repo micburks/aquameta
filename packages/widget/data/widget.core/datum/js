@@ -1,8 +1,19 @@
-import '/db/widget/dep/datum.js';
+export {database} from '/db/widget/dep/datum.browser.js';
+import {__NODE__} from '/db/widget/core/env.js';
 
-// TODO: try again to get webpack to configure datum exports properly
-
-const {client, database, simple, query} = window.datum;
-
-export {client, database, simple, query};
-
+// isomorphic compat
+let queryExecutor;
+export async function query(executable) {
+  if (!queryExecutor) {
+    await (
+      __NODE__
+        ? import('/db/widget/dep/datum.node.js')
+        : import('/db/widget/dep/datum.browser.js')
+    ).then(({query, client}) => {
+      queryExecutor = query(
+        __NODE__ ? client.connection() : client.endpoint(),
+      );
+    });
+  }
+  return queryExecutor(executable);
+}
