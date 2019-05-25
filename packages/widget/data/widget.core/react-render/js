@@ -1,0 +1,39 @@
+import {__NODE__} from '/db/widget/core/env.js';
+
+export default async function ReactRender(element) {
+  if (__NODE__) {
+    const [ServerStyleSheet, ReactDOMServer] = await Promise.all([
+      import('/db/widget/dep/styled-components.js').then(mod => mod.ServerStyleSheet),
+      import('/db/widget/dep/react-dom-server.js').then(mod => mod.default),
+    ]);
+    const sheet = new ServerStyleSheet();
+    let rendered = null;
+    try {
+      const renderedString = ReactDOMServer.renderToString(
+        sheet.collectStyles(element)
+      );
+      rendered = {
+        headContent: sheet.getStyleTags(),
+        bodyContent: `<div id="root">${renderedString}</div>`,
+      };
+    } catch (e) {
+      console.error(e);
+    } finally {
+      sheet.seal();
+      return rendered;
+    }
+  } else {
+    return import('/db/widget/dep/react-dom.js')
+      .then(({default: ReactDOM}) => {
+        let root = document.getElementById('root');
+        if (root) {
+          return ReactDOM.hydrate(element, root)
+        } else {
+          root = document.createElement('div');
+          root.id = 'root';
+          document.body.appendChild(root);
+          return ReactDOM.render(element, root);
+        }
+      });
+  }
+}
