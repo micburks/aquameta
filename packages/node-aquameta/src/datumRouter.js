@@ -21,8 +21,6 @@ export default function(config) {
 
   async function handleRequest(ctx, next) {
     //debug('datum', path, req.url)
-    console.log(ctx.request.url);
-
     const isSource = sourceRegex.test(ctx.request.url);
 
     const url = isSource
