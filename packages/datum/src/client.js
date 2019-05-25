@@ -29,7 +29,7 @@ export function endpoint(config?: ClientOptions): Client {
   return createClient(ENDPOINT, config);
 }
 
-export const connection = __NODE__ ? function connection(config?: ClientOptions): Client => {
+export const connection = __NODE__ ? function connection(config?: ClientOptions): Client {
   return createClient(CONNECTION, config);
 } : null;
 
