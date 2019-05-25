@@ -1,6 +1,6 @@
 // @flow
 
-import pg from 'pg';
+import pg from '@micburks/pg';
 import type {
   Client,
   ConnectionOptions,
