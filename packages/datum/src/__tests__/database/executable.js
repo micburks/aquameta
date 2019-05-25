@@ -13,7 +13,7 @@ test('#http - parses request', t => {
   const executable = database.http(req);
 
   t.is(executable.method, 'POST');
-  t.is(executable.url, '/endpoint/v1/relation/test/table');
+  t.is(executable.url, 'v1/relation/test/table');
   t.deepEqual(executable.args, {name: 'value'});
   t.deepEqual(executable.data, {body: true});
   t.end();
