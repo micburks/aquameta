@@ -2,7 +2,11 @@
 
 #### TODO
 
-
+- [ ] loader -separate caches so each can be cleared independently
+- [ ] loader - don't read cache for db modules
+- [X] fix the build on datum. not working in node, super weird how many time im
+  importing/exporting in different formats
+- [-] maybe push files directly into db
 - [ ] host pres
 - [ ] how to hot update modules? - need component wrapper that updates them
 - [ ] do hack to get update to work /relation => /row
@@ -29,7 +33,6 @@
   in a stored procedure
 - [ ] Get rid of console.logs for connection
 - [ ] Add demos or tests for each package
-- [ ] Add postinstall script that does `cat setup.sql | psql aquameta`
 - [ ] combine all todos (not sure where they are)
 - [ ] test everything
 - [ ] write widget
@@ -37,6 +40,7 @@
   of things to document this way
 - [X] finish sync
 - [ ] provide a top-level sql file for each package
+  - [ ] Add postinstall script that does `cat setup.sql | psql aquameta`
 - [ ] make a install file for aquameta that removes a lot of dependencies (easy
   install path for mac)
 - [ ] finish simple API for datum
