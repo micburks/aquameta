@@ -37,7 +37,7 @@
     "just-compose": "^1.1.0",
     "just-curry-it": "^3.1.0",
     "node-fetch": "^2.3.0",
-    "pg": "^7.4.1",
+    "@micburks/pg": "^8.0.0",
     "ramda": "^0.26.1",
     "unfetch": "^4.1.0"
   },
