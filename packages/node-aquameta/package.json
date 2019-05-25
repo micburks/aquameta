@@ -34,7 +34,7 @@
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {
-    "@micburks/pg": "^8.0.0",
+    "@micburks/pg": "^8.0.1",
     "aquameta-datum": "^0.1.15",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
