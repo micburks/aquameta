@@ -36,19 +36,55 @@ export default function(config) {
       }
 
       const page = response.result[0].row;
+      // TODO: this is all html specific - should check http headers
 
       if (config.ssr && page.js) {
-        const {default: render} = await import(
-          `${sitemapUrl}/${page.name}.js`
-        );
-        const rendered = await render();
-        ctx.status = result.status;
-        ctx.set('Content-Type', page.mimetype);
-        ctx.body = page.content + rendered;
+        try {
+          const render = await import(`${sitemapUrl}/${page.name}.js`)
+            .then(mod => {
+              if (!mod.default) {
+                throw new Error(`no default export found in module ${page.name}.js`);
+              }
+              return mod.default;
+            });
+          const rendered = await render();
+          if (!rendered) {
+            // ssr failed
+            throw new Error(`ssr failed: url - ${ctx.req.url}`);
+          }
+          const renderedHTML = `
+            <html>
+              <head>
+                ${page.content}
+                ${rendered.headContent}
+              </head>
+              <body>
+                ${rendered.bodyContent}
+                <script type="module">
+                  ${page.js}
+                </script>
+              </body>
+            </html>
+          `;
+          return sendResponse(ctx, {
+            status: 200,
+            mimetype: 'text/html',
+            content: renderedHTML,
+          })
+        } catch (e) {
+          console.error(e);
+          return sendResponse(ctx, {
+            status: result.status,
+            mimetype: page.mimetype,
+            page,
+          })
+        }
       } else {
-        ctx.status = result.status;
-        ctx.set('Content-Type', page.mimetype);
-        ctx.body = page.content;
+        return sendResponse(ctx, {
+          status: result.status,
+          mimetype: page.mimetype,
+          page,
+        })
       }
     } catch (err) {
       console.log('error', err);
@@ -57,4 +93,25 @@ export default function(config) {
       return next();
     }
   };
+}
+
+function sendResponse(ctx, {status, mimetype, content, page}) {
+  ctx.status = status;
+  ctx.set('Content-Type', mimetype);
+  if (page && !content) {
+    ctx.body = `
+      <html>
+        <head>
+          ${page.content}
+        </head>
+        <body>
+          <script type="module">
+            ${page.js}
+          </script>
+        </body>
+      </html>
+    `;
+  } else {
+    ctx.body = content;
+  }
 }

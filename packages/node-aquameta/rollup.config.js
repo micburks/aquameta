@@ -12,7 +12,6 @@ const external = [
   'koa-router',
   'koa-session',
   'node-fetch',
-  'pg',
   'url',
 ];
 
