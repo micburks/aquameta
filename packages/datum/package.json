@@ -1,6 +1,6 @@
 {
   "name": "aquameta-datum",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Service layer for the Aquameta database API",
   "sideEffects": false,
   "main": "./dist-node-cjs/index.js",
@@ -34,10 +34,10 @@
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {
+    "@micburks/pg": "^8.0.0",
     "just-compose": "^1.1.0",
     "just-curry-it": "^3.1.0",
     "node-fetch": "^2.3.0",
-    "@micburks/pg": "^8.0.0",
     "ramda": "^0.26.1",
     "unfetch": "^4.1.0"
   },

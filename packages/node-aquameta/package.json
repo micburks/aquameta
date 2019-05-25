@@ -1,6 +1,6 @@
 {
   "name": "aquameta",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Node implementation of the Aquameta server",
   "type": "module",
   "main": "dist/aquameta.js",
@@ -34,7 +34,7 @@
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {
-    "aquameta-datum": "^0.1.12",
+    "aquameta-datum": "^0.1.13",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-mount": "^3.0.0",
