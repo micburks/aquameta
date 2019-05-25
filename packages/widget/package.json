@@ -6,7 +6,7 @@
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
   "scripts": {
-    "build-datum": "webpack && mv dist/main.js data/widget.dep/datum/js",
+    "build-datum": "rollup -c && mv dist/lib.browser.js data/widget.dep/datum.browser/js && mv dist/lib.node.js data/widget.dep/datum.node/js",
     "postinstall": "cat setup.sql | psql aquameta",
     "serve": "aquameta",
     "start": "run-p sync serve",
@@ -49,8 +49,6 @@
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
     "rollup-plugin-commonjs": "^8.4.1",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.2.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "veggie": "^2.4.1",
     "webpack": "^4.31.0",
