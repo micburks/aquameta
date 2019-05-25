@@ -11,8 +11,8 @@ const defaultConfig: ClientOptions = {
   rawResponse: false,
 };
 
-const ENDPOINT = new Object();
-const CONNECTION = new Object();
+const ENDPOINT = Symbol.for('endpoint');
+const CONNECTION = Symbol.for('connection');
 
 export const isEndpointClient = (client: Client): boolean => {
   return client.type === ENDPOINT;
