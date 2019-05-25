@@ -1,7 +1,7 @@
 import test from 'tape';
 import connection from '../../query/connection.js';
 import sinon from 'sinon';
-import pg from 'pg';
+import pg from '@micburks/pg';
 
 test('#connection', async t => {
   const fakeRow = {name: 'fake-name'};
