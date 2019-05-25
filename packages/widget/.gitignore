@@ -1,5 +1,6 @@
 node_modules
 dist
 .nyc_output
-data/widget.dep/datum
 *.swp
+data/widget.dep/datum.browser
+data/widget.dep/datum.node
