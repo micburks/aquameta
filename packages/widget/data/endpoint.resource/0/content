@@ -1,26 +1,9 @@
-<html>
-  <head>
-    <title>widget test</title>
-    <style>
-      * { box-sizing: border-box; }
-      html { font-family: Helvetica, 'sans-serif'; }
-      body {
-        background-color: rgba(0, 0, 0, 0.03);
-        margin: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module">
-      import html from '/db/widget/core/html.js';
-      import ReactDOM from '/db/widget/dep/react-dom.js';
-      import Root from '/db/widget/component/root.js';
-
-      ReactDOM.render(
-        html`<${Root}/>`,
-        document.getElementById('root'),
-      );
-    </script>
-  </body>
-</html>
+<title>widget test</title>
+<style>
+  * { box-sizing: border-box; }
+  html { font-family: Helvetica, 'sans-serif'; }
+  body {
+    background-color: rgba(0, 0, 0, 0.03);
+    margin: 0;
+  }
+</style>

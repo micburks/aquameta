@@ -1,13 +1,14 @@
+import ReactRender from '/db/widget/core/react-render.js';
 import html from '/db/widget/core/html.js';
-import ReactDOMServer from '/db/widget/dep/react-dom-server.js';
 import Root from '/db/widget/component/root.js';
+import {__BROWSER__} from '/db/widget/core/env.js';
 
-export default function() {
-  console.log('running ssr');
-
-  const rendered = ReactDOMServer.renderToString(
+export default async function render() {
+  return ReactRender(
     html`<${Root}/>`,
   );
+}
 
-  return `<div id="root">${rendered}</div>`;
+if (__BROWSER__) {
+  render();
 }
