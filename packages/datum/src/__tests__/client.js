@@ -41,6 +41,8 @@ test('#client - connection', t => {
 test('#client - isInvalidClient', t => {
   t.true(isInvalidClient({}));
   t.true(isInvalidClient({type: new Object()}));
+  t.true(isInvalidClient({type: Symbol('executable')}));
+  t.true(!isInvalidClient({type: Symbol.for('executable')}));
   t.true(isInvalidClient({connection: true}));
   t.true(isInvalidClient({endpoint: true}));
   t.end();

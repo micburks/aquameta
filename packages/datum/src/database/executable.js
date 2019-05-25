@@ -17,7 +17,7 @@ import {fn} from './chainable.js';
 // TODO move this
 import {parseSourceUrl} from '../query/connection.js';
 
-const EXECUTABLE = new Object();
+const EXECUTABLE = Symbol.for('executable');
 
 const createExecutable = curry<
   string,
