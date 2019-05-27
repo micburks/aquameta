@@ -3,9 +3,10 @@
 
 Transport layer includes most things outside the database
 
-- fetching data
-- database connection
-- data format
 - web server
+- database connection
+- local data access (connection)
+- remote data access (http)
+- data format
 - code storage
 - code consumption

@@ -1,7 +1,0 @@
-import html from '/db/widget/core/html.js'
-
-export default function InsertExample() {
-  return html`
-    <div>Insert example!</div>
-  `;
-}

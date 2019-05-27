@@ -1,0 +1,16 @@
+
+# node-aquameta
+
+`node-aquameta` is a small http server for accepting requests and accessing data
+
+- looks for:
+  - data fetching urls - format defined in configuration
+  - source urls - hardcoded format
+  - everything else is assumed to be in the resource table
+- does not know:
+  - the format of queries
+  - how to connect to database
+- returns data with appropriate content-type header
+- performs SSR
+  - due to the limitations of plv8
+

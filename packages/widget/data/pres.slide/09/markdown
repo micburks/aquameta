@@ -1,0 +1,10 @@
+
+# source url - definition
+
+source urls
+- are human-readable and human-writable
+- impose constraints on the tables they reference
+- can reference any field in the tables that follow these constraints
+- look like this:
+
+`/db/<schema>/<relation>/<name>.<column>`

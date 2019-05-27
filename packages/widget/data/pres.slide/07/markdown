@@ -1,0 +1,18 @@
+
+# node-aquameta - schema
+
+## endpoint.request (table)
+
+| path | field_id | mimetype |
+| ---- | -------- | -------- |
+| /favicon.ico | site/icons/123/content | image/x-icon |
+| /admin | site/pages/456/content | text/html |
+
+
+## endpoint.sitemap (view)
+
+| name | path | mimetype | content | is_page | head_content | js |
+| ---- | ---- | -------- | ------- | ------- | ------------ | -- |
+| favicon | /favicon.ico | image/x-icon | `[BINARY]` | `f` | `null` | `null` |
+| admin | /admin | text/html | `null` | `t` | `<title>my site</title>` | `export default function universalRender() {}` |
+

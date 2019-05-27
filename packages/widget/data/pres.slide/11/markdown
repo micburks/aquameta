@@ -1,0 +1,16 @@
+
+# source url - use
+
+link tags, script tags, image tags, and font references can all work appropriately
+```html
+<link rel="stylesheet" type="text/css" href="/db/widget/core/reset.css" />
+<link rel="icon" type="image/x-icon" href="/db/site/icons/favicon.ico" />
+```
+
+Most importantly, this allows us to do this:
+```js
+import render from '/db/widget/core/render.js';
+
+document.getElementById('root').innerHTML = render();
+```
+

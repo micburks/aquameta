@@ -1,0 +1,9 @@
+
+# aquameta-widget
+
+- [`jspm.io`](https://jspm.io) for using js ecosystem modules directly
+
+```js
+import React from 'https://dev.jspm.io/react';
+```
+
