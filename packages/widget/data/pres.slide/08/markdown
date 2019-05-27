@@ -1,0 +1,17 @@
+
+# source url - the issue
+
+Data access urls are meant to be somewhat readable and RESTful
+
+`https://hub.aquameta.com/endpoint/v1/relation/widget/widget?where=[{...}]`
+
+Human readable urls
+- are necessary for resources
+- are not necessary for data access
+  - no one will ever form these urls by hand
+
+But we're also storing code in the database. When we write code, we need to
+reference other pieces of code and this needs to be done in a human-readable
+format.
+
+Enter source urls

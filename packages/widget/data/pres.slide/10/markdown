@@ -1,0 +1,38 @@
+
+# source url - constraints
+
+source url table constraints are:
+- has a `name` column
+- `name` values are unique across the table
+- has one or more columns named after extensions
+  - e.g. `js`, `css`, `png`, `ico`
+  - these extensions must match a value in the `endpoint.mimetype` table
+  - mimetype will be used in the `Content-Type` header for the http response
+  - these columns contain source code or binary data
+
+```sql
+create or replace function endpoint.source(
+  schema_name text,
+  relation_name text,
+  column_name text,
+  name text,
+  out status integer,
+  out message text,
+  out response text,
+  out mimetype text
+)
+ returns setof record
+ language plpgsql
+AS $function$
+    begin
+        return query execute 'select 200 as status, ''OK''::text as message, c.response, m.mimetype ' ||
+        'from ( ' ||
+          'select ' || quote_ident(column_name) || ' as response, ' || quote_literal(column_name) || ' as extension ' ||
+          'from ' || quote_ident(schema_name) || '.' || quote_ident(relation_name) || ' ' ||
+          'where name=' || quote_literal(name) || ' ' ||
+        ') as c ' ||
+        'join endpoint.mimetype_extension me on c.extension=me.extension ' ||
+        'join endpoint.mimetype m on me.mimetype_id=m.id';
+    end;
+$function$;
+```

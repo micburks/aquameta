@@ -1,0 +1,24 @@
+import html from '/db/widget/core/html.js'
+import React from '/db/widget/dep/react.js';
+import {database as db, query} from '/db/widget/core/datum.js';
+import Markdown from '/db/widget/component/markdown.js';
+
+const rel = db.relation('pres.component');
+const filter = table => db.where('name', 'quine', table);
+const go = () => query(db.select(filter(rel)));
+
+export default function Quine() {
+  const [output, setOutput] = React.useState(null);
+  async function showSource() {
+    const [row] = await go();
+    setOutput(
+      '```js\n' + row.js + '\n```'
+    );
+  }
+  return html`
+    <div>
+      I'm a quine <button onClick=${showSource}>click</button>
+      ${output && html`<${Markdown} markdown=${output} />`}
+    </div>
+  `;
+}

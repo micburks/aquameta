@@ -1,0 +1,11 @@
+
+# server-side rendering
+
+want to run this code as-is on the server
+
+need to support
+- import/export
+- importing libraries from jspm
+- importing code from db
+- code fencing based on the environment
+

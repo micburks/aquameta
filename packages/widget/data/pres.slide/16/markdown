@@ -1,0 +1,14 @@
+
+# aquameta-widget
+
+- many modern libraries, especially frameworks still require build systems
+  - e.g. React jsx needs to be transpiled to `React.createElement` function
+    calls
+- but there are existing frameworks that eschew build steps
+  - [`htm`](https://github.com/developit/htm)
+    - uses tagged template literals instead of jsx
+    - compiles jsx-style strings at runtime to react
+  - [`styled-components`](https://github.com/styled-components/styled-components)
+    - declaratively defines styles as react components
+    - inserts styles at runtime
+

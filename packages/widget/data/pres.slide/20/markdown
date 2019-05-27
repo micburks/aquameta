@@ -1,0 +1,24 @@
+
+# server-side rendering
+
+```js
+export {database} from '/db/widget/dep/datum.browser.js';
+import {__NODE__} from '/db/widget/core/env.js';
+
+// isomorphic compat
+let queryExecutor;
+export async function query(executable) {
+  if (!queryExecutor) {
+    await (
+      __NODE__
+        ? import('/db/widget/dep/datum.node.js')
+        : import('/db/widget/dep/datum.browser.js')
+    ).then(({query, client}) => {
+      queryExecutor = query(
+        __NODE__ ? client.connection() : client.endpoint(),
+      );
+    });
+  }
+  return queryExecutor(executable);
+}
+```

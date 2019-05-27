@@ -1,9 +1,0 @@
-
-# node-aquameta
-
-`node-aquameta` is a thin server layer for accepting requests and accessing data
-- doesn't know implementation details of `datum`
-- looks for source urls, looks for data requests, falls back to querying
-  endpoint.sitemap (maps url to field)
-- returns data with appropriate content-type header
-- could perform SSR later

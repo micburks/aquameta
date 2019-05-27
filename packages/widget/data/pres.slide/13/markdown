@@ -1,0 +1,17 @@
+
+# aquameta-widget
+
+`widget`
+
+- no longer exists
+- ...in the form it previously did
+- source urls allow importing/running arbitrary code from the database
+
+Most important feature needed:
+
+> using packages from the js ecosystem
+
+We wouldn't need a novel rendering framework if we could grab one off the shelf
+
+If only there was a service that convert js packages into es module format
+

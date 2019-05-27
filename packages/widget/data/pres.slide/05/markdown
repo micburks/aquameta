@@ -1,0 +1,13 @@
+
+# aquameta-datum
+
+`datum` is an isomorphic data access library
+
+- provides abstractions for composing queries
+- contains encoding/decoding logic
+  - encodes query as http request
+  - parses http request into query
+  - write once, run anywhere
+- contains logic to run queries on a database connection
+- maintains pool of database connections
+

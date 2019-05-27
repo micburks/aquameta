@@ -1,0 +1,29 @@
+
+# aquameta-widget
+
+```js
+import html from '/db/widget/core/html.js';
+import styled from '/db/widget/dep/styled-components.js';
+import Constrained from '/db/widget/component/constrained.js';
+
+const Wrapper = styled.div`
+  background-color: ${({theme}) => theme.colors.dark};
+  color: ${({theme}) => theme.colors.opaque.light};
+  padding: 2px;
+  text-align: right;
+  width: 100%;
+`;
+
+export default function StatusBanner({index, rows}) {
+  const {length} = rows;
+  const {name} = rows[index];
+  return html`
+    <${Wrapper}>
+      <${Constrained}>
+        ${name} (${index+1}/${length})
+      <//>
+    <//>
+  `;
+}
+```
+

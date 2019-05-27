@@ -10,6 +10,9 @@ export default function Splash() {
   return html`
     <${Wrapper}>
       <h1>Aquameta transport layer<//>
+      <a href="https://github.com/micburks/aquameta">
+        micburks/aquameta
+      </a>
     <//>
   `;
 }
