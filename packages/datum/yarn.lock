@@ -175,6 +175,24 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@micburks/pg-pool@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@micburks/pg-pool/-/pg-pool-3.0.0.tgz#9699c139dbe4521864b2dbad10ba0f516a279ae6"
+  integrity sha512-Ah16cHGSdJ9PvFoS9uowWFa+kaMgeqMvQI2sLIfny2FFH3REMJY+3lF09vPWkjsGHc9BYZV611Ytc3Lx6GRsKQ==
+
+"@micburks/pg@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@micburks/pg/-/pg-8.0.1.tgz#0ae930a7753d94648ecd7357eb92dd3f4cb0501a"
+  integrity sha512-jXZiVxjSu9mwCS91m3CFAVLNFnVoLEafwd4PaacHH7LT0rASbLm8WJ2bMtTWIJJX+6cV9VaEpsbqUFHzgwbriw==
+  dependencies:
+    "@micburks/pg-pool" "^3.0.0"
+    buffer-writer "2.0.0"
+    packet-reader "1.0.0"
+    pg-connection-string "0.1.3"
+    pg-types "~2.0.0"
+    pgpass "1.x"
+    semver "4.3.2"
+
 "@sinonjs/commons@^1", "@sinonjs/commons@^1.0.2", "@sinonjs/commons@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.4.0.tgz#7b3ec2d96af481d7a0321252e7b1c94724ec5a78"
@@ -1974,9 +1992,9 @@ lodash.flattendeep@^4.4.0:
   integrity sha1-+wMJF/hqMTTlvJvsDWngAT3f7bI=
 
 lodash@^4.17.10, lodash@^4.17.11:
-  version "4.17.11"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
-  integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
+  version "4.17.14"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
+  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
 
 lolex@^2.3.2:
   version "2.7.5"
@@ -2701,11 +2719,6 @@ pg-int8@1.0.1:
   resolved "https://registry.yarnpkg.com/pg-int8/-/pg-int8-1.0.1.tgz#943bd463bf5b71b4170115f80f8efc9a0c0eb78c"
   integrity sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==
 
-pg-pool@^2.0.4:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/pg-pool/-/pg-pool-2.0.6.tgz#7b561a482feb0a0e599b58b5137fd2db3ad8111c"
-  integrity sha512-hod2zYQxM8Gt482q+qONGTYcg/qVcV32VHVPtktbBJs0us3Dj7xibISw0BAAXVMCzt8A/jhfJvpZaxUlqtqs0g==
-
 pg-types@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/pg-types/-/pg-types-2.0.1.tgz#b8585a37f2a9c7b386747e44574799549e5f4933"
@@ -2716,19 +2729,6 @@ pg-types@~2.0.0:
     postgres-bytea "~1.0.0"
     postgres-date "~1.0.4"
     postgres-interval "^1.1.0"
-
-pg@^7.4.1:
-  version "7.9.0"
-  resolved "https://registry.yarnpkg.com/pg/-/pg-7.9.0.tgz#04f0024d810544463f47dbb5aada2486aa7dcc36"
-  integrity sha512-GkzteBFpsIoIBCSuomqik3IGvhqAtTr32jclR24RmUg170Jrn6ypwR97YalFHrsE1iaW8T0aAH13dmij8QUQ0g==
-  dependencies:
-    buffer-writer "2.0.0"
-    packet-reader "1.0.0"
-    pg-connection-string "0.1.3"
-    pg-pool "^2.0.4"
-    pg-types "~2.0.0"
-    pgpass "1.x"
-    semver "4.3.2"
 
 pgpass@1.x:
   version "1.0.2"
