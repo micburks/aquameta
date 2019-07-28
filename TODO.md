@@ -2,12 +2,24 @@
 
 #### TODO
 
+- [ ] endpoint function select, unlike rows select, needs to be able to control
+  the status/headers/etc. of the return response - otherwise those values are
+  always hard-coded and there is no way to set cookies from the user's
+  perspective
+- [ ] put fork login in endpoint.request to point to v2 with source url parsing
+- [ ] loader - only cache versioned jspm request
+- [ ] loader - don't cache db requests
+- [ ] grant permissions to anonymous on new tables
+- [ ] default permissions: anonymous can't select endpoint.session
+- [ ] anonymous needs password other than empty? not sure why (md5 in pg_hba
+  instead of trust?)
+- [ ] need to be able to specify permissions to sync bin through env
 - [ ] loader -separate caches so each can be cleared independently
 - [ ] loader - don't read cache for db modules
 - [X] fix the build on datum. not working in node, super weird how many time im
   importing/exporting in different formats
 - [-] maybe push files directly into db
-- [ ] host pres
+- [X] host pres
 - [ ] how to hot update modules? - need component wrapper that updates them
 - [ ] do hack to get update to work /relation => /row
 - [ ] add watch option to sync import - only insert/update rows that changed
@@ -35,12 +47,13 @@
 - [ ] Add demos or tests for each package
 - [ ] combine all todos (not sure where they are)
 - [ ] test everything
-- [ ] write widget
+- [X] write widget
 - [ ] make an app that uses this - will find a lot of things to fix and a lot
   of things to document this way
 - [X] finish sync
 - [ ] provide a top-level sql file for each package
   - [ ] Add postinstall script that does `cat setup.sql | psql aquameta`
+  - [ ] make scripts idempotent
 - [ ] make a install file for aquameta that removes a lot of dependencies (easy
   install path for mac)
 - [ ] finish simple API for datum
@@ -53,7 +66,7 @@
 - [ ] general migration library?
 - [ ] add debug logging
 - [X] add config.json to each table dir for sync
-- [ ] connection pooling
+- [ ] connection pooling... difficult
 - [ ] chunk large insert/updates
 - [ ] why is datumRouter calling (await request.json()).request? for source url
 - [ ] make sure version from client request is passed into endpoint.request,
