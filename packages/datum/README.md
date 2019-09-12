@@ -1,8 +1,6 @@
 
 # aquameta-datum
 
-[![Build Status](https://travis-ci.org/micburks/aquameta-datum.svg?branch=master)](https://travis-ci.org/micburks/aquameta-datum)
-
 Service layer for the Aquameta database API
 
 
@@ -12,7 +10,7 @@ Service layer for the Aquameta database API
 database. The API is intentionally split into small, composable parts to allow
 partially applying queries. This lends itself to a UI built with modular,
 reusable components, such as the widget framework
-([aquameta-widget](https://github.com/micburks/aquameta-widget)).
+([aquameta-widget](https://github.com/micburks/aquameta/tree/master/packages/widget)).
 
 ### Create a query executor
 
