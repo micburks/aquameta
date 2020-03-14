@@ -1,7 +1,7 @@
 // @flow
 
 import url from 'url';
-import {__, curry} from 'ramda';
+import ramda from 'ramda';
 import {
   DELETE,
   INSERT,
@@ -10,12 +10,13 @@ import {
   getMethodFromType,
 } from './constants.js';
 import type {Executable, HTTPRequest} from '../types.js';
-import {compose} from 'ramda';
 import {addArg} from './args.js';
 import {fn} from './chainable.js';
 
 // TODO move this
 import {parseSourceUrl} from '../query/connection.js';
+
+const {__, compose, curry} = ramda;
 
 const EXECUTABLE = Symbol.for('executable');
 
@@ -98,10 +99,10 @@ export const http = __NODE__
     const [, version] = /\/?(.+)\//.exec(pathname);
     console.log(version);
     */
-        const url = pathname.replace(/\/?.+?\//, '');
+        const path = pathname.replace(/\/?.+?\//, '');
         return createExecutable(
           req.method,
-          {url, args: parsed.query || {}},
+          {url: path, args: parsed.query || {}},
           req.body || null,
         );
       } else {

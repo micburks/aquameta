@@ -1,7 +1,3 @@
 node_modules
-dist
-.nyc_output
-dist-browser-cjs/
-dist-browser-esm/
-dist-node-cjs/
-dist-node-esm/
+dist-browser
+dist-node

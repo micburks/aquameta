@@ -1,6 +1,6 @@
 import executeEndpoint from './endpoint.js';
 import executeConnection from './connection.js';
-import {compose, cond, curry, when, T} from 'ramda';
+import ramda from 'ramda';
 import {
   isConnectionClient,
   isEndpointClient,
@@ -10,6 +10,7 @@ import {isInvalidExecutable} from '../database/index.js';
 
 import type {Client, Executable, Query} from '../types.js';
 
+const {compose, cond, curry, when, T} = ramda;
 /**
  * query
  *

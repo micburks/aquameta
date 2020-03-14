@@ -1,14 +1,19 @@
-import test from 'tape';
 import endpoint from '../../query/endpoint.js';
+import chai from 'chai';
 import * as fetchExport from '../../query/fetch.js';
+import {describe} from 'these-are-tests';
 import sinon from 'sinon';
 
-test('#endpoint', async t => {
+const {expect} = chai;
+
+const {xit} = describe('endpoint');
+
+xit('#endpoint', async () => {
   const fakeFetch = (url, options) => {
-    t.is(url, '/db/v3/relation/endpoint/session');
-    t.is(options.method, 'POST');
-    t.is(options.body, void 0, 'body is not added with no data');
-    t.true('credentials' in options, 'some form of credentials are used');
+    expect.is(url, '/db/v3/relation/endpoint/session');
+    expect.is(options.method, 'POST');
+    expect.is(options.body, void 0, 'body is not added with no data');
+    expect.true('credentials' in options, 'some form of credentials are used');
     return {
       json: sinon.fake.returns(
         Promise.resolve({
@@ -31,13 +36,12 @@ test('#endpoint', async t => {
   };
   await endpoint(client, query);
   fetchExport.fetch.restore();
-  t.end();
 });
 
-test('#endpoint - with data', async t => {
+xit('#endpoint - with data', async () => {
   const fakeFetch = (url, options) => {
-    t.is(typeof options.body, 'string', 'body is a string');
-    t.is(options.body, '{"key":"value"}', 'body is stringified');
+    expect.is(typeof options.body, 'string', 'body is a string');
+    expect.is(options.body, '{"key":"value"}', 'body is stringified');
     return {
       json: sinon.fake.returns(
         Promise.resolve({
@@ -56,10 +60,9 @@ test('#endpoint - with data', async t => {
   };
   await endpoint({}, query);
   fetchExport.fetch.restore();
-  t.end();
 });
 
-test('#endpoint - with args', async t => {
+xit('#endpoint - with args', async () => {
   const argsString = 'limit=5&order_by=name';
   const args = {
     order: [
@@ -80,7 +83,7 @@ test('#endpoint - with args', async t => {
   };
 
   const fakeFetch = url => {
-    t.is(
+    expect.is(
       url,
       `${client.url}/${client.version}/${query.url}?${argsString}`,
       'adds query string',
@@ -97,5 +100,4 @@ test('#endpoint - with args', async t => {
 
   await endpoint(client, query);
   fetchExport.fetch.restore();
-  t.end();
 });

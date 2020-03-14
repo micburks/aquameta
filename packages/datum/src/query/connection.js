@@ -1,6 +1,7 @@
 // @flow
 
 import pg from '@micburks/pg';
+import process from 'process';
 import type {
   Client,
   ConnectionOptions,

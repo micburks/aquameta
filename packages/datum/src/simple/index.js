@@ -1,7 +1,9 @@
 import query from '../query/index.js';
 import * as client from '../client.js';
 import * as db from '../database/index.js';
-import {compose} from 'ramda';
+import ramda from 'ramda';
+
+const {compose} = ramda;
 
 const c = __NODE__ ? client.connection() : client.endpoint();
 const go = query(c);

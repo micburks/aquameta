@@ -3,22 +3,23 @@
   "version": "0.1.19",
   "description": "Service layer for the Aquameta database API",
   "sideEffects": false,
-  "main": "./dist-node-cjs/index.js",
-  "module": "./dist-node-esm/index.js",
-  "browser": {
-    "./dist-node-cjs/index.js": "./dist-browser-cjs/index.js",
-    "./dist-node-esm/index.js": "./dist-browser-esm/index.js"
+  "type": "module",
+  "main": "dist-node/index.js",
+  "exports": {
+    "./node": "dist-node/index.js",
+    "./browser": "dist-node/index.js"
   },
   "scripts": {
-    "build": "cup clean && cup build",
-    "build-w": "cup build -w",
+    "build-browser": "rm -rf dist-browser && babel --config-file ./babel.browser.js src -d dist-browser",
+    "build-node": "rm -rf dist-node && babel --config-file ./babel.node.js src -d dist-node",
+    "build": "rm -rf dist-* && yarn build-browser && yarn build-node",
+    "build-w": "yarn build-node -w",
     "start": "./demo/server.js",
     "preversion": "yarn test",
     "version": "yarn build",
     "postversion": "git push && git push --tags",
-    "test": "tape dist-node-cjs/__tests__/**/*.js | tap-spec",
-    "test-w": "nodemon -w dist-node-cjs -x 'yarn test'",
-    "coverage": "nyc tape dist-node-cjs/__tests__/**/*.js",
+    "test": "these-are-tests dist-node/__tests__",
+    "test-w": "nodemon -w dist-node -x 'yarn test'",
     "watch": "run-p build-w test-w"
   },
   "keywords": [
@@ -42,22 +43,24 @@
     "unfetch": "^4.1.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-syntax-flow": "^7.8.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.8.3",
+    "babel-plugin-transform-cup-globals": "^1.0.2",
+    "babel-plugin-transform-prune-unused-imports": "^1.0.1",
     "chai": "^4.1.2",
     "chalk": "^2.3.2",
-    "create-universal-package": "^4.1.0",
     "flow-bin": "^0.104.0",
     "nodemon": "^1.18.11",
     "npm-run-all": "^4.1.5",
-    "nyc": "^14.1.1",
+    "postgres": "^1.0.2",
     "sinon": "^7.3.2",
-    "tap-spec": "^5.0.0",
-    "tape": "^4.10.1",
+    "these-are-tests": "^1.0.4",
     "veggie": "^2.4.1"
   },
   "files": [
-    "dist-node-cjs",
-    "dist-node-esm",
-    "dist-browser-cjs",
-    "dist-browser-esm"
+    "dist-browser",
+    "dist-node"
   ]
 }

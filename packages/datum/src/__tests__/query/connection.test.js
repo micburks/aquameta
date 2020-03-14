@@ -1,9 +1,14 @@
-import test from 'tape';
+import {describe} from 'these-are-tests';
+import chai from 'chai';
 import connection from '../../query/connection.js';
 import sinon from 'sinon';
 import pg from '@micburks/pg';
 
-test('#connection', async t => {
+const {expect} = chai;
+
+const {it} = describe('connection');
+
+it('#connection', async () => {
   const fakeRow = {name: 'fake-name'};
   let loggedIn = false;
 
@@ -28,19 +33,18 @@ test('#connection', async t => {
   const clientAPI = {
     query: sinon.fake(fakeQuery),
     connect: sinon.fake(),
-    end: sinon.fake(),
   };
   sinon.stub(pg, 'Client').callsFake(config => {
     if (loggedIn) {
-      t.is(
+      expect.is(
         config.user,
         'logged-in-user',
         'updates config to use logged in user',
       );
     } else {
-      t.is(config.user, 'anonymous', 'uses default config');
+      expect.is(config.user, 'anonymous', 'uses default config');
     }
-    t.is(config.host, 'override-host', 'merges given client config');
+    expect.is(config.host, 'override-host', 'merges given client config');
 
     return clientAPI;
   });
@@ -50,23 +54,22 @@ test('#connection', async t => {
     connection: {host: 'override-host'},
   };
   const user = await connection(client, {});
-  t.deepEquals(user[0], fakeRow, 'returns data');
-  t.is(
+  expect.deepEquals(user[0], fakeRow, 'returns data');
+  expect.is(
     clientAPI.connect.callCount,
     clientAPI.end.callCount,
     'all clients are released',
   );
 
   pg.Client.restore();
-  t.end();
 });
 
-test('#connection - without sessionId', async t => {
+it('#connection - without sessionId', async () => {
   const fakeRow = {name: 'fake-name'};
 
   const fakeQuery = queryString => {
     if (/^select .* role_name from endpoint.session/.test(queryString)) {
-      t.fail('tried to login');
+      expect.fail('tried to login');
     } else {
       return {
         rows: [
@@ -85,24 +88,23 @@ test('#connection - without sessionId', async t => {
     end: sinon.fake(),
   };
   sinon.stub(pg, 'Client').callsFake(config => {
-    t.is(config.user, 'anonymous', "doesn't alter user");
+    expect.is(config.user, 'anonymous', "doesn't alter user");
 
     return clientAPI;
   });
 
   const result = await connection({}, {});
-  t.deepEqual(result[0], fakeRow, 'returns data');
-  t.is(
+  expect.deepEqual(result[0], fakeRow, 'returns data');
+  expect.is(
     clientAPI.connect.callCount,
     clientAPI.end.callCount,
     'all clients are released',
   );
 
   pg.Client.restore();
-  t.end();
 });
 
-test('#connection - uses anonymous if login fails', async t => {
+it('#connection - uses anonymous if login fails', async () => {
   const fakeRow = {name: 'fake-name'};
 
   const fakeQuery = queryString => {
@@ -134,25 +136,24 @@ test('#connection - uses anonymous if login fails', async t => {
     end: sinon.fake(),
   };
   sinon.stub(pg, 'Client').callsFake(config => {
-    t.is(config.user, 'anonymous', "doesn't alter user");
+    expect.is(config.user, 'anonymous', "doesn't alter user");
 
     return clientAPI;
   });
 
   const client = {rawSession: true, sessionId: '123'};
   const result = await connection(client, {});
-  t.deepEqual(result[0], fakeRow, 'still returns data');
-  t.is(
+  expect.deepEqual(result[0], fakeRow, 'still returns data');
+  expect.is(
     clientAPI.connect.callCount,
     clientAPI.end.callCount,
     'all clients are released',
   );
 
   pg.Client.restore();
-  t.end();
 });
 
-test('#connection - deals with error in running queries', async t => {
+it('#connection - deals with error in running queries', async () => {
   const fakeQuery = () => {
     throw new Error('db connection failed');
   };
@@ -165,18 +166,17 @@ test('#connection - deals with error in running queries', async t => {
 
   const client = {sessionId: '123'};
   const result = await connection(client, {});
-  t.is(result, null, 'returns null');
-  t.is(
+  expect.is(result, null, 'returns null');
+  expect.is(
     clientAPI.connect.callCount,
     clientAPI.end.callCount,
     'all clients are released',
   );
 
   pg.Client.restore();
-  t.end();
 });
 
-test('#connection - passes all query params', async t => {
+it('#connection - passes all query params', async () => {
   const sessionId = '123';
   const version = 'v2';
   const query = {
@@ -188,10 +188,10 @@ test('#connection - passes all query params', async t => {
 
   const fakeQuery = (queryString, args) => {
     if (/^select .* role_name from endpoint.session/.test(queryString)) {
-      t.deepEqual(args, [sessionId]);
+      expect.deepEqual(args, [sessionId]);
       return {rows: [{role_name: 'logged-in-user'}]};
     } else {
-      t.deepEqual(args, [
+      expect.deepEqual(args, [
         version,
         query.method,
         query.url,
@@ -219,5 +219,4 @@ test('#connection - passes all query params', async t => {
   const client = {sessionId, version};
   await connection(client, query);
   pg.Client.restore();
-  t.end();
 });

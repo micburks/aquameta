@@ -1,6 +1,8 @@
 // @flow
 
-import {always, cond, equals, T} from 'ramda';
+import ramda from 'ramda';
+
+const {always, cond, equals, T} = ramda;
 
 export const DELETE = 'DELETE';
 export const INSERT = 'INSERT';

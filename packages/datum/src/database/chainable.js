@@ -1,8 +1,10 @@
 // @flow
 
-import {__} from 'ramda';
+import ramda from 'ramda';
 import {addArg, addNestedArrayArg, addOrder, addWhere} from './args.js';
 import type {Fn, Relation} from '../types.js';
+
+const {__} = ramda;
 
 export function relation(name: string): Relation {
   if (!name) {

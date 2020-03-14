@@ -1,7 +1,9 @@
 // @flow
 
-import {cond, curry, T} from 'ramda';
+import ramda from 'ramda';
 import type {Direction, Executable, WhereOps} from '../types';
+
+const {cond, curry, T} = ramda;
 
 // (a) => bool
 const isFalsy: (?mixed) => boolean = val => !val;
