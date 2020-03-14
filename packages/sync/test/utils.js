@@ -1,6 +1,5 @@
 import {compose} from 'ramda';
 import {client, database as db, query} from 'aquameta-datum';
-export {createTestTable, dropTestTable, getTestRows};
 
 const executeQuery = (...args) => {
   return query(client.connection())(...args);
@@ -22,7 +21,7 @@ async function executeEach(...args) {
   }
 }
 
-async function createTestTable() {
+export async function createTestTable() {
   await executeEach(
     db.insert(metaSchemaRel, {
       name: 'test',
@@ -54,7 +53,7 @@ async function createTestTable() {
   );
 }
 
-async function dropTestTable() {
+export async function dropTestTable() {
   await executeEach(
     db.del(testUserRel),
     db.del(testUserMetaRow),
@@ -62,6 +61,6 @@ async function dropTestTable() {
   );
 }
 
-function getTestRows() {
+export function getTestRows() {
   return executeQuery(db.select(testUserRel));
 }
