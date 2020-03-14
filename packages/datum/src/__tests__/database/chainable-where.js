@@ -38,10 +38,7 @@ test('#where - #equals - adds to existing where array', t => {
   const op = '=';
   const value = '<template></template>';
 
-  const query = compose(
-    where(name, value),
-    where('name', 'my_widget'),
-  )(rel);
+  const query = compose(where(name, value), where('name', 'my_widget'))(rel);
 
   t.deepEqual(query.args.where, [
     {name: 'name', op: '=', value: 'my_widget'},

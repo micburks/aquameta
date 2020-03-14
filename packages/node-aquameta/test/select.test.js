@@ -1,4 +1,3 @@
-
 import {withTableFixture} from './fixture.js';
 
 test('select', async () => {

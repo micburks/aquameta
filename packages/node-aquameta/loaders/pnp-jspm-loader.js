@@ -13,14 +13,20 @@ const fullUrlRegex = /^https\:\/\/.*/;
 const relativeRegex = /^\/npm\:/;
 
 function encode(str) {
-  return str && str.replace(/[/?]/g, char => {
-    return `[${char.charCodeAt(0)}]`;
-  });
+  return (
+    str &&
+    str.replace(/[/?]/g, char => {
+      return `[${char.charCodeAt(0)}]`;
+    })
+  );
 }
 function decode(str) {
-  return str && str.replace(/\[(\d+)\]/g, (_, code) => {
-    return String.fromCharCode(code);
-  });
+  return (
+    str &&
+    str.replace(/\[(\d+)\]/g, (_, code) => {
+      return String.fromCharCode(code);
+    })
+  );
 }
 
 function getRequestFromCachePath(path) {
@@ -56,7 +62,7 @@ async function httpsGet(url) {
 export async function resolve(
   specifier,
   parentModuleURL = baseURL,
-  defaultResolver
+  defaultResolver,
 ) {
   // does async not work at all for loading a file?
   // - try to make a minimal reproduction to test it out
@@ -80,8 +86,12 @@ export async function resolve(
   const isFullUrl = fullUrlRegex.test(specifier);
   const isRelativeUrl = relativeRegex.test(specifier);
   if (isFullUrl || isRelativeUrl) {
-    const absoluteUrl = isRelativeUrl ? `https://dev.jspm.io${specifier}` : specifier;
-    const urlCachePath = getUrlCachePath(absoluteUrl.replace(/^https\:\/\//, ''));
+    const absoluteUrl = isRelativeUrl
+      ? `https://dev.jspm.io${specifier}`
+      : specifier;
+    const urlCachePath = getUrlCachePath(
+      absoluteUrl.replace(/^https\:\/\//, ''),
+    );
     url = new URL(urlCachePath, parentModuleURL).href;
     const exists = await fs.existsSync(urlCachePath);
     if (!exists) {

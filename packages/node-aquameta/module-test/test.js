@@ -1,3 +1,3 @@
-import {resolve} from './loader.js'
+import {resolve} from './loader.js';
 
 resolve();

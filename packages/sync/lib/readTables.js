@@ -62,7 +62,7 @@ async function readTables(path) {
     }
     const rows = await Promise.all(await readRows(tablePath));
     if (!rows || !rows.length) {
-      return {table, rows:[]};
+      return {table, rows: []};
     }
     if (config.upsert) {
       await upsert(rel, rows, config);

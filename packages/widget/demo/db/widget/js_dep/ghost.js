@@ -1,3 +1,3 @@
-export default function () {
-  console.log('boo 456')
+export default function() {
+  console.log('boo 456');
 }

@@ -1,6 +1,6 @@
-import babel from 'rollup-plugin-babel'
-import commonjs from 'rollup-plugin-commonjs'
-import resolve from 'rollup-plugin-node-resolve'
+import babel from 'rollup-plugin-babel';
+import commonjs from 'rollup-plugin-commonjs';
+import resolve from 'rollup-plugin-node-resolve';
 
 const resolveOptions = {
   only: [
@@ -12,7 +12,7 @@ const resolveOptions = {
     /postgres-.+/,
     'xtend',
     'node-fetch',
-    'unfetch'
+    'unfetch',
   ],
 };
 
@@ -21,40 +21,43 @@ const config = {
     babel(),
     commonjs({
       include: 'node_modules/**',
-    })
+    }),
   ],
   output: {
-    format: 'es'
-  }
-}
+    format: 'es',
+  },
+};
 
-export default [{
-  // browser
-  ...config,
-  input: './node_modules/aquameta-datum/dist-browser-esm/index.js',
-  output: {
-    ...config.output,
-    file: 'dist/lib.browser.js',
+export default [
+  {
+    // browser
+    ...config,
+    input: './node_modules/aquameta-datum/dist-browser-esm/index.js',
+    output: {
+      ...config.output,
+      file: 'dist/lib.browser.js',
+    },
+    plugins: [
+      ...config.plugins,
+      resolve({
+        ...resolveOptions,
+        browser: true,
+      }),
+    ],
   },
-  plugins: [
-    ...config.plugins,
-    resolve({
-      ...resolveOptions,
-      browser: true,
-    }),
-  ],
-}, {
-  // node
-  ...config,
-  input: './node_modules/aquameta-datum/dist-node-esm/index.js',
-  output: {
-    ...config.output,
-    file: 'dist/lib.node.js',
+  {
+    // node
+    ...config,
+    input: './node_modules/aquameta-datum/dist-node-esm/index.js',
+    output: {
+      ...config.output,
+      file: 'dist/lib.node.js',
+    },
+    plugins: [
+      ...config.plugins,
+      resolve({
+        ...resolveOptions,
+      }),
+    ],
   },
-  plugins: [
-    ...config.plugins,
-    resolve({
-      ...resolveOptions,
-    }),
-  ],
-}]
+];

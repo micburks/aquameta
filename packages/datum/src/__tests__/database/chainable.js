@@ -27,10 +27,7 @@ test('#order - asc/desc add value', t => {
   const ascColumn = 'name';
   const descColumn = 'updated_at';
 
-  const query = compose(
-    orderByAsc(ascColumn),
-    orderByDesc(descColumn),
-  )(rel);
+  const query = compose(orderByAsc(ascColumn), orderByDesc(descColumn))(rel);
 
   t.true(query.args.order instanceof Array);
   t.deepEqual(query.args.order, [
@@ -43,10 +40,7 @@ test('#order - asc/desc add value', t => {
 test('#exclude - adds array values', t => {
   const columns = ['id', 'name'];
 
-  const query = compose(
-    exclude(columns[1]),
-    exclude(columns[0]),
-  )(rel);
+  const query = compose(exclude(columns[1]), exclude(columns[0]))(rel);
 
   t.true(query.args.exclude instanceof Array);
   t.deepEqual(query.args.exclude, [columns]);

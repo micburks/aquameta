@@ -10,7 +10,9 @@ function Root() {
 }
 
 const rendered = ReactDOMServer.renderToString(
-  html`<${Root}/>`,
+  html`
+    <${Root} />
+  `,
 );
 
 console.log({rendered});

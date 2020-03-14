@@ -1,4 +1,4 @@
-const aquameta = require('./src/index.js'); /* require('aquameta');
+const aquameta = require('./dist/aquameta.js'); // require('aquameta');
 const express = require('express');
 const app = express();
 
@@ -13,3 +13,5 @@ const endpointConfig = {
 
 // Add Aquameta middleware and routes to the app
 app.use(aquameta(endpointConfig));
+
+app.listen(3000);

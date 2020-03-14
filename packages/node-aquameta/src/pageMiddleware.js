@@ -8,10 +8,7 @@ const sitemap = database.relation('endpoint.sitemap');
 
 export default function(config) {
   const dbClient = client.connection(config.client);
-  const executeQuery = compose(
-    query(dbClient),
-    database.select,
-  );
+  const executeQuery = compose(query(dbClient), database.select);
   return async (ctx, next) => {
     if (ctx.req.method !== 'GET' || ctx.body) {
       // Skip if body already set
@@ -24,11 +21,7 @@ export default function(config) {
       );
       const response = JSON.parse(result.response);
 
-      if (
-        !response ||
-        !response.result ||
-        response.result.length === 0
-      ) {
+      if (!response || !response.result || response.result.length === 0) {
         console.log('no page');
         // debug('page not found')
         ctx.status = 404;
@@ -40,13 +33,16 @@ export default function(config) {
 
       if (config.ssr && page.js) {
         try {
-          const render = await import(`${sitemapUrl}/${page.name}.js`)
-            .then(mod => {
+          const render = await import(`${sitemapUrl}/${page.name}.js`).then(
+            mod => {
               if (!mod.default) {
-                throw new Error(`no default export found in module ${page.name}.js`);
+                throw new Error(
+                  `no default export found in module ${page.name}.js`,
+                );
               }
               return mod.default;
-            });
+            },
+          );
           const rendered = await render();
           if (!rendered) {
             // ssr failed
@@ -70,21 +66,21 @@ export default function(config) {
             status: 200,
             mimetype: 'text/html',
             content: renderedHTML,
-          })
+          });
         } catch (e) {
           console.error(e);
           return sendResponse(ctx, {
             status: result.status,
             mimetype: page.mimetype,
             page,
-          })
+          });
         }
       } else {
         return sendResponse(ctx, {
           status: result.status,
           mimetype: page.mimetype,
           page,
-        })
+        });
       }
     } catch (err) {
       console.log('error', err);

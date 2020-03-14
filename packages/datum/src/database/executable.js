@@ -72,39 +72,40 @@ type ParsedUrl = {
  */
 const sourceUrlRegex = /^\/db\/.+\/.+\/.+\..+/;
 const source = addArg('source', true);
-export const http = __NODE__ ? function http(req: HTTPRequest): Executable | null {
-  const parsed: ParsedUrl = url.parse(req.url, true);
-  const {pathname} = parsed;
+export const http = __NODE__
+  ? function http(req: HTTPRequest): Executable | null {
+      const parsed: ParsedUrl = url.parse(req.url, true);
+      const {pathname} = parsed;
 
-  if (pathname && sourceUrlRegex.test(pathname)) {
-    // return createExecutable('GET', {url: pathname, args: {source: true}}, null);
-    if (__NODE__) {
-      const {schemaName, relationName, column, name} = parseSourceUrl(pathname);
-      const func = fn('endpoint.source', [
-        schemaName,
-        relationName,
-        column,
-        name,
-      ]);
-      // $FlowFixMe
-      return compose(
-        select,
-        source,
-      )(func);
-    }
-  } else if (pathname) {
-    // TODO: does something need to happen here with versions?
-    /*
+      if (pathname && sourceUrlRegex.test(pathname)) {
+        // return createExecutable('GET', {url: pathname, args: {source: true}}, null);
+        if (__NODE__) {
+          const {schemaName, relationName, column, name} = parseSourceUrl(
+            pathname,
+          );
+          const func = fn('endpoint.source', [
+            schemaName,
+            relationName,
+            column,
+            name,
+          ]);
+          // $FlowFixMe
+          return compose(select, source)(func);
+        }
+      } else if (pathname) {
+        // TODO: does something need to happen here with versions?
+        /*
     const [, version] = /\/?(.+)\//.exec(pathname);
     console.log(version);
     */
-    const url = pathname.replace(/\/?.+?\//, '');
-    return createExecutable(
-      req.method,
-      {url, args: parsed.query || {}},
-      req.body || null,
-    );
-  } else {
-    return null;
-  }
-} : null;
+        const url = pathname.replace(/\/?.+?\//, '');
+        return createExecutable(
+          req.method,
+          {url, args: parsed.query || {}},
+          req.body || null,
+        );
+      } else {
+        return null;
+      }
+    }
+  : null;

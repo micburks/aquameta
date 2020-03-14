@@ -26,7 +26,7 @@ async function writeToCache(url, module) {
 export async function resolve(
   specifier,
   parentModuleURL = baseURL,
-  defaultResolver
+  defaultResolver,
 ) {
   // does async not work at all for loading a file?
   // - try to make a minimal reproduction to test it out

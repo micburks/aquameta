@@ -1,5 +1,5 @@
-import {resolve as dbResolve} from '../loaders/pnp-db-loader.js'
-import {resolve as jspmResolve} from '../loaders/pnp-jspm-loader.js'
+import {resolve as dbResolve} from '../loaders/pnp-db-loader.js';
+import {resolve as jspmResolve} from '../loaders/pnp-jspm-loader.js';
 
 const loaders = [dbResolve, jspmResolve];
 const baseURL = new URL('file://');
@@ -8,14 +8,14 @@ baseURL.pathname = `${process.cwd()}/`;
 export async function resolve(
   specifier,
   parentModuleURL = baseURL,
-  defaultResolver
+  defaultResolver,
 ) {
   let module;
   for (const loader of loaders) {
     const resolvedModule = await loader(
       specifier,
       parentModuleURL,
-      defaultResolver
+      defaultResolver,
     );
     if (resolvedModule) {
       module = resolvedModule;
@@ -23,8 +23,10 @@ export async function resolve(
     }
   }
 
-  return module || {
-    url: new URL(specifier, parentModuleURL).href,
-    format: 'module'
-  };
+  return (
+    module || {
+      url: new URL(specifier, parentModuleURL).href,
+      format: 'module',
+    }
+  );
 }

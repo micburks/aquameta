@@ -5,18 +5,9 @@ import {compose} from 'ramda';
 
 const c = __NODE__ ? client.connection() : client.endpoint();
 const go = query(c);
-const select = compose(
-  go,
-  db.select,
-);
-const insert = compose(
-  go,
-  db.insert,
-);
-const del = compose(
-  go,
-  db.del,
-);
+const select = compose(go, db.select);
+const insert = compose(go, db.insert);
+const del = compose(go, db.del);
 
 // TODO: should query be able to run multiple queries in a single transaction?
 // TODO: you'd want to be able to do order/limit/include/exlude from these functions too
@@ -73,10 +64,7 @@ export async function updateRows(
     const wheres = Object.entries(equalities).map(([key, value]) => {
       return db.where(key, value);
     });
-    await compose(
-      go,
-      ...wheres,
-    )(db.update(db.relation(table), fields));
+    await compose(go, ...wheres)(db.update(db.relation(table), fields));
   } else {
     return db.update(db.relation(table), fields);
   }
@@ -87,10 +75,7 @@ export async function deleteRows(table: string, equalities?: {[string]: any}) {
     const wheres = Object.entries(equalities).map(([key, value]) => {
       return db.where(key, value);
     });
-    await compose(
-      del,
-      ...wheres,
-    )(db.relation(table));
+    await compose(del, ...wheres)(db.relation(table));
   } else {
     return del(db.relation(table));
   }

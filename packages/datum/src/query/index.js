@@ -55,7 +55,4 @@ const execute = cond(
 
 const getKey = curry((key, obj) => obj[key]);
 
-const invoke = compose(
-  when(getKey('evented'), makeEvented),
-  execute,
-);
+const invoke = compose(when(getKey('evented'), makeEvented), execute);

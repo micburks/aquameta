@@ -14,10 +14,7 @@ export default function(config) {
   const pathRegex = new RegExp(`/${config.client.url}/`);
   const sourceRegex = /\/db\/.+\/.+\/.+\..+/;
   const sourcePath = '/db/:schemaName/:relationName/:name.:column';
-  const executeHTTPQuery = compose(
-    query(dbClient),
-    database.http,
-  );
+  const executeHTTPQuery = compose(query(dbClient), database.http);
 
   async function handleRequest(ctx, next) {
     //debug('datum', path, req.url)

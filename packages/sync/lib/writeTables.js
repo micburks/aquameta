@@ -12,10 +12,7 @@ const mkdir = promisify(fs.mkdir);
 
 module.exports = writeTable;
 
-const select = compose(
-  query(client.connection()),
-  db.select,
-);
+const select = compose(query(client.connection()), db.select);
 
 async function writeTable(table, dir) {
   const tablePath = join(dir, table);

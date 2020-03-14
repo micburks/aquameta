@@ -10,11 +10,12 @@ import type {
 
 const anonConfig: ConnectionOptions = {
   user: 'anonymous',
+  password: process.env.PGANONPASSWORD,
   database: 'aquameta',
-  host: 'localhost',
-  port: 5432,
-  max: 4,
-  idleTimeoutMilliseconds: 30000,
+  // host: 'localhost',
+  // port: 5432,
+  // max: 4,
+  // idleTimeoutMilliseconds: 30000,
 };
 
 type PgConnection = {
@@ -31,8 +32,10 @@ async function getConnection(config?: {
     ...anonConfig,
     ...((config && config.connection) || {}),
   };
-  // Don't allow user to be overridden
-  mergedConfig.user = anonConfig.user;
+  // Don't allow user to be overridden - this might be stupid
+  // mergedConfig.user = anonConfig.user;
+  mergedConfig.user = process.env.PGUSER || mergedConfig.user;
+  mergedConfig.password = process.env.PGPASSWORD || mergedConfig.password;
   const anonClient: PgConnection = new pg.Client(mergedConfig);
 
   await anonClient.connect();
