@@ -7,7 +7,7 @@
   "main": "dist-node/index.js",
   "exports": {
     "./node": "dist-node/index.js",
-    "./browser": "dist-node/index.js"
+    "./browser": "dist-browser/index.js"
   },
   "scripts": {
     "build-browser": "rm -rf dist-browser && babel --config-file ./babel.browser.js src -d dist-browser",
