@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-const path = require('path'); // eslint-disable-line
-const meow = require('meow'); // eslint-disable-line
-const {exportTables} = require('..'); // eslint-disable-line
+import path from 'path';
+import meow from 'meow';
+import process from 'process';
+import {exportTables} from '..';
 
 const cli = meow(
   `
@@ -12,7 +13,7 @@ const cli = meow(
     Options
       --table, -t  [Required] Schema-qualified table name or names separated by commas
       -dir, -d  Path to a directory to write to. Defaults to ./data
- 
+
     Examples
       $ export -t endpoint.resource,widget.core -d path/to/data
       Exported endpoint.resource to path/to/data/endpoint.resource
@@ -25,6 +26,7 @@ const cli = meow(
         alias: 'd',
         default: path.resolve('data'),
       },
+
       table: {
         type: 'string',
         alias: 't',
@@ -40,7 +42,9 @@ if (!table) {
 }
 
 exportTables(table, dir).then(tables => {
-  tables.forEach(({table, dir}) => { // eslint-disable-line
-    console.log(`Exported ${table} to ${dir.replace(process.cwd(), '.')}`); // eslint-disable-line
+  tables.forEach(({tableName, dirName}) => {
+    console.log(
+      `Exported ${tableName} to ${dirName.replace(process.cwd(), '.')}`,
+    );
   });
 });

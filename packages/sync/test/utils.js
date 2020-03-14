@@ -1,27 +1,19 @@
-/* globals require module */
-
-const {compose} = require('ramda');
-const {client, database: db, query} = require('aquameta-datum');
-
-module.exports = {
-  createTestTable,
-  dropTestTable,
-  getTestRows,
-};
+import {compose} from 'ramda';
+import {client, database as db, query} from 'aquameta-datum';
+export {createTestTable, dropTestTable, getTestRows};
 
 const executeQuery = (...args) => {
   return query(client.connection())(...args);
 };
+
 const metaSchemaRel = db.relation('meta.schema');
 const metaTableRel = db.relation('meta.table');
 const metaColumnRel = db.relation('meta.column');
 const testUserRel = db.relation('test.user');
-
 const testUserMetaRow = compose(
   db.where('schema_name', 'test'),
   db.where('name', 'user'),
 )(metaTableRel);
-
 const testMetaRow = compose(db.where('name', 'test'))(metaSchemaRel);
 
 async function executeEach(...args) {
@@ -32,7 +24,9 @@ async function executeEach(...args) {
 
 async function createTestTable() {
   await executeEach(
-    db.insert(metaSchemaRel, {name: 'test'}),
+    db.insert(metaSchemaRel, {
+      name: 'test',
+    }),
     db.insert(metaTableRel, {
       schema_name: 'test',
       name: 'user',

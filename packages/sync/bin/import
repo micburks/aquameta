@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const path = require('path'); // eslint-disable-line
-const meow = require('meow'); // eslint-disable-line
-const {importDir} = require('..'); // eslint-disable-line
+import path from 'path';
+import meow from 'meow';
+import {importDir} from '..';
 
 const cli = meow(
   `
