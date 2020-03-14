@@ -3,13 +3,14 @@
   "version": "0.1.19",
   "description": "Import from and export to filesystem from Aquameta database",
   "main": "lib/index.js",
+  "type": "module",
   "bin": {
     "import": "bin/import",
     "export": "bin/export"
   },
   "scripts": {
     "prepublish": "yarn test",
-    "test": "nyc mocha"
+    "test": "these-are-tests test"
   },
   "keywords": [
     "datum",
@@ -26,7 +27,6 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "mocha": "^5.2.0",
-    "nyc": "^14.1.1"
+    "these-are-tests": "^1.0.4"
   }
 }
