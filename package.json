@@ -8,16 +8,16 @@
     "flow": "flow"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-config-cup": "^2.0.2",
-    "eslint-config-cup-recommended": "^2.0.2",
-    "eslint-plugin-cup": "^2.0.1",
-    "eslint-plugin-flowtype": "^3.6.1",
-    "eslint-plugin-import": "^2.17.1",
-    "eslint-plugin-prettier": "^3.0.1",
-    "flow-bin": "^0.97.0",
-    "lerna": "^3.13.2",
-    "prettier": "^1.17.0"
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-cup": "^2.0.3",
+    "eslint-config-cup-recommended": "^2.0.3",
+    "eslint-plugin-cup": "^2.0.2",
+    "eslint-plugin-flowtype": "^4.6.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "flow-bin": "^0.120.1",
+    "lerna": "^3.20.2",
+    "prettier": "^1.19.1"
   }
 }
