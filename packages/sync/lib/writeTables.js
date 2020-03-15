@@ -1,12 +1,12 @@
-import fs from 'fs';
+import {promises as fs} from 'fs';
 import del from 'del';
 import {join} from 'path';
-import {compose} from 'ramda';
+import ramda from 'ramda';
 import {promisify} from 'util';
 import {client, database as db, query} from 'aquameta-datum';
 
-const writeFile = promisify(fs.writeFile);
-const mkdir = promisify(fs.mkdir);
+const {compose} = ramda;
+
 const select = compose(query(client.connection()), db.select);
 
 export default async function writeTable(table, dir) {
@@ -23,7 +23,7 @@ export default async function writeTable(table, dir) {
     await del([join(tablePath, '*'), `!${join(tablePath, 'config.js')}`]);
     const rowPath = join(tablePath, row.id);
 
-    await mkdir(rowPath, {
+    await fs.mkdir(rowPath, {
       recursive: true,
     });
 
@@ -35,7 +35,7 @@ export default async function writeTable(table, dir) {
 
         if (value) {
           // exclude null values
-          fieldPromises.push(writeFile(fieldPath, value, 'utf-8'));
+          fieldPromises.push(fs.writeFile(fieldPath, value, 'utf-8'));
         }
       }
     });

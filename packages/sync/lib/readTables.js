@@ -1,10 +1,8 @@
-import fs from 'fs';
+import {existsSync, promises as fs} from 'fs';
 import {join} from 'path';
 import {promisify} from 'util';
 import {client, database as db, query} from 'aquameta-datum';
 
-const readdir = promisify(fs.readdir);
-const readFile = promisify(fs.readFile);
 const executeQuery = query(client.connection());
 
 const defaultConfig = {
@@ -50,7 +48,7 @@ async function upsert(rel, rows, config) {
 }
 
 export default async function readTables(path) {
-  const tables = await readdir(path).map(async table => {
+  const tables = (await fs.readdir(path)).map(async table => {
     const tablePath = join(path, table);
     const configPath = join(tablePath, 'config.js');
 
@@ -58,7 +56,7 @@ export default async function readTables(path) {
       ...defaultConfig,
     };
 
-    if (fs.existsSync(configPath)) {
+    if (existsSync(configPath)) {
       const configFile = await import(configPath).then(({default: c}) => c);
       config = {
         ...config,
@@ -108,7 +106,7 @@ export default async function readTables(path) {
 }
 
 async function readRows(path) {
-  const rows = await readdir(path)
+  const rows = (await fs.readdir(path))
     .filter(p => p !== 'config.js')
     .filter(p => !p.startsWith('.'))
     .map(async rowId => {
@@ -127,11 +125,11 @@ async function readRows(path) {
 async function readColumns(path) {
   const row = {};
 
-  const columns = await readdir(path)
+  const columns = (await fs.readdir(path))
     .filter(p => !p.startsWith('.'))
     .map(async name => {
       const fullPath = join(path, name);
-      let content = await readFile(fullPath, 'utf-8');
+      let content = await fs.readFile(fullPath, 'utf-8');
 
       if (content.charAt(content.length - 1) === '\n') {
         // Remove new line at end of file

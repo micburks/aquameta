@@ -1,11 +1,11 @@
 import {createTestTable, dropTestTable, getTestRows} from './utils.js';
 import {importDir} from '../lib/index.js';
-import {describe} from 'these-are-tests';
-import {expect} from 'chai';
+import {describe, createLock} from 'these-are-tests';
+import assert from 'assert';
 
 const {it} = describe('import');
 
-async function before() {
+async function setup() {
   await dropTestTable();
   await createTestTable();
   return {
@@ -14,35 +14,57 @@ async function before() {
   };
 }
 
+const lock = createLock();
+
 it('returns an array of tables', async () => {
-  const {returnedTables} = await before();
+  const done = await lock();
+  const {returnedTables} = await setup();
 
   const [table] = returnedTables;
 
   const tables = returnedTables.map(({table: t}) => t);
 
-  expect(table).to.have.all.keys(['table', 'rows']);
-  expect(tables).to.have.all.members(['test.user', 'test.no-data']);
+  assert.deepStrictEqual(
+    Object.keys(table),
+    ['table', 'rows'],
+    'returns table and rows',
+  );
+  assert.deepStrictEqual(
+    tables,
+    ['test.no-data', 'test.user'],
+    'inserts all tables',
+  );
+  done();
 });
 
 it('inserts returns inserted rows', async () => {
-  const {returnedTables} = await before();
+  const done = await lock();
+  const {returnedTables} = await setup();
 
   const {rows} = returnedTables.find(({table}) => table === 'test.user');
 
-  expect(rows).to.have.lengthOf(5);
+  assert.equal(rows.length, 5, 'all rows inserted');
+  done();
 });
 
 it('inserts all rows', async () => {
-  const {testRows} = await before();
+  const done = await lock();
+  const {testRows} = await setup();
 
-  expect(testRows).to.have.lengthOf(5);
+  assert.equal(testRows.length, 5, 'all rows inserted');
+  done();
 });
 
 it('inserts all fields', async () => {
-  const {testRows} = await before();
+  const done = await lock();
+  const {testRows} = await setup();
 
   const row = testRows[0];
-  expect(row).to.have.all.keys(['name', 'age', 'id']);
-  expect(row.name).to.equal(`mickey${row.age}`);
+  assert.deepStrictEqual(
+    Object.keys(row),
+    ['name', 'age', 'id'],
+    'inserts all columns',
+  );
+  assert.equal(row.name, `mickey${row.age}`, 'inserts correct data');
+  done();
 });

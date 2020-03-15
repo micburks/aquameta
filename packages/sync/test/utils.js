@@ -1,5 +1,7 @@
-import {compose} from 'ramda';
+import ramda from 'ramda';
 import {client, database as db, query} from 'aquameta-datum';
+
+const {compose} = ramda;
 
 const executeQuery = (...args) => {
   return query(client.connection())(...args);
@@ -16,8 +18,10 @@ const testUserMetaRow = compose(
 const testMetaRow = compose(db.where('name', 'test'))(metaSchemaRel);
 
 async function executeEach(...args) {
+  const previous = [];
   for (const q of args) {
-    await executeQuery(q);
+    await Promise.all(previous);
+    previous.push(executeQuery(q));
   }
 }
 
