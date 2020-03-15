@@ -14,6 +14,7 @@
     "build": "rollup -c",
     "build-w": "nodemon --watch src --exec 'yarn build'",
     "clean": "rm -rf ./.loader_cache/*",
+    "postinstall": "cat setup.sql | psql aquameta",
     "preversion": "npm test",
     "version": "npm run build # Get current version",
     "serve": "nodemon --watch dist bin/www",
@@ -28,9 +29,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/micburks/node-aquameta.git"
+    "url": "git+https://github.com/micburks/aquameta.git"
   },
-  "homepage": "https://github.com/micburks/node-aquameta",
+  "homepage": "https://github.com/micburks/aquameta/tree/master/packages/node-aquameta",
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {

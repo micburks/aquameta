@@ -19,6 +19,7 @@
     "preversion": "yarn test",
     "version": "yarn build",
     "postversion": "git push && git push --tags",
+    "postinstall": "cat setup.sql | psql aquameta",
     "test": "these-are-tests dist-node/__tests__",
     "test-w": "nodemon -w dist-node -x 'yarn test'",
     "watch": "run-p build-w test-w"
@@ -30,9 +31,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/micburks/aquameta-datum.git"
+    "url": "git+https://github.com/micburks/aquameta.git"
   },
-  "homepage": "https://github.com/micburks/aquameta-datum",
+  "homepage": "https://github.com/micburks/aquameta/tree/master/packages/datum",
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {

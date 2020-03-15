@@ -17,6 +17,11 @@
     "aquameta",
     "postgres"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micburks/aquameta.git"
+  },
+  "homepage": "https://github.com/micburks/aquameta/tree/master/packages/sync",
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {
