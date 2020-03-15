@@ -648,9 +648,9 @@ strip-indent@^2.0.0:
   integrity sha1-XvjbKV0B5u1sv3qrlpmNeCJSe2g=
 
 these-are-tests@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/these-are-tests/-/these-are-tests-1.0.4.tgz#f5c85a7c3ebcc8418b493e810cea1dc33bcd4d31"
-  integrity sha512-pQHHMWPKkwxk20ynfFX4piRQm7VpWGGd07tHFB7O46FRme5tFN0Eg+erZlwfJzjtZ7i4dPtU+GMCXPRiPxZ8lQ==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/these-are-tests/-/these-are-tests-1.1.1.tgz#2893fc8b22c66fbd745944c4b8edbdfe33aad3e2"
+  integrity sha512-Ipj7BW3rFELrXhDES8I5ZJRLNurwVur+4AtXYU8iHPw3e72jqLyFzWxDIclHJjTN5GlIld+rGIelRxfHf23PyA==
 
 through@2:
   version "2.3.8"
