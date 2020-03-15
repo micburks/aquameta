@@ -21,9 +21,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/micburks/aquameta-widget.git"
+    "url": "git+https://github.com/micburks/aquameta.git"
   },
-  "homepage": "https://github.com/micburks/aquameta-widget",
+  "homepage": "https://github.com/micburks/aquameta/tree/master/packages/widget",
   "author": "Mickey Burks",
   "license": "MIT",
   "dependencies": {
@@ -53,6 +53,5 @@
     "veggie": "^2.4.1",
     "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2"
-  },
-  "gitHead": "029cfb95244fc439b1fa1f28ab3c200852cdf53f"
+  }
 }
