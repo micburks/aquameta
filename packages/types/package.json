@@ -1,0 +1,30 @@
+{
+  "name": "aquameta-types",
+  "version": "0.0.0",
+  "description": "Generate types from database schema",
+  "type": "module",
+  "bin": "./bin/types.js",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "bin/types.js generated-types"
+  },
+  "keywords": [
+    "widget",
+    "datum",
+    "aquameta",
+    "postgres"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micburks/aquameta.git"
+  },
+  "homepage": "https://github.com/micburks/aquameta/tree/master/packages/types",
+  "author": "Mickey Burks",
+  "license": "MIT",
+  "dependencies": {
+    "aquameta-datum": "^0.1.19"
+  },
+  "engines": {
+    "node": ">=13.2.0"
+  }
+}
