@@ -4,10 +4,11 @@
   "description": "Service layer for the Aquameta database API",
   "sideEffects": false,
   "type": "module",
-  "main": "dist-node/index.js",
+  "main": "./dist-browser/index.js",
   "exports": {
-    "./node": "dist-node/index.js",
-    "./browser": "dist-browser/index.js"
+    ".": "./dist-node/index.js",
+    "./node": "./dist-node/index.js",
+    "./browser": "./dist-browser/index.js"
   },
   "scripts": {
     "build-browser": "rm -rf dist-browser && babel --config-file ./babel.browser.js src -d dist-browser",
