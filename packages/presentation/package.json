@@ -1,0 +1,25 @@
+{
+  "name": "aquameta-presentation",
+  "version": "0.0.0",
+  "description": "Presentation UI for experimental monorepo",
+  "scripts": {
+    "postinstall": "cat setup.sql | psql aquameta",
+    "sync": "nodemon -w data -e '' -x 'import -d data'"
+  },
+  "keywords": [
+    "widget",
+    "datum",
+    "aquameta",
+    "postgres"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micburks/aquameta.git"
+  },
+  "homepage": "https://github.com/micburks/aquameta/tree/master/packages/presentation",
+  "author": "Mickey Burks",
+  "license": "MIT",
+  "devDependencies": {
+    "aquameta-sync": "^0.1.19"
+  }
+}
