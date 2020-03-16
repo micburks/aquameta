@@ -6,7 +6,7 @@
   "bin": "./bin/types.js",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "bin/types.js generated-types"
+    "test": "bin/types.js generated-types.js"
   },
   "keywords": [
     "widget",

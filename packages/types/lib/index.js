@@ -16,56 +16,66 @@ const readFile = __util.promisify(__fs.readFile);
 const writeFile = __util.promisify(__fs.writeFile);
 const copyFile = __util.promisify(__fs.copyFile);
 
-const exec = __util.promisify(__cp.exec);
-const spawn = __util.promisify(__cp.spawn);
-const execFile = __util.promisify(__cp.execFile);
-
-const prompt = __helpers.prompt;
-
-// cli args/options
-const args = __helpers.args;
-const options = __helpers.options;
-
 const go = query(client.connection());
+
+export default async function types({args, options}) {
+  const rows = await go(db.select(db.relation('widget.type')));
+
+  const defs = rows.map(({schema_name, relation_name, columns, nullable}) => {
+    const tableRowType = kebabToPascal(`${schema_name}_${relation_name}`);
+    return `type ${tableRowType} = <{|
+${Object.entries(columns).map(([col, type]) =>
+`  ${col}: ${nullable[col] ? '?' : ''}${typeMap[type] || 'String'}`
+).join(',\n')}
+|}>;`;
+  }).join('\n');
+
+  await writeFile(args[0], defs);
+}
+
+function kebabToPascal(str) {
+  return str.replace(/^./, first => first.toUpperCase())
+    .replace(/_./g, chars => chars[1].toUpperCase());
+}
 
 const typeMap = {
   'pg_catalog.uuid': 'String',
   'pg_catalog.text': 'String',
   'pg_catalog.int4': 'Integer',
-  'pg_catalog.oid': '',
+  'pg_catalog.oid': 'String',
   'pg_catalog."varchar"': 'String',
   'pg_catalog.int2': 'Integer',
-  'pg_catalog.bool': '',
-  'pg_catalog.int8': '',
-  'pg_catalog.name': '',
-  'pg_catalog."char"': '',
-  'pg_catalog._text': '',
-  'pg_catalog._oid': '',
-  'pg_catalog.pg_lsn': '',
-  'pg_catalog._name': '',
-  'pg_catalog.regproc': '',
-  'pg_catalog.bytea': '',
-  'pg_catalog.timestamptz': '',
-  'pg_catalog.inet': '',
-  'pg_catalog.xid': '',
-  'pg_catalog.regtype': '',
-  'pg_catalog.pg_node_tree': '',
-  'pg_catalog.anyarray': '',
-  'pg_catalog.float4': '',
-  'pg_catalog.oidvector': '',
-  'pg_catalog._float4': '',
-  'pg_catalog.int2vector': '',
-  'pg_catalog._char': '',
-  'pg_catalog._aclitem': '',
-  'pg_catalog.float8': '',
-  'pg_catalog."interval"': '',
-  'pg_catalog."timestamp"': '',
-  'pg_catalog._regtype': '',
-  'pg_catalog._int2': '',
-  'pg_catalog.pg_dependencies': '',
-  'pg_catalog.pg_ndistinct': '',
-  'pg_catalog.abstime': '',
-  'pg_catalog.json': '',
+  'pg_catalog.bool': 'Boolean',
+  'pg_catalog.int8': 'Integer',
+  'pg_catalog.name': 'String',
+  'pg_catalog."char"': 'String',
+  'pg_catalog._text': 'String',
+  'pg_catalog._oid': 'String',
+  'pg_catalog.pg_lsn': 'String',
+  'pg_catalog._name': 'String',
+  'pg_catalog.regproc': 'String',
+  'pg_catalog.bytea': 'String',
+  'pg_catalog.timestamptz': 'String',
+  'pg_catalog.inet': 'String',
+  'pg_catalog.xid': 'String',
+  'pg_catalog.regtype': 'String',
+  'pg_catalog.pg_node_tree': 'String',
+  'pg_catalog.anyarray': 'String',
+  'pg_catalog.float4': 'String',
+  'pg_catalog.oidvector': 'String',
+  'pg_catalog._float4': 'String',
+  'pg_catalog.int2vector': 'String',
+  'pg_catalog._char': 'String',
+  'pg_catalog._aclitem': 'String',
+  'pg_catalog.float8': 'String',
+  'pg_catalog."interval"': 'String',
+  'pg_catalog."timestamp"': 'String',
+  'pg_catalog._regtype': 'String',
+  'pg_catalog._int2': 'Integer',
+  'pg_catalog.pg_dependencies': 'String',
+  'pg_catalog.pg_ndistinct': 'String',
+  'pg_catalog.abstime': 'String',
+  'pg_catalog.json': 'any',
   'meta.role_id': 'RoleId',
   'meta.field_id': 'FieldId',
   'meta.function_id': 'FunctionId',
@@ -91,13 +101,3 @@ const typeMap = {
   'meta.siuda': 'Suida',
   'public.hstore': 'Hstore',
 };
-
-export default async function types({args, options}) {
-  const rows = await go(db.select(db.relation('meta.column')));
-  const set = new Set(
-    rows.map(row => {
-      return row.type_name;
-    }),
-  );
-  console.log(set);
-}
