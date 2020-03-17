@@ -23,14 +23,51 @@ export default async function types({args, options}) {
 
   const defs = rows.map(({schema_name, relation_name, columns, nullable}) => {
     const tableRowType = kebabToPascal(`${schema_name}_${relation_name}`);
-    return `type ${tableRowType} = <{|
+    return `\tdeclare type ${tableRowType} = Array<{|
 ${Object.entries(columns).map(([col, type]) =>
-`  ${col}: ${nullable[col] ? '?' : ''}${typeMap[type] || 'String'}`
+`\t\t${normalizeColumnName(col)}: ${nullable[col] ? '?' : ''}${typeMap[type] || 'String'}`).join(',\n')};
+\t|}>;
+\tdeclare export function select('${schema_name}.${relation_name}'): Promise<${tableRowType}>;`;
+  }).join('\n');
+
+  // fallback
+  // fn.push(`(string => Array<any>)`);
+  await writeFile(args[0], fileContents(defs));
+
+  /*
+  const fn = [];
+  const defs = rows.map(({schema_name, relation_name, columns, nullable}) => {
+    const tableRowType = kebabToPascal(`${schema_name}_${relation_name}`);
+    fn.push(`('${schema_name}.${relation_name}' => Promise<${tableRowType}>)`);
+    return `declare type ${tableRowType} = Array<{|
+${Object.entries(columns).map(([col, type]) =>
+`  ${normalizeColumnName(col)}: ${nullable[col] ? '?' : ''}${typeMap[type] || 'String'}`
 ).join(',\n')}
 |}>;`;
   }).join('\n');
 
-  await writeFile(args[0], defs);
+  // fallback
+  fn.push(`(string => Array<any>)`);
+  const fnSignature = `${fn.join('\n\t& ')}\n;`;
+  await writeFile(args[0], fileContents(`${fnSignature}\n${defs}`));
+  */
+}
+
+const fileContents = str =>
+`// @flow
+declare module "aquameta-datum" {
+${str}
+};`;
+/*
+const fileContents = str =>
+`// @flow
+declare module "aquameta-datum" {
+  declare export var select: ${str}
+};`;
+*/
+
+function normalizeColumnName(str) {
+  return str.toLowerCase().replace(/ /g, '_');
 }
 
 function kebabToPascal(str) {
@@ -99,5 +136,5 @@ const typeMap = {
   'meta.foreign_key_id': 'ForeignKeyId',
   'meta.cast_id': 'CastId',
   'meta.siuda': 'Suida',
-  'public.hstore': 'Hstore',
+  'public.hstore': 'any',
 };
