@@ -6,6 +6,7 @@
   "bin": "./bin/types.js",
   "main": "./lib/index.js",
   "scripts": {
+    "postinstall": "cat setup.sql | psql aquameta",
     "test": "bin/types.js generated-types.js"
   },
   "keywords": [
