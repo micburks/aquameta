@@ -1,3 +1,4 @@
 node_modules
 *.swp
 logbook.md
+flow-typed/aquameta-datum.js
