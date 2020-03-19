@@ -18,16 +18,10 @@ const copyFile = __util.promisify(__fs.copyFile);
 
 const go = query(client.connection());
 
-const blacklistSchema = [
-  'pg_catalog',
-  'information_schema',
-];
-
 export default async function types({args, options}) {
   const rows = await go(db.select(db.relation('widget.type')));
 
-  const defs = rows.filter(({schema_name}) => !blacklistSchema.includes(schema_name))
-    .map(({schema_name, relation_name, columns, nullable}) => {
+  const defs = rows.map(({schema_name, relation_name, columns, nullable}) => {
     const tableRowType = kebabToPascal(`${schema_name}_${relation_name}`);
     return `\tdeclare type ${tableRowType} = Array<{|
 ${Object.entries(columns).map(([col, type]) =>
