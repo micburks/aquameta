@@ -22,7 +22,7 @@ export const isConnectionClient = __NODE__
   ? (client: Client): boolean => {
       return client.type === CONNECTION;
     }
-  : null;
+  : (client: Client) => false; // eslint-disable-line no-unused-vars
 
 export const isInvalidClient = (client: Client): boolean =>
   !(isEndpointClient(client) || isConnectionClient(client));
@@ -35,12 +35,8 @@ export const connection = __NODE__
   ? function connection(config?: ClientOptions): Client {
       return createClient(CONNECTION, config);
     }
-  : null;
+  : (client?: ClientOptions) => false; // eslint-disable-line no-unused-vars
 
-function createClient(type: Object, config: ?ClientOptions): Client {
-  return {
-    ...defaultConfig,
-    ...config,
-    type,
-  };
+function createClient(type: symbol, config?: ClientOptions): Client {
+  return Object.assign({}, defaultConfig, config, {type});
 }

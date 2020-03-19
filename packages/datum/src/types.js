@@ -1,7 +1,7 @@
 // @flow
 
 export type Client = {
-  type: {},
+  type: symbol,
   url: string,
   version: string,
   sessionCookie: string,
@@ -37,7 +37,7 @@ export type Executable = {
   args: {[string]: mixed | Array<mixed>},
   data: ?{[string]: mixed},
   version: ?string,
-  type: {},
+  type: symbol,
 };
 
 export type QueryResult =

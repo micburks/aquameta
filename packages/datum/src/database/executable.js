@@ -74,7 +74,7 @@ type ParsedUrl = {
 const sourceUrlRegex = /^\/db\/.+\/.+\/.+\..+/;
 const source = addArg('source', true);
 export const http = __NODE__
-  ? function http(req: HTTPRequest): Executable | null {
+  ? function http(req: HTTPRequest): ?Executable {
       const parsed: ParsedUrl = url.parse(req.url, true);
       const {pathname} = parsed;
 

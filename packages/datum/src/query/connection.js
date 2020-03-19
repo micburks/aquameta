@@ -1,6 +1,7 @@
 // @flow
 
 import pg from '@micburks/pg';
+// $FlowFixMe
 import process from 'process';
 import type {
   Client,
@@ -29,10 +30,11 @@ async function getConnection(config?: {
   [string]: any,
   connection?: {[string]: any},
 }): Promise<PgConnection> {
-  const mergedConfig = {
-    ...anonConfig,
-    ...((config && config.connection) || {}),
-  };
+  const mergedConfig = Object.assign(
+    {},
+    anonConfig,
+    config && config.connection,
+  );
   // Don't allow user to be overridden - this might be stupid
   // mergedConfig.user = anonConfig.user;
   mergedConfig.user = process.env.PGUSER || mergedConfig.user;
