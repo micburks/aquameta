@@ -78,6 +78,17 @@
     - client version is only important for which version url is created
     - url version should go straight to database
 
+- from types package
+- [] simplify datum to help type system
+- [] generated types for composites
+- [] get types to match aquameta-datum
+- [] there's a difference between a nullable field and whether that field must
+  exist in the row response
+- [X] generated type signature for db functions
+  [here](https://flow.org/try/#0PQKgBAAgZgNg9gdzCYAoVAXAngBwKZgDKeMeAxhmALyphgAUA5ALZ4YCGAdBwEamPUAfGACybdgBV2fPACVEAZwCUtMADIGLcZwVkAFnmbsBVYWI6F9h9vITLVGhRgBOASwB2AcyFgAgs+d2LAAedncsQVQAbnRsfFFxKRlbBWo-AKDggG8AH1VXABMALjAk0gBJAoAaVXd2VhLGXn4aul0DIwB9OoawLQ5GVByAX0EYzFwCMrxKtNza+rwSpzcvVrB2627F5ZcPTxqR8biCc3ZLDptFNP9AkPm6QpKL60r1nqWNvbWh0ePJohWIyzKhgB5gD67VYHX7jMhwdxODYkcgYZ4oihpeibIxKHxZfJQBg49jUKig-pcZp4Rh4gl0OjONgAV2c7gYAG0ALolMJYJQxOjDMAkBQEVxE7FA0nkimsDg6aW0sGqRkstmcnlgPkC1TC0UEekMpkYVns+jc3nhXVC1DDOEIpHU1KgsWkChMeVU6T8XXwxGUElpN2oz3aEm0mL+pFwDAGZwAEXYHGDGIwTAUcFYnDIgRwkaAA)
+- [X] module name mapper
+    [here](https://flow.org/en/docs/config/options/#toc-module-name-mapper-regex-string)
+
 
 #### Tech debt
 

@@ -17,53 +17,66 @@ const writeFile = __util.promisify(__fs.writeFile);
 const copyFile = __util.promisify(__fs.copyFile);
 
 const go = query(client.connection());
+const selects = [];
 
 export default async function types({args, options}) {
   const rows = await go(db.select(db.relation('widget.type')));
 
-  const defs = rows.map(({schema_name, relation_name, columns, nullable}) => {
-    const tableRowType = kebabToPascal(`${schema_name}_${relation_name}`);
-    return `\tdeclare type ${tableRowType} = Array<{|
-${Object.entries(columns).map(([col, type]) =>
-`\t\t${normalizeColumnName(col)}: ${nullable[col] ? '?' : ''}${typeMap[type] || 'String'}`).join(',\n')};
-\t|}>;
-\tdeclare export function select('${schema_name}.${relation_name}'): Promise<${tableRowType}>;`;
-  }).join('\n');
+  const defs = rows
+    .map(({schema_name, relation_name, columns, nullable}) => {
+      const tableRowType = kebabToPascal(`${schema_name}_${relation_name}`);
+      const typeFields = Object.entries(columns).map(
+        ([col, type]) =>
+          `${normalizeColumnName(col)}: ${nullable[col] ? '?' : ''}${typeMap[
+            type
+          ] || 'String'}`,
+      );
+      selects.push(select(`${schema_name}.${relation_name}`, tableRowType));
+      return typeString(
+        `${schema_name}.${relation_name}`,
+        tableRowType,
+        typeFields,
+      );
+    })
+    .join('\n');
 
   // fallback
   // fn.push(`(string => Array<any>)`);
-  await writeFile(args[0], fileContents(defs));
-
-  /*
-  const fn = [];
-  const defs = rows.map(({schema_name, relation_name, columns, nullable}) => {
-    const tableRowType = kebabToPascal(`${schema_name}_${relation_name}`);
-    fn.push(`('${schema_name}.${relation_name}' => Promise<${tableRowType}>)`);
-    return `declare type ${tableRowType} = Array<{|
-${Object.entries(columns).map(([col, type]) =>
-`  ${normalizeColumnName(col)}: ${nullable[col] ? '?' : ''}${typeMap[type] || 'String'}`
-).join(',\n')}
-|}>;`;
-  }).join('\n');
-
-  // fallback
-  fn.push(`(string => Array<any>)`);
-  const fnSignature = `${fn.join('\n\t& ')}\n;`;
-  await writeFile(args[0], fileContents(`${fnSignature}\n${defs}`));
-  */
+  await writeFile(args[0], fileString(defs));
 }
 
-const fileContents = str =>
-`// @flow
+const fileString = str =>
+  `// @flow
+${str}
+export type SelectType = ${selects.join('&\n')};
+`;
+
+/*
+const fileString = str =>
+  `// @flow
 declare module "aquameta-datum" {
+\tdeclare export var database: {
+\t\tselect: ${selects.join(' &\n\t\t\t')}
+\t}
 ${str}
 };`;
+*/
+
+function select(name, typeName) {
+  return `(('${name}') => Promise<${typeName}>)`;
+}
+
+const typeString = (name, typeName, lines) =>
+  `\ttype ${typeName} = Array<{|
+${lines.map(line => `\t\t${line}`).join(',\n')}
+\t|}>;`;
+
 /*
-const fileContents = str =>
-`// @flow
-declare module "aquameta-datum" {
-  declare export var select: ${str}
-};`;
+const typeString = (name, typeName, lines) =>
+`\tdeclare type ${typeName} = Array<{|
+${lines.map(line => `\t\t${line}`).join(',\n')}
+\t|}>;
+\tdeclare export function select('${name}'): Promise<${typeName}>;`;
 */
 
 function normalizeColumnName(str) {
@@ -71,7 +84,8 @@ function normalizeColumnName(str) {
 }
 
 function kebabToPascal(str) {
-  return str.replace(/^./, first => first.toUpperCase())
+  return str
+    .replace(/^./, first => first.toUpperCase())
     .replace(/_./g, chars => chars[1].toUpperCase());
 }
 
