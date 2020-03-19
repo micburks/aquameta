@@ -11,10 +11,8 @@
     "./browser": "./dist-browser/index.js"
   },
   "scripts": {
-    "build-browser": "rm -rf dist-browser && babel --config-file ./babel.browser.js src -d dist-browser",
-    "build-node": "rm -rf dist-node && babel --config-file ./babel.node.js src -d dist-node",
-    "build": "rm -rf dist-* && yarn build-browser && yarn build-node",
-    "build-w": "yarn build-node -w",
+    "build": "./build.sh",
+    "build-w": "nodemod -w src -x 'yarn build'",
     "start": "./demo/server.js",
     "preversion": "yarn test",
     "version": "yarn build",
@@ -63,6 +61,7 @@
   },
   "files": [
     "dist-browser",
-    "dist-node"
+    "dist-node",
+    "src"
   ]
 }
