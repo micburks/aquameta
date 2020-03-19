@@ -31,7 +31,7 @@ export type ConnectionOptions = {
   idleTimeoutMilliseconds?: number,
 };
 
-export type Executable = {
+export type Executable<T> = {
   method: string,
   url: string,
   args: {[string]: mixed | Array<mixed>},
@@ -40,9 +40,9 @@ export type Executable = {
   type: symbol,
 };
 
-export type QueryResult =
+export type QueryResult<T> =
   | {
-      rows: Array<{[string]: any}>,
+      rows: Array<T>,
     }
   | QueryError;
 

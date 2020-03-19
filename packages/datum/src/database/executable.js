@@ -12,6 +12,7 @@ import {
 import type {Executable, HTTPRequest} from '../types.js';
 import {addArg} from './args.js';
 import {fn} from './chainable.js';
+import type {SelectType} from './generated-types.js';
 
 // TODO move this
 import {parseSourceUrl} from '../query/connection.js';
@@ -22,15 +23,15 @@ const EXECUTABLE = Symbol.for('executable');
 
 const createExecutable = curry<
   string,
-  Executable,
+  Executable<any>,
   {[string]: mixed},
-  Executable,
+  Executable<any>,
 >(
-  (
+  <T>(
     method: string,
-    chainable: Executable,
+    chainable: Executable<T>,
     data: ?{[string]: mixed},
-  ): Executable => ({
+  ): Executable<T> => ({
     method,
     url: chainable.url,
     args: chainable.args, // SELECT, UPDATE, DELETE use args
@@ -40,19 +41,23 @@ const createExecutable = curry<
   }),
 );
 
-export function isInvalidExecutable(executable: Executable): boolean {
+export function isInvalidExecutable(executable: Executable<any>): boolean {
   return !(executable.type === EXECUTABLE);
 }
 
 // $FlowFixMe
-export const del = createExecutable(getMethodFromType(DELETE), (__: any), null);
-export const insert = createExecutable(getMethodFromType(INSERT));
-export const select = createExecutable(
+export const del = createExecutable<any>(
+  getMethodFromType(DELETE),
+  (__: any),
+  null,
+);
+export const insert = createExecutable<any>(getMethodFromType(INSERT));
+export const select = createExecutable<SelectType>(
   getMethodFromType(SELECT),
   (__: any),
   null,
 );
-export const update = createExecutable(getMethodFromType(UPDATE));
+export const update = createExecutable<any>(getMethodFromType(UPDATE));
 
 type ParsedUrl = {
   pathname?: string,
@@ -74,7 +79,7 @@ type ParsedUrl = {
 const sourceUrlRegex = /^\/db\/.+\/.+\/.+\..+/;
 const source = addArg('source', true);
 export const http = __NODE__
-  ? function http(req: HTTPRequest): ?Executable {
+  ? function http(req: HTTPRequest): ?Executable<any> {
       const parsed: ParsedUrl = url.parse(req.url, true);
       const {pathname} = parsed;
 

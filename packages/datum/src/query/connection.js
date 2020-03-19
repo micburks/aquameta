@@ -22,7 +22,7 @@ const anonConfig: ConnectionOptions = {
 
 type PgConnection = {
   connect: () => Promise<void>,
-  query: (string, Array<any>) => Promise<QueryResult>,
+  query: (string, Array<any>) => Promise<QueryResult<any>>,
   end: () => Promise<void>,
 };
 
@@ -82,10 +82,10 @@ async function getConnection(config?: {
  * Execute query server-side
  * @returns {Promise}
  */
-export default async function executeConnection(
+export default async function executeConnection<T>(
   client: Client,
-  query: Executable,
-): Promise<QueryResult> {
+  query: Executable<T>,
+): Promise<QueryResult<T>> {
   let connection;
 
   try {

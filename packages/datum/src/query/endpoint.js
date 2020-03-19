@@ -14,10 +14,10 @@ type Request = {
  * Fetch query results client-side
  * @returns {Promise}
  */
-export default async function executeEndpoint(
+export default async function executeEndpoint<T>(
   client: Client,
-  query: Executable,
-): Promise<QueryResult> {
+  query: Executable<T>,
+): Promise<QueryResult<T>> {
   const requestUrl = `/${client.url}/${client.version}/${query.url}`
     .replace(/\/+/g, '/') // remove duplicate slashes
     .replace(/\/$/, ''); // remove tail slash
