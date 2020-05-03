@@ -1,26 +1,12 @@
 {
-  "name": "aquameta-datum",
-  "version": "0.1.19",
-  "description": "Service layer for the Aquameta database API",
+  "name": "aquameta-template",
+  "version": "0.0.0",
+  "description": "Server-side templates",
   "sideEffects": false,
   "type": "module",
-  "main": "./dist-browser/index.js",
-  "exports": {
-    ".": "./dist-node/index.js",
-    "./node": "./dist-node/index.js",
-    "./browser": "./dist-browser/index.js"
-  },
+  "main": "./src/index.js",
   "scripts": {
-    "build": "./build.sh",
-    "build-w": "nodemod -w src -x 'yarn build'",
-    "start": "./demo/server.js",
-    "preversion": "yarn test",
-    "version": "yarn build",
-    "postversion": "git push && git push --tags",
-    "postinstall": "cat setup.sql | psql aquameta",
-    "test": "these-are-tests dist-node/__tests__",
-    "test-w": "nodemon -w dist-node -x 'yarn test'",
-    "watch": "run-p build-w test-w"
+    "test": "node bin/main.js templates --dry"
   },
   "keywords": [
     "datum",
@@ -36,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@micburks/pg": "^8.0.1",
+    "aquameta-datum": "^0.1.19",
     "just-compose": "^1.1.0",
     "just-curry-it": "^3.1.0",
     "node-fetch": "^2.6.0",
