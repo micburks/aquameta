@@ -148,6 +148,17 @@ select row_to_json(q)
 from q
 where q.widget_id is not null;
 
+-- generate n number of uuids
+create or replace function template.generate_uuids(integer) returns setof uuid as $$
+  with recursive generated (id, n) as (
+    select public.uuid_generate_v4(), 1
+    union all
+    select public.uuid_generate_v4(), n+1
+    from generated
+      where n < $1
+  )
+  select id from generated;
+$$ language sql;
 
 --create or replace function template.insert_rows(
 --  json text,
