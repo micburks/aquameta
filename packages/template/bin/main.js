@@ -5,7 +5,7 @@ import __path from 'path';
 import * as __helpers from './helpers.js';
 
 import {query, client, database} from 'aquameta-datum';
-import {parse, astToRows} from '../src/index.js';
+import {parse, astToRows, writeWidget} from '../src/index.js';
 
 const pathResolve = __path.resolve;
 const pathJoin = __path.join;
@@ -35,8 +35,19 @@ const execute = query(client.connection());
     const contents = await readFile(resolvedFile, 'utf-8');
     const parsed = await parse(contents);
     const rows = await astToRows(file.replace(pathExt(file), ''), parsed);
-    if (!options.dry) {
+    if ('dry' in options ? !options.dry : false) {
       await execute(database.fn('template.insertSorted', rows));
+    }
+    if ('write' in options ? options.write : false) {
+      await writeWidget(
+        execute(
+          db.whereEquals(
+            'name',
+            file.replace(pathExt(file), ''),
+            db.select('template.widget_ast'),
+          ),
+        ),
+      );
     }
   }
 })();
