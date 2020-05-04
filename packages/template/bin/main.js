@@ -25,7 +25,13 @@ if (!dir) {
   process.exit(1);
 }
 
-const execute = query(client.connection());
+const execute = query(
+  client.connection({
+    connection: {
+      user: 'mickey',
+    },
+  }),
+);
 
 (async () => {
   const resolvedDir = pathResolve(dir);
@@ -35,8 +41,10 @@ const execute = query(client.connection());
     const contents = await readFile(resolvedFile, 'utf-8');
     const parsed = await parse(contents);
     const rows = await astToRows(file.replace(pathExt(file), ''), parsed);
-    if ('dry' in options ? !options.dry : false) {
-      await execute(database.fn('template.insertSorted', rows));
+    if (!options.dry) {
+      await execute(
+        database.select(database.fn('template.insert_sorted', [rows])),
+      );
     }
     if ('write' in options ? options.write : false) {
       await writeWidget(

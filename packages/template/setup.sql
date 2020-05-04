@@ -160,6 +160,12 @@ create or replace function template.generate_uuids(integer) returns setof uuid a
   select id from generated;
 $$ language sql;
 
+create or replace function template.insert_sorted(rows json) returns void as $$
+begin
+
+end;
+$$ language plpgsql;
+
 --create or replace function template.insert_rows(
 --  json text,
 --  out status integer,
