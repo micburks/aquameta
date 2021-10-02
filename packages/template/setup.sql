@@ -160,8 +160,22 @@ create or replace function template.generate_uuids(integer) returns setof uuid a
   select id from generated;
 $$ language sql;
 
+-- sort rows and insert
 create or replace function template.insert_sorted(rows json) returns void as $$
+
+declare
+session_id uuid; -- null if not evented
+row_id meta.row_id;
+relation_id meta.relation_id;
+function_id meta.function_id;
+field_id meta.field_id;
+relation_subscribable boolean;
+op text;
+op_params text;
+
 begin
+
+  raise warning '##### json data: %', rows::text;
 
 end;
 $$ language plpgsql;
